@@ -1,0 +1,1395 @@
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PetHub</title>
+<meta name="description" content="PetHub — Plataforma completa para cuidar do seu pet">
+<meta name="theme-color" content="#C4533D">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="PetHub">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}::-webkit-scrollbar{display:none}
+body{background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;font-family:'Nunito',sans-serif}
+input,select,textarea{font-family:'Nunito',sans-serif}button{cursor:pointer}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const {useState,useEffect}=React;
+
+const Bell=({size=20,color='currentColor'})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>;
+const ArrowLeft=({size=20,color='currentColor'})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>;
+const ChevronRight=({size=16,color='currentColor'})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>;
+const Home=({size=22,color='currentColor'})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>;
+const ShoppingBag=({size=22,color='currentColor'})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>;
+const User=({size=22,color='currentColor'})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>;
+const Droplets=({size=22,color='currentColor'})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"/><path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"/></svg>;
+const Activity=({size=22,color='currentColor'})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>;
+const Search=({size=17,color='currentColor'})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>;
+const MapPin=({size=16,color='currentColor'})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>;
+const Star=({size=11,color='currentColor',fill='none'})=><svg width={size} height={size} viewBox="0 0 24 24" fill={fill} stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>;
+const Plus=({size=15,color='currentColor'})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>;
+const Heart=({size=13,color='currentColor',fill='none'})=><svg width={size} height={size} viewBox="0 0 24 24" fill={fill} stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>;
+const Check=({size=20,color='currentColor'})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>;
+const Calendar=({size=15,color='currentColor'})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>;
+const Clock=({size=15,color='currentColor'})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>;
+const Share2=({size=15,color='currentColor'})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>;
+const QrCode=({size=16,color='currentColor'})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="5" y="5" width="3" height="3" fill={color}/><rect x="16" y="5" width="3" height="3" fill={color}/><rect x="16" y="16" width="3" height="3" fill={color}/></svg>;
+const Globe=({size=14,color='currentColor'})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>;
+
+/* ─── EDITABLE COMBO ──────────────────────────────────────────── */
+function EditableCombo({options=[],value='',onChange,placeholder='',label='',bg}){
+  const [query,setQuery]=useState(value);
+  const [open,setOpen]=useState(false);
+  const filtered=query?options.filter(o=>o.toLowerCase().includes(query.toLowerCase())):options;
+  return(
+    <div style={{position:'relative',marginBottom:16}}>
+      {label&&<div style={{fontSize:11,fontWeight:800,color:'#7A4030',textTransform:'uppercase',letterSpacing:1.1,marginBottom:9}}>{label}</div>}
+      <div style={{background:bg||'#F0E6CE',borderRadius:13,padding:'13px 15px',display:'flex',alignItems:'center',gap:8}}>
+        <input value={query}
+          onChange={e=>{setQuery(e.target.value);onChange(e.target.value);setOpen(true);}}
+          onFocus={()=>setOpen(true)}
+          onBlur={()=>setTimeout(()=>setOpen(false),200)}
+          placeholder={placeholder}
+          style={{flex:1,fontSize:14,color:'#2D1610',fontWeight:500,background:'transparent',border:'none',outline:'none',fontFamily:'inherit'}}/>
+        <span style={{color:'#C49A80',fontSize:12,flexShrink:0}}>▾</span>
+      </div>
+      {open&&filtered.length>0&&(
+        <div style={{position:'absolute',top:'calc(100% + 4px)',left:0,right:0,maxHeight:180,overflowY:'auto',background:'#fff',borderRadius:12,boxShadow:'0 8px 24px rgba(0,0,0,0.13)',zIndex:999}}>
+          {filtered.map(opt=>(
+            <div key={opt} onMouseDown={()=>{setQuery(opt);onChange(opt);setOpen(false);}}
+              style={{padding:'12px 15px',fontSize:13,color:'#2D1610',fontWeight:500,borderBottom:'1px solid #F0E6CE',cursor:'pointer',background:'white'}}
+              onMouseEnter={e=>e.target.style.background='#FAF6EE'}
+              onMouseLeave={e=>e.target.style.background='white'}>
+              {opt}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+const C = {
+  coral:"#C4533D",coralDark:"#A63D2A",beige:"#F0E6CE",beigeLight:"#FAF6EE",
+  dark:"#2D1610",mid:"#7A4030",light:"#C49A80",
+  blood:"#9B1C35",bloodDark:"#6A0F20",green:"#3D7A45",white:"#FFFFFF",
+};
+
+const QR_DOTS=(()=>{const d=[];for(let y=0;y<=20;y++)for(let x=0;x<=20;x++){if(x<=7&&y<=7)continue;if(x>=13&&y<=7)continue;if(x<=7&&y>=13)continue;if(x===6&&y>=8&&y<=12){if(y%2===0)d.push({x,y});continue;}if(y===6&&x>=8&&x<=12){if(x%2===0)d.push({x,y});continue;}if(x===6||y===6)continue;if(((x*13+y*7)%17)<7)d.push({x,y});}return d;})();
+
+/* ─── TRANSLATIONS ───────────────────────────────────────────── */
+const i18n={
+  pt:{
+    tagline:"my best friend's best friend",legal:"Ao criar conta você concorda com os Termos de Uso e Política de Privacidade (LGPD)",
+    feat1:"Prontuário digital completo",feat2:"Lembretes de vacinas e rotina",feat3:"Marketplace de serviços",feat4:"Doação de sangue animal",feat5:"Comunidade de tutores",
+    createAcc:"Criar conta grátis",signIn:"Já tenho conta — Entrar",
+    step:"Passo 1 de 2",obTitle:"Conta pra gente\nsobre seu pet 🐾",obSub:"Vamos criar o perfil do seu melhor amigo",
+    petType:"Tipo de pet",petName:"Nome do pet",breed:"Raça",lifeStage:"Fase de vida",
+    puppy:"Filhote",adult:"Adulto",senior:"Sênior",dog:"Cachorro",cat:"Gato",other:"Outro",
+    namePH:"Ex: Thor, Luna, Mel...",breedPH:"Selecione a raça",laterNote:"Você pode adicionar mais pets depois",continue:"Continuar →",
+    greeting:"Bom dia,",quickAccess:"Acesso rápido",reminders:"Lembretes",seeAll:"Ver todos",urgent:"URGENTE",
+    mySchedule:"Minha Agenda",aptsWeek:"2 consultas esta semana",
+    bloodBannerLabel:"CAMPANHA ATIVA",bloodBannerTitle:"Doação de Sangue Animal",
+    bloodBannerText:"Seu pet pode salvar até 3 vidas. Bancos de sangue precisam de doadores agora.",bloodBannerCta:"Saiba como participar →",
+    qaHealth:"Prontuário",qaHealthSub:"Ver histórico",qaServices:"Serviços",qaServicesSub:"5 disponíveis",
+    qaBlood:"Doação",qaBloodSub:"Campanha ativa!",qaMap:"Descobrir",qaMapSub:"Pet-friendly",
+    qaPetbot:"PetBot IA",qaPetbotSub:"Pergunte tudo",qaRoutine:"Rotina",qaRoutineSub:"🔥 12 dias",
+    navHome:"Início",navHealth:"Saúde",navServices:"Serviços",navBlood:"Doação",navProfile:"Perfil",
+    rem1:"Vacina V10",rem1s:"Thor · Vence em 12 dias",rem2:"Banho & Tosa",rem2s:"Agendado para 15/06",rem3:"Vermífugo",rem3s:"Thor · Em 3 semanas",
+    healthTitle:"Saúde do Thor 🐾",scoreLabel:"Health Score",
+    mVaccines:"Vacinas",mConsults:"Consultas",mDocs:"Documentos",
+    inDate:"Em dia",warnLabel:"Vence em 12 dias",addVaccBtn:"Registrar Nova Vacina",addDocBtn:"Adicionar Documento",
+    servTitle:"Serviços 🛒",searchServ:"Buscar veterinário, banho, hotel...",allCat:"Todos",
+    available:"Disponível",unavailable:"Indisponível",nearProviders:"prestadores próximos",viewDet:"Ver detalhes →",
+    // Blood Guide
+    bgTitle:"Doação de Sangue Animal",bgSub:"Como funciona e como participar",
+    bgStat1:"1 em cada 3\ncirurgias de emergência",bgStat1s:"precisa de transfusão",
+    bgStat2:"Menos de 1%\ndos pets",bgStat2s:"são doadores cadastrados",
+    bgStat3:"1 doação pode\nsalvar até",bgStat3s:"3 animais",
+    bgWhyTitle:"Por que isso importa?",
+    bgWhyText:"No Brasil, bancos de sangue animal funcionam, mas poucos tutores sabem que existem. Cães e gatos podem precisar de transfusão em cirurgias, traumas e tratamentos de doenças graves. A escassez de doadores é crítica.",
+    bgHowTitle:"Como funciona a doação?",
+    bgStep1:"Cadastre seu pet",bgStep1d:"Verifique a elegibilidade e faça o pré-cadastro aqui no app",
+    bgStep2:"Agende a visita",bgStep2d:"Encontre o banco de sangue mais próximo e agende gratuitamente",
+    bgStep3:"Doação segura",bgStep3d:"O processo leva 30–45 minutos e é indolor. O pet fica tranquilo",
+    bgStep4:"Acompanhe o impacto",bgStep4d:"PetHub registra cada doação e você recebe certificado digital",
+    bgReqTitle:"Quem pode ser doador?",
+    bgReqDog:"Para Cães",bgReqCat:"Para Gatos",
+    bgReq1:"Peso mínimo 25kg",bgReq1c:"Peso mínimo 4kg",
+    bgReq2:"Entre 1 e 8 anos",bgReq3:"Vacinação em dia",bgReq4:"Sem doenças infecciosas",bgReq5:"Sem doação nos últimos 3 meses",
+    bgMythTitle:"Mitos & Verdades",
+    bgM1q:"A doação machuca o animal",bgM1a:"O processo é seguro e indolor. O pet é sedado levemente se necessário.",
+    bgM2q:"O pet fica fraco depois",bgM2a:"O organismo se recupera em 24 a 48 horas completamente.",
+    bgM3q:"É muito complicado",bgM3a:"Com o PetHub, é simples! Você agenda e acompanha tudo pelo app.",
+    qaGPS:"Localizar Thor",qaGPSSub:"GPS ativo",
+    bgCta:"Verificar elegibilidade e cadastrar",bgBack:"Voltar",
+    bgNearTitle:"Bancos de sangue próximos",
+    // Discover
+    discTitle:"Descobrir 🗺️",searchPlaces:"Buscar lugares pet-friendly...",nearYou:"Perto de você",community:"Comunidade 🤝",
+    adoptSection:"Adoção 🐾",petsWaiting:"3 pets aguardando adoção",viewPets:"Ver pets disponíveis →",
+    // Profile
+    planLabel:"Meu Plano",planFree:"Gratuito",planPremium:"Premium ✨",petsSection:"Meus Pets",addPet:"Adicionar",
+    upgradeBtn:"Upgrade",activeBtn:"Ativo ✓",signOut:"Sair da conta",langLabel:"Idioma",
+    // Notifications
+    notifTitle:"Notificações 🔔",gUrgent:"🔴 Urgente",gToday:"📅 Hoje",gWeek:"📆 Esta semana",
+    // Agenda
+    agendaTitle:"Minha Agenda 📅",tabUpcoming:"Próximos",tabHistory:"Histórico",
+    reschedule:"Reagendar",cancelBtn:"Cancelar",newApt:"+ Novo Agendamento",
+    stConfirmed:"Confirmado",stDone:"Concluído",stCanceled:"Cancelado",
+    // Vaccine
+    avTitle:"Registrar Vacina 💉",fieldVaccName:"Nome da Vacina",fieldDate:"Data de Aplicação",
+    fieldClinic:"Clínica / Hospital",fieldVet:"Veterinário Responsável",fieldNext:"Próxima Dose (Opcional)",
+    fieldProof:"Comprovante (Opcional)",attachBtn:"📎 Anexar foto ou PDF",
+    vaccSaved:"Vacina registrada!",vaccSavedSub:"O prontuário do Thor foi atualizado e o Health Score recalculado.",backHealth:"Voltar ao Prontuário",
+    // Service Detail
+    aboutLabel:"Sobre",servicesValLabel:"Serviços e Valores",reviewsLabel:"Avaliações dos clientes",verifiedBadge:"✓ Verificado",bookConsult:"Agendar Consulta",
+    // Booking
+    petSection:"Pet",dateSection:"Data",timeSection:"Horário",paySection:"Pagamento",notesSection:"Observações (Opcional)",
+    notesPH:"Ex: Thor tem medo de barulhos, favor avisar antes...",summaryLabel:"Resumo",serviceRow:"Serviço",
+    dateRow:"Data",timeRow:"Horário",payRow:"Pagamento",totalRow:"Total",confirmBook:"Confirmar Agendamento →",instant:"Instantâneo",creditDebit:"Crédito/Débito",
+    // Booking Success
+    bookSuccTitle:"Agendamento\nConfirmado!",bookSuccSub:"Você receberá uma confirmação e lembretes pelo app.",viewAgenda:"📅 Ver minha agenda",backHome:"Voltar ao Início",
+    // QR
+    qrTitle:"QR Code do Thor 🔑",qrEmerg:"Em caso de emergência",
+    qrEmergText:"Qualquer veterinário pode escanear este QR Code para acessar o prontuário completo do Thor, incluindo histórico médico, alergias e contato do tutor.",
+    qrContact:"Contato de emergência",shareBtn:"Compartilhar",copied:"Copiado!",savePdf:"⬇ Salvar PDF",
+    // PetBot
+    pbTitle:"PetBot IA",pbStatus:"Online · Assistente do Thor",pbDisc:"⚕️ Não substitui vet.",pbPH:"Pergunte sobre a saúde do Thor...",
+    pbS1:"Thor pode comer manga?",pbS2:"Frequência ideal de banho?",pbS3:"Thor está com peso ideal?",pbS4:"Sintomas de Leishmaniose?",
+    // Routine
+    routineTitle:"Rotina do Thor 📋",routineToday:"hoje",routineStreak:"sequência ativa",taskLabel:"Tarefas de hoje",weekDays:["D","S","T","Q","Q","S","S"],
+    // Adoption
+    adoptTitle:"Adoção Responsável 🏠",filterAll:"🐾 Todos",filterDogs:"🐕 Cachorros",filterCats:"🐈 Gatos",
+    petsNear:"pets disponíveis perto de você",adoptCta:"🏠 Quero adotar",adoptDone:"✓ Interesse registrado!",
+    vaccinatedBadge:"✓ Vacinado",neuteredBadge:"✓ Castrado",
+    // Premium
+    premTitle:"PetHub Premium",premSub:"O melhor cuidado para o Thor, sem limites.",
+    planMonthly:"Mensal",planAnnual:"Anual",trialBadge:"🎁 7 dias grátis para experimentar",
+    startTrial:"Começar 7 dias grátis ✨",noCommit:"Sem compromisso. Cancele quando quiser.\nRenovação automática após o período grátis.",
+    featLabel:"Recurso",freeCol:"Free",premCol:"Premium",premSuccess:"Bem-vindo ao\nPetHub Premium!",
+    premSuccessSub:"Todos os recursos foram desbloqueados para você e o Thor.",exploreBtn:"Explorar recursos Premium →",
+  },
+  en:{
+    tagline:"my best friend's best friend",legal:"By creating an account you agree to our Terms of Use and Privacy Policy",
+    feat1:"Complete digital health records",feat2:"Vaccine and routine reminders",feat3:"Services marketplace",feat4:"Animal blood donation",feat5:"Pet owner community",
+    createAcc:"Create free account",signIn:"I already have an account — Sign in",
+    step:"Step 1 of 2",obTitle:"Tell us about\nyour pet 🐾",obSub:"Let's create your best friend's profile",
+    petType:"Pet type",petName:"Pet name",breed:"Breed",lifeStage:"Life stage",
+    puppy:"Puppy",adult:"Adult",senior:"Senior",dog:"Dog",cat:"Cat",other:"Other",
+    namePH:"e.g. Max, Luna, Buddy...",breedPH:"Select breed",laterNote:"You can add more pets later",continue:"Continue →",
+    greeting:"Good morning,",quickAccess:"Quick access",reminders:"Reminders",seeAll:"See all",urgent:"URGENT",
+    mySchedule:"My Schedule",aptsWeek:"2 appointments this week",
+    bloodBannerLabel:"ACTIVE CAMPAIGN",bloodBannerTitle:"Animal Blood Donation",
+    bloodBannerText:"Your pet can save up to 3 lives. Blood banks urgently need donors right now.",bloodBannerCta:"Learn how to participate →",
+    qaHealth:"Health Records",qaHealthSub:"View history",qaServices:"Services",qaServicesSub:"5 available",
+    qaBlood:"Donate",qaBloodSub:"Active campaign!",qaMap:"Discover",qaMapSub:"Pet-friendly",
+    qaPetbot:"PetBot AI",qaPetbotSub:"Ask anything",qaRoutine:"Routine",qaRoutineSub:"🔥 12 days",
+    navHome:"Home",navHealth:"Health",navServices:"Services",navBlood:"Donate",navProfile:"Profile",
+    rem1:"V10 Vaccine",rem1s:"Thor · Expires in 12 days",rem2:"Bath & Grooming",rem2s:"Scheduled for 06/15",rem3:"Dewormer",rem3s:"Thor · In 3 weeks",
+    healthTitle:"Thor's Health 🐾",scoreLabel:"Health Score",
+    mVaccines:"Vaccines",mConsults:"Consultations",mDocs:"Documents",
+    inDate:"Up to date",warnLabel:"Expires in 12 days",addVaccBtn:"Record New Vaccine",addDocBtn:"Add Document",
+    servTitle:"Services 🛒",searchServ:"Search vet, grooming, hotel...",allCat:"All",
+    available:"Available",unavailable:"Unavailable",nearProviders:"nearby providers",viewDet:"View details →",
+    bgTitle:"Animal Blood Donation",bgSub:"How it works and how to participate",
+    bgStat1:"1 in every 3\nemergency surgeries",bgStat1s:"needs a transfusion",
+    bgStat2:"Less than 1%\nof pets",bgStat2s:"are registered donors",
+    bgStat3:"1 donation can\nsave up to",bgStat3s:"3 animals",
+    bgWhyTitle:"Why does this matter?",
+    bgWhyText:"Animal blood banks exist, but most pet owners don't know about them. Dogs and cats may need transfusions in surgeries, trauma care, and treatment of serious diseases. The shortage of registered donors is critical.",
+    bgHowTitle:"How does donation work?",
+    bgStep1:"Register your pet",bgStep1d:"Check eligibility and pre-register directly in the app",
+    bgStep2:"Schedule the visit",bgStep2d:"Find the nearest blood bank and schedule for free",
+    bgStep3:"Safe donation",bgStep3d:"The process takes 30–45 minutes and is painless. Pets stay calm",
+    bgStep4:"Track the impact",bgStep4d:"PetHub logs every donation and you receive a digital certificate",
+    bgReqTitle:"Who can be a donor?",bgReqDog:"For Dogs",bgReqCat:"For Cats",
+    bgReq1:"Minimum weight 55 lbs",bgReq1c:"Minimum weight 8.8 lbs",
+    bgReq2:"Between 1 and 8 years old",bgReq3:"Vaccinations up to date",bgReq4:"No infectious diseases",bgReq5:"No donation in the last 3 months",
+    bgMythTitle:"Myths & Facts",
+    bgM1q:"Donation hurts the animal",bgM1a:"The process is safe and painless. Light sedation is used if needed.",
+    bgM2q:"The pet becomes weak",bgM2a:"The body fully recovers in 24 to 48 hours.",
+    bgM3q:"It's too complicated",bgM3a:"With PetHub, it's simple! Schedule and track everything in the app.",
+    qaGPS:"Locate Thor",qaGPSSub:"GPS active",
+    bgCta:"Check eligibility and register",bgBack:"Back",bgNearTitle:"Nearby blood banks",
+    discTitle:"Discover 🗺️",searchPlaces:"Search pet-friendly places...",nearYou:"Near you",community:"Community 🤝",
+    adoptSection:"Adoption 🐾",petsWaiting:"3 pets waiting for adoption",viewPets:"View available pets →",
+    planLabel:"My Plan",planFree:"Free",planPremium:"Premium ✨",petsSection:"My Pets",addPet:"Add",
+    upgradeBtn:"Upgrade",activeBtn:"Active ✓",signOut:"Sign out",langLabel:"Language",
+    notifTitle:"Notifications 🔔",gUrgent:"🔴 Urgent",gToday:"📅 Today",gWeek:"📆 This week",
+    agendaTitle:"My Schedule 📅",tabUpcoming:"Upcoming",tabHistory:"History",
+    reschedule:"Reschedule",cancelBtn:"Cancel",newApt:"+ New Appointment",
+    stConfirmed:"Confirmed",stDone:"Completed",stCanceled:"Canceled",
+    avTitle:"Record Vaccine 💉",fieldVaccName:"Vaccine Name",fieldDate:"Application Date",
+    fieldClinic:"Clinic / Hospital",fieldVet:"Veterinarian",fieldNext:"Next Dose (Optional)",
+    fieldProof:"Proof (Optional)",attachBtn:"📎 Attach photo or PDF",
+    vaccSaved:"Vaccine recorded!",vaccSavedSub:"Thor's health record was updated and Health Score recalculated.",backHealth:"Back to Health Record",
+    aboutLabel:"About",servicesValLabel:"Services & Prices",reviewsLabel:"Customer reviews",verifiedBadge:"✓ Verified",bookConsult:"Book Consultation",
+    petSection:"Pet",dateSection:"Date",timeSection:"Time",paySection:"Payment",notesSection:"Notes (Optional)",
+    notesPH:"e.g. Thor is afraid of loud noises...",summaryLabel:"Summary",serviceRow:"Service",
+    dateRow:"Date",timeRow:"Time",payRow:"Payment",totalRow:"Total",confirmBook:"Confirm Appointment →",instant:"Instant",creditDebit:"Credit/Debit",
+    bookSuccTitle:"Appointment\nConfirmed!",bookSuccSub:"You'll receive a confirmation and reminders in the app.",viewAgenda:"📅 View my schedule",backHome:"Back to Home",
+    qrTitle:"Thor's QR Code 🔑",qrEmerg:"In case of emergency",
+    qrEmergText:"Any veterinarian can scan this QR Code to access Thor's complete health record, including medical history, allergies and guardian contact.",
+    qrContact:"Emergency contact",shareBtn:"Share",copied:"Copied!",savePdf:"⬇ Save PDF",
+    pbTitle:"PetBot AI",pbStatus:"Online · Thor's Assistant",pbDisc:"⚕️ Does not replace vet.",pbPH:"Ask about Thor's health...",
+    pbS1:"Can Thor eat mango?",pbS2:"Ideal bath frequency?",pbS3:"Is Thor at ideal weight?",pbS4:"Symptoms of Leishmaniasis?",
+    routineTitle:"Thor's Routine 📋",routineToday:"today",routineStreak:"active streak",taskLabel:"Today's tasks",weekDays:["Su","Mo","Tu","We","Th","Fr","Sa"],
+    adoptTitle:"Responsible Adoption 🏠",filterAll:"🐾 All",filterDogs:"🐕 Dogs",filterCats:"🐈 Cats",
+    petsNear:"pets available near you",adoptCta:"🏠 I want to adopt",adoptDone:"✓ Interest registered!",
+    vaccinatedBadge:"✓ Vaccinated",neuteredBadge:"✓ Neutered",
+    premTitle:"PetHub Premium",premSub:"The best care for Thor, without limits.",
+    planMonthly:"Monthly",planAnnual:"Annual",trialBadge:"🎁 7 days free to try",
+    startTrial:"Start 7-day free trial ✨",noCommit:"No commitment. Cancel anytime.\nAuto-renews after the free period.",
+    featLabel:"Feature",freeCol:"Free",premCol:"Premium",premSuccess:"Welcome to\nPetHub Premium!",
+    premSuccessSub:"All features have been unlocked for you and Thor.",exploreBtn:"Explore Premium features →",
+  },
+  es:{
+    tagline:"el mejor amigo de tu mejor amigo",legal:"Al crear una cuenta aceptas nuestros Términos de Uso y Política de Privacidad",
+    feat1:"Historia médica digital completa",feat2:"Recordatorios de vacunas y rutina",feat3:"Mercado de servicios",feat4:"Donación de sangre animal",feat5:"Comunidad de dueños de mascotas",
+    createAcc:"Crear cuenta gratis",signIn:"Ya tengo cuenta — Iniciar sesión",
+    step:"Paso 1 de 2",obTitle:"Cuéntanos sobre\ntu mascota 🐾",obSub:"Vamos a crear el perfil de tu mejor amigo",
+    petType:"Tipo de mascota",petName:"Nombre",breed:"Raza",lifeStage:"Etapa de vida",
+    puppy:"Cachorro",adult:"Adulto",senior:"Senior",dog:"Perro",cat:"Gato",other:"Otro",
+    namePH:"Ej: Max, Luna, Copito...",breedPH:"Seleccionar raza",laterNote:"Puedes agregar más mascotas después",continue:"Continuar →",
+    greeting:"Buenos días,",quickAccess:"Acceso rápido",reminders:"Recordatorios",seeAll:"Ver todos",urgent:"URGENTE",
+    mySchedule:"Mi Agenda",aptsWeek:"2 citas esta semana",
+    bloodBannerLabel:"CAMPAÑA ACTIVA",bloodBannerTitle:"Donación de Sangre Animal",
+    bloodBannerText:"Tu mascota puede salvar hasta 3 vidas. Los bancos de sangre necesitan donantes ahora.",bloodBannerCta:"Aprende cómo participar →",
+    qaHealth:"Historia médica",qaHealthSub:"Ver historial",qaServices:"Servicios",qaServicesSub:"5 disponibles",
+    qaBlood:"Donación",qaBloodSub:"¡Campaña activa!",qaMap:"Descubrir",qaMapSub:"Pet-friendly",
+    qaPetbot:"PetBot IA",qaPetbotSub:"Pregunta todo",qaRoutine:"Rutina",qaRoutineSub:"🔥 12 días",
+    navHome:"Inicio",navHealth:"Salud",navServices:"Servicios",navBlood:"Donación",navProfile:"Perfil",
+    rem1:"Vacuna V10",rem1s:"Thor · Vence en 12 días",rem2:"Baño y Peluquería",rem2s:"Programado para 15/06",rem3:"Antiparasitario",rem3s:"Thor · En 3 semanas",
+    healthTitle:"Salud de Thor 🐾",scoreLabel:"Puntuación de salud",
+    mVaccines:"Vacunas",mConsults:"Consultas",mDocs:"Documentos",
+    inDate:"Al día",warnLabel:"Vence en 12 días",addVaccBtn:"Registrar Nueva Vacuna",addDocBtn:"Agregar Documento",
+    servTitle:"Servicios 🛒",searchServ:"Buscar veterinario, baño, hotel...",allCat:"Todos",
+    available:"Disponible",unavailable:"No disponible",nearProviders:"proveedores cercanos",viewDet:"Ver detalles →",
+    bgTitle:"Donación de Sangre Animal",bgSub:"Cómo funciona y cómo participar",
+    bgStat1:"1 de cada 3\ncirugías de emergencia",bgStat1s:"necesita transfusión",
+    bgStat2:"Menos del 1%\nde las mascotas",bgStat2s:"son donantes registradas",
+    bgStat3:"1 donación puede\nsalvar hasta",bgStat3s:"3 animales",
+    bgWhyTitle:"¿Por qué es importante?",
+    bgWhyText:"Los bancos de sangre animal existen, pero pocos dueños de mascotas lo saben. Los perros y gatos pueden necesitar transfusiones en cirugías, traumas y tratamiento de enfermedades graves. La escasez de donantes es crítica.",
+    bgHowTitle:"¿Cómo funciona la donación?",
+    bgStep1:"Registra tu mascota",bgStep1d:"Verifica la elegibilidad y haz el pre-registro aquí en la app",
+    bgStep2:"Programa la visita",bgStep2d:"Encuentra el banco de sangre más cercano y agenda gratis",
+    bgStep3:"Donación segura",bgStep3d:"El proceso toma 30–45 minutos y es indoloro. La mascota se mantiene tranquila",
+    bgStep4:"Sigue el impacto",bgStep4d:"PetHub registra cada donación y recibes un certificado digital",
+    bgReqTitle:"¿Quién puede ser donante?",bgReqDog:"Para Perros",bgReqCat:"Para Gatos",
+    bgReq1:"Peso mínimo 25kg",bgReq1c:"Peso mínimo 4kg",
+    bgReq2:"Entre 1 y 8 años",bgReq3:"Vacunación al día",bgReq4:"Sin enfermedades infecciosas",bgReq5:"Sin donación en los últimos 3 meses",
+    bgMythTitle:"Mitos y Verdades",
+    bgM1q:"La donación le duele al animal",bgM1a:"El proceso es seguro e indoloro. Se usa sedación leve si es necesario.",
+    bgM2q:"La mascota queda débil",bgM2a:"El organismo se recupera completamente en 24 a 48 horas.",
+    bgM3q:"Es muy complicado",bgM3a:"¡Con PetHub es fácil! Agenda y sigue todo desde la app.",
+    qaGPS:"Localizar Thor",qaGPSSub:"GPS activo",
+    bgCta:"Verificar elegibilidad y registrar",bgBack:"Volver",bgNearTitle:"Bancos de sangre cercanos",
+    discTitle:"Descubrir 🗺️",searchPlaces:"Buscar lugares pet-friendly...",nearYou:"Cerca de ti",community:"Comunidad 🤝",
+    adoptSection:"Adopción 🐾",petsWaiting:"3 mascotas esperando adopción",viewPets:"Ver mascotas disponibles →",
+    planLabel:"Mi Plan",planFree:"Gratuito",planPremium:"Premium ✨",petsSection:"Mis Mascotas",addPet:"Agregar",
+    upgradeBtn:"Mejorar",activeBtn:"Activo ✓",signOut:"Cerrar sesión",langLabel:"Idioma",
+    notifTitle:"Notificaciones 🔔",gUrgent:"🔴 Urgente",gToday:"📅 Hoy",gWeek:"📆 Esta semana",
+    agendaTitle:"Mi Agenda 📅",tabUpcoming:"Próximas",tabHistory:"Historial",
+    reschedule:"Reprogramar",cancelBtn:"Cancelar",newApt:"+ Nueva Cita",
+    stConfirmed:"Confirmada",stDone:"Completada",stCanceled:"Cancelada",
+    avTitle:"Registrar Vacuna 💉",fieldVaccName:"Nombre de la Vacuna",fieldDate:"Fecha de Aplicación",
+    fieldClinic:"Clínica / Hospital",fieldVet:"Veterinario Responsable",fieldNext:"Próxima Dosis (Opcional)",
+    fieldProof:"Comprobante (Opcional)",attachBtn:"📎 Adjuntar foto o PDF",
+    vaccSaved:"¡Vacuna registrada!",vaccSavedSub:"El historial de Thor fue actualizado y la puntuación de salud recalculada.",backHealth:"Volver al Historial",
+    aboutLabel:"Acerca de",servicesValLabel:"Servicios y Precios",reviewsLabel:"Opiniones de clientes",verifiedBadge:"✓ Verificado",bookConsult:"Agendar Consulta",
+    petSection:"Mascota",dateSection:"Fecha",timeSection:"Horario",paySection:"Pago",notesSection:"Observaciones (Opcional)",
+    notesPH:"Ej: Thor tiene miedo de los ruidos...",summaryLabel:"Resumen",serviceRow:"Servicio",
+    dateRow:"Fecha",timeRow:"Horario",payRow:"Pago",totalRow:"Total",confirmBook:"Confirmar Cita →",instant:"Instantáneo",creditDebit:"Crédito/Débito",
+    bookSuccTitle:"¡Cita\nConfirmada!",bookSuccSub:"Recibirás una confirmación y recordatorios en la app.",viewAgenda:"📅 Ver mi agenda",backHome:"Volver al Inicio",
+    qrTitle:"Código QR de Thor 🔑",qrEmerg:"En caso de emergencia",
+    qrEmergText:"Cualquier veterinario puede escanear este código QR para acceder al historial completo de Thor, incluyendo historial médico, alergias y contacto del tutor.",
+    qrContact:"Contacto de emergencia",shareBtn:"Compartir",copied:"¡Copiado!",savePdf:"⬇ Guardar PDF",
+    pbTitle:"PetBot IA",pbStatus:"En línea · Asistente de Thor",pbDisc:"⚕️ No reemplaza al vet.",pbPH:"Pregunta sobre la salud de Thor...",
+    pbS1:"¿Thor puede comer mango?",pbS2:"¿Con qué frecuencia debe bañarse?",pbS3:"¿Thor tiene el peso ideal?",pbS4:"¿Síntomas de Leishmaniasis?",
+    routineTitle:"Rutina de Thor 📋",routineToday:"hoy",routineStreak:"racha activa",taskLabel:"Tareas de hoy",weekDays:["D","L","M","M","J","V","S"],
+    adoptTitle:"Adopción Responsable 🏠",filterAll:"🐾 Todos",filterDogs:"🐕 Perros",filterCats:"🐈 Gatos",
+    petsNear:"mascotas disponibles cerca",adoptCta:"🏠 Quiero adoptar",adoptDone:"✓ ¡Interés registrado!",
+    vaccinatedBadge:"✓ Vacunado",neuteredBadge:"✓ Castrado",
+    premTitle:"PetHub Premium",premSub:"El mejor cuidado para Thor, sin límites.",
+    planMonthly:"Mensual",planAnnual:"Anual",trialBadge:"🎁 7 días gratis para probar",
+    startTrial:"Comenzar 7 días gratis ✨",noCommit:"Sin compromiso. Cancela cuando quieras.\nRenovación automática después del período gratis.",
+    featLabel:"Función",freeCol:"Gratis",premCol:"Premium",premSuccess:"¡Bienvenido a\nPetHub Premium!",
+    premSuccessSub:"Todas las funciones han sido desbloqueadas para ti y Thor.",exploreBtn:"Explorar funciones Premium →",
+  }
+};
+
+/* ─── SHARED COMPONENTS ───────────────────────────────────────── */
+function StatusBar({light=false}){const c=light?"rgba(255,255,255,0.9)":C.dark;return(<div style={{height:44,display:"flex",alignItems:"center",justifyContent:"space-between",padding:"0 24px",fontSize:13,fontWeight:700,color:c}}><span>9:41</span><div style={{display:"flex",gap:5,fontSize:11}}><span>●●●●</span><span>WiFi</span><span style={{fontSize:14}}>🔋</span></div></div>);}
+
+function BottomNav({active,onTab,t}){
+  const tabs=[{id:"home",icon:<Home size={22}/>,label:t.navHome},{id:"health",icon:<Activity size={22}/>,label:t.navHealth},{id:"services",icon:<ShoppingBag size={22}/>,label:t.navServices},{id:"blood",icon:<Droplets size={22}/>,label:t.navBlood},{id:"profile",icon:<User size={22}/>,label:t.navProfile}];
+  return(<div style={{position:"absolute",bottom:0,left:0,right:0,height:80,background:C.white,borderTop:"1px solid rgba(0,0,0,0.08)",display:"flex",alignItems:"center",justifyContent:"space-around",paddingBottom:16}}>
+    {tabs.map(tab=>(<button key={tab.id} onClick={()=>onTab(tab.id)} style={{display:"flex",flexDirection:"column",alignItems:"center",gap:3,background:"none",color:active===tab.id?C.coral:"#C4937A",fontSize:10,fontWeight:active===tab.id?800:500,padding:"4px 6px",border:"none",cursor:"pointer",fontFamily:"inherit"}}>{tab.icon}<span>{tab.label}</span></button>))}
+  </div>);}
+
+function SubHeader({title,onBack,light=false}){return(<div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16}}><button onClick={onBack} style={{background:light?"rgba(255,255,255,0.15)":C.beige,border:"none",width:36,height:36,borderRadius:12,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer"}}><ArrowLeft size={18} color={light?C.white:C.mid}/></button><div style={{fontFamily:"'Playfair Display', serif",fontSize:19,fontWeight:700,color:light?C.white:C.dark}}>{title}</div></div>);}
+
+function LangPicker({lang,setLang,dark=false}){
+  return(<div style={{display:"flex",gap:6,alignItems:"center"}}>
+    {[["pt","🇧🇷"],["en","🇺🇸"],["es","🇪🇸"]].map(([l,flag])=>(
+      <button key={l} onClick={()=>setLang(l)} style={{padding:"5px 10px",borderRadius:12,background:lang===l?(dark?"rgba(0,0,0,0.15)":"rgba(255,255,255,0.2)"):"transparent",border:lang===l?`1.5px solid ${dark?"rgba(0,0,0,0.2)":"rgba(255,255,255,0.4)"}`:"1.5px solid transparent",fontSize:13,cursor:"pointer",fontFamily:"inherit",color:dark?C.dark:C.white,fontWeight:lang===l?800:400}}>
+        {flag} <span style={{fontSize:10,marginLeft:2}}>{l.toUpperCase()}</span>
+      </button>
+    ))}
+  </div>);}
+
+/* ─── WELCOME ─────────────────────────────────────────────────── */
+function WelcomeScreen({onNext,lang,setLang}){
+  const t=i18n[lang];
+  return(<div style={{position:"absolute",inset:0,background:`linear-gradient(160deg,${C.coral} 0%,${C.coralDark} 65%,#7A2010 100%)`,display:"flex",flexDirection:"column",overflow:"hidden"}}>
+    <div style={{position:"absolute",top:-90,right:-90,width:280,height:280,borderRadius:"50%",background:"rgba(255,255,255,0.07)"}}/>
+    <StatusBar light/>
+    <div style={{display:"flex",justifyContent:"flex-end",padding:"0 24px 0"}}><LangPicker lang={lang} setLang={setLang}/></div>
+    <div style={{flex:1,padding:"8px 36px 0",display:"flex",flexDirection:"column"}}>
+      <div style={{fontSize:48,marginBottom:12}}>🐾</div>
+      <div style={{fontFamily:"'Playfair Display', serif",fontSize:54,fontWeight:700,color:C.white,lineHeight:1,marginBottom:8,letterSpacing:-1}}>PetHub</div>
+      <div style={{fontFamily:"'Playfair Display', serif",fontSize:17,fontStyle:"italic",color:"rgba(255,255,255,0.65)",lineHeight:1.5,marginBottom:28}}>{t.tagline}</div>
+      <div style={{display:"flex",flexDirection:"column",gap:14}}>
+        {[t.feat1,t.feat2,t.feat3,t.feat4,t.feat5].map((f,i)=>(<div key={i} style={{display:"flex",alignItems:"center",gap:14}}><div style={{width:34,height:34,borderRadius:11,background:"rgba(255,255,255,0.12)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,flexShrink:0}}>{["🏥","📅","🛒","🩸","🤝"][i]}</div><span style={{color:"rgba(255,255,255,0.85)",fontSize:14,fontWeight:600}}>{f}</span></div>))}
+      </div>
+    </div>
+    <div style={{padding:"24px 32px 44px"}}>
+      <button onClick={onNext} style={{width:"100%",padding:"17px",background:C.white,color:C.coral,borderRadius:18,fontSize:16,fontWeight:800,marginBottom:12,border:"none",cursor:"pointer",fontFamily:"inherit"}}>{t.createAcc}</button>
+      <button style={{width:"100%",padding:"15px",background:"transparent",color:"rgba(255,255,255,0.88)",borderRadius:18,fontSize:14,fontWeight:600,border:"2px solid rgba(255,255,255,0.3)",cursor:"pointer",fontFamily:"inherit"}}>{t.signIn}</button>
+      <div style={{textAlign:"center",marginTop:16,fontSize:10,color:"rgba(255,255,255,0.38)",lineHeight:1.6}}>{t.legal}</div>
+    </div>
+  </div>);}
+
+/* ─── ONBOARDING ──────────────────────────────────────────────── */
+function OnboardingScreen({onNext,lang}){
+  const t=i18n[lang];
+  const [petType,setPetType]=useState("dog");const [name,setName]=useState("");const [breed,setBreed]=useState("");const [age,setAge]=useState("adult");
+  const dogBreeds=["Labrador","Golden Retriever","Bulldog Francês","Poodle","Shih Tzu","Yorkshire","Beagle","SRD"];
+  const catBreeds=["SRD","Siamês","Persa","Maine Coon","Ragdoll","Angorá Turco"];
+  return(<div style={{position:"absolute",inset:0,background:C.beigeLight,overflowY:"auto"}}>
+    <StatusBar/>
+    <div style={{padding:"0 24px 48px"}}>
+      <div style={{display:"flex",gap:8,marginBottom:24}}><div style={{flex:1,height:4,borderRadius:4,background:C.coral}}/><div style={{flex:1,height:4,borderRadius:4,background:C.beige}}/></div>
+      <div style={{fontSize:11,color:C.light,fontWeight:700,letterSpacing:1.2,marginBottom:6,textTransform:"uppercase"}}>{t.step}</div>
+      <div style={{fontFamily:"'Playfair Display', serif",fontSize:25,fontWeight:700,color:C.dark,lineHeight:1.3,marginBottom:6,whiteSpace:"pre-line"}}>{t.obTitle}</div>
+      <div style={{fontSize:14,color:C.light,fontWeight:500,marginBottom:28}}>{t.obSub}</div>
+      <div style={{marginBottom:22}}><div style={{fontSize:11,fontWeight:800,color:C.mid,textTransform:"uppercase",letterSpacing:1.2,marginBottom:10}}>{t.petType}</div>
+        <div style={{display:"flex",gap:10}}>{[{id:"dog",e:"🐶",l:t.dog},{id:"cat",e:"🐱",l:t.cat},{id:"other",e:"🐰",l:t.other}].map(pt=>(<button key={pt.id} onClick={()=>setPetType(pt.id)} style={{flex:1,padding:"16px 8px",borderRadius:16,background:petType===pt.id?C.coral:C.beige,display:"flex",flexDirection:"column",alignItems:"center",gap:7,border:"none",cursor:"pointer",fontFamily:"inherit"}}><span style={{fontSize:26}}>{pt.e}</span><span style={{fontSize:12,fontWeight:700,color:petType===pt.id?C.white:C.mid}}>{pt.l}</span></button>))}</div>
+      </div>
+      <div style={{marginBottom:18}}><div style={{fontSize:11,fontWeight:800,color:C.mid,textTransform:"uppercase",letterSpacing:1.2,marginBottom:10}}>{t.petName}</div>
+        <div style={{background:C.beige,borderRadius:14,padding:"14px 16px",display:"flex",alignItems:"center",gap:10}}><span style={{fontSize:17}}>✏️</span><input value={name} onChange={e=>setName(e.target.value)} placeholder={t.namePH} style={{flex:1,fontSize:15,color:C.dark,fontWeight:500,background:"transparent",border:"none",outline:"none",fontFamily:"inherit"}}/></div>
+      </div>
+      <div style={{marginBottom:18}}>
+        <EditableCombo label={t.breed} options={petType==="cat"?catBreeds:dogBreeds} value={breed} onChange={setBreed} placeholder={t.breedPH}/>
+      </div>
+      <div style={{marginBottom:32}}><div style={{fontSize:11,fontWeight:800,color:C.mid,textTransform:"uppercase",letterSpacing:1.2,marginBottom:10}}>{t.lifeStage}</div>
+        <div style={{display:"flex",gap:10}}>{[["puppy",t.puppy],["adult",t.adult],["senior",t.senior]].map(([id,label])=>(<button key={id} onClick={()=>setAge(id)} style={{flex:1,padding:"12px 8px",borderRadius:13,background:age===id?`${C.coral}20`:C.beige,border:age===id?`2px solid ${C.coral}`:"2px solid transparent",fontSize:13,fontWeight:700,color:age===id?C.coral:C.mid,cursor:"pointer",fontFamily:"inherit"}}>{label}</button>))}</div>
+      </div>
+      <button onClick={onNext} style={{width:"100%",padding:"16px",background:C.coral,color:C.white,borderRadius:18,fontSize:15,fontWeight:800,marginBottom:12,border:"none",cursor:"pointer",fontFamily:"inherit"}}>{t.continue}</button>
+      <div style={{textAlign:"center",fontSize:13,color:C.light,fontWeight:500}}>{t.laterNote}</div>
+    </div>
+  </div>);}
+
+/* ─── HOME ────────────────────────────────────────────────────── */
+function HomeScreen({onNavigate,activeNav,t}){
+  const qas=[{id:"health",icon:"🏥",label:t.qaHealth,sub:t.qaHealthSub,bg:"#E8F5E9"},{id:"services",icon:"🛒",label:t.qaServices,sub:t.qaServicesSub,bg:"#FFF3E0"},{id:"gps",icon:"📡",label:t.qaGPS,sub:t.qaGPSSub,bg:"#E3F2FD"},{id:"map",icon:"🗺️",label:t.qaMap,sub:t.qaMapSub,bg:"#E8EAF6"},{id:"petbot",icon:"🤖",label:t.qaPetbot,sub:t.qaPetbotSub,bg:"#F3E5F5"},{id:"routine",icon:"📋",label:t.qaRoutine,sub:t.qaRoutineSub,bg:"#E0F7FA"}];
+  const rems=[{icon:"💉",title:t.rem1,sub:t.rem1s,urgent:true},{icon:"🪥",title:t.rem2,sub:t.rem2s,urgent:false},{icon:"💊",title:t.rem3,sub:t.rem3s,urgent:false}];
+  return(<div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column"}}>
+    <div style={{flex:1,overflowY:"auto",background:C.beigeLight}}>
+      <StatusBar/>
+      <div style={{padding:"0 24px 18px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+        <div><div style={{fontSize:13,color:C.light,fontWeight:600}}>{t.greeting}</div><div style={{fontFamily:"'Playfair Display', serif",fontSize:21,fontWeight:700,color:C.dark}}>Maria Silva 👋</div></div>
+        <button onClick={()=>onNavigate("notifications")} style={{width:44,height:44,borderRadius:13,background:C.white,display:"flex",alignItems:"center",justifyContent:"center",boxShadow:"0 2px 8px rgba(0,0,0,0.08)",position:"relative",border:"none",cursor:"pointer"}}>
+          <Bell size={20} color={C.mid}/><div style={{position:"absolute",top:8,right:8,width:8,height:8,borderRadius:"50%",background:C.coral,border:"2px solid white"}}/>
+        </button>
+      </div>
+
+      {/* 🩸 BLOOD DONATION CAMPAIGN BANNER — prominent hero */}
+      <div style={{padding:"0 24px 18px"}}>
+        <div onClick={()=>onNavigate("blood")} style={{background:`linear-gradient(130deg,${C.blood} 0%,${C.bloodDark} 100%)`,borderRadius:22,padding:"18px 20px",cursor:"pointer",position:"relative",overflow:"hidden"}}>
+          <div style={{position:"absolute",right:-30,top:-30,width:130,height:130,borderRadius:"50%",background:"rgba(255,255,255,0.06)"}}/>
+          <div style={{position:"absolute",right:16,top:16,background:"rgba(255,255,255,0.18)",borderRadius:8,padding:"3px 8px",fontSize:9,fontWeight:800,color:C.white,letterSpacing:1}}>{t.bloodBannerLabel}</div>
+          <div style={{fontSize:32,marginBottom:8}}>🩸</div>
+          <div style={{fontFamily:"'Playfair Display', serif",fontSize:18,fontWeight:700,color:C.white,marginBottom:4}}>{t.bloodBannerTitle}</div>
+          <div style={{fontSize:12,color:"rgba(255,255,255,0.75)",fontWeight:500,lineHeight:1.5,marginBottom:14}}>{t.bloodBannerText}</div>
+          <div style={{background:"rgba(255,255,255,0.2)",borderRadius:12,padding:"9px 16px",display:"inline-flex",alignItems:"center",gap:8,fontSize:13,fontWeight:700,color:C.white}}>
+            {t.bloodBannerCta}
+          </div>
+        </div>
+      </div>
+
+      {/* Pet card */}
+      <div style={{padding:"0 24px 20px"}}>
+        <div onClick={()=>onNavigate("qrcode")} style={{background:`linear-gradient(130deg,${C.coral} 0%,${C.coralDark} 100%)`,borderRadius:22,padding:"20px",display:"flex",alignItems:"center",gap:16,position:"relative",overflow:"hidden",cursor:"pointer"}}>
+          <div style={{position:"absolute",right:-25,top:-25,width:120,height:120,borderRadius:"50%",background:"rgba(255,255,255,0.07)"}}/>
+          <div style={{position:"absolute",top:12,right:14}}><QrCode size={16} color="rgba(255,255,255,0.4)"/></div>
+          <div style={{width:64,height:64,borderRadius:"50%",background:"rgba(255,255,255,0.18)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:30,flexShrink:0,border:"2px solid rgba(255,255,255,0.35)"}}>🐶</div>
+          <div style={{flex:1}}>
+            <div style={{fontFamily:"'Playfair Display', serif",fontSize:20,fontWeight:700,color:C.white}}>Thor</div>
+            <div style={{color:"rgba(255,255,255,0.7)",fontSize:12,fontWeight:500,marginBottom:10}}>Golden Retriever · 3 {t.adult === "Adulto" ? "anos" : t.adult === "Adult" ? "years" : "años"}</div>
+            <div style={{display:"flex",gap:8}}>
+              <div style={{background:"rgba(255,255,255,0.18)",borderRadius:9,padding:"4px 10px",fontSize:12,color:C.white,fontWeight:700}}>❤️ {t.scoreLabel} 87</div>
+              <div style={{background:"rgba(255,150,50,0.3)",borderRadius:9,padding:"4px 10px",fontSize:12,color:"#FFD580",fontWeight:700}}>⚠️ Vacina</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Actions */}
+      <div style={{padding:"0 24px 20px"}}>
+        <div style={{fontFamily:"'Playfair Display', serif",fontSize:17,fontWeight:700,color:C.dark,marginBottom:12}}>{t.quickAccess}</div>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8}}>
+          {qas.map(a=>(<button key={a.id} onClick={()=>onNavigate(a.id)} style={{background:C.white,borderRadius:18,padding:"16px 13px",textAlign:"left",boxShadow:"0 2px 10px rgba(0,0,0,0.06)",position:"relative",overflow:"hidden",border:"none",cursor:"pointer",fontFamily:"inherit"}}>
+            <div style={{position:"absolute",top:-10,right:-10,width:50,height:50,borderRadius:"50%",background:a.bg}}/>
+            <div style={{fontSize:22,marginBottom:7}}>{a.icon}</div>
+            <div style={{fontSize:13,fontWeight:800,color:C.dark,marginBottom:2,lineHeight:1.2}}>{a.label}</div>
+            <div style={{fontSize:11,color:C.light,fontWeight:600}}>{a.sub}</div>
+          </button>))}
+        </div>
+      </div>
+
+      {/* Reminders */}
+      <div style={{padding:"0 24px 20px"}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
+          <div style={{fontFamily:"'Playfair Display', serif",fontSize:17,fontWeight:700,color:C.dark}}>{t.reminders}</div>
+          <button style={{fontSize:13,color:C.coral,fontWeight:700,background:"none",border:"none",cursor:"pointer",fontFamily:"inherit"}}>{t.seeAll}</button>
+        </div>
+        <div style={{display:"flex",flexDirection:"column",gap:9}}>
+          {rems.map((r,i)=>(<div key={i} style={{background:C.white,borderRadius:15,padding:"13px 15px",display:"flex",alignItems:"center",gap:13,boxShadow:"0 2px 8px rgba(0,0,0,0.05)",borderLeft:r.urgent?`4px solid ${C.coral}`:"4px solid transparent"}}>
+            <div style={{width:38,height:38,borderRadius:11,background:r.urgent?`${C.coral}15`:C.beige,display:"flex",alignItems:"center",justifyContent:"center",fontSize:17,flexShrink:0}}>{r.icon}</div>
+            <div style={{flex:1}}><div style={{fontSize:14,fontWeight:700,color:C.dark}}>{r.title}</div><div style={{fontSize:12,color:C.light,fontWeight:500,marginTop:2}}>{r.sub}</div></div>
+            {r.urgent&&<div style={{background:`${C.coral}15`,color:C.coral,fontSize:9,fontWeight:800,padding:"4px 8px",borderRadius:8}}>{t.urgent}</div>}
+          </div>))}
+        </div>
+      </div>
+
+      {/* Agenda shortcut */}
+      <div style={{padding:"0 24px 32px"}}>
+        <div onClick={()=>onNavigate("agenda")} style={{background:C.white,borderRadius:16,padding:"15px 18px",display:"flex",alignItems:"center",gap:13,boxShadow:"0 2px 8px rgba(0,0,0,0.05)",cursor:"pointer"}}>
+          <div style={{width:42,height:42,borderRadius:12,background:`${C.coral}15`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:19,flexShrink:0}}>📅</div>
+          <div style={{flex:1}}><div style={{fontSize:14,fontWeight:700,color:C.dark}}>{t.mySchedule}</div><div style={{fontSize:12,color:C.light,fontWeight:500,marginTop:2}}>{t.aptsWeek}</div></div>
+          <ChevronRight size={16} color={C.light}/>
+        </div>
+      </div>
+    </div>
+    <BottomNav active={activeNav} onTab={onNavigate} t={t}/>
+  </div>);}
+
+/* ─── HEALTH ──────────────────────────────────────────────────── */
+function HealthScreen({onNavigate,activeNav,t}){
+  const [tab,setTab]=useState("v");
+  const vacc=[{n:"V10 Múltipla",w:true,d:"15/06/2026"},{n:"Antirrábica",w:false,d:"20/12/2025"},{n:"Giárdia",w:false,d:"05/03/2026"},{n:"Leishmaniose",w:false,d:"10/01/2026"}];
+  const cons=[{d:"28/04/2026",vet:"Dr. Carlos Mendes",cl:"Clínica PetVida",r:"Check-up anual"},{d:"12/01/2026",vet:"Dra. Ana Lima",cl:"Hospital Vet. USP",r:"Vermínoses"},{d:"03/09/2025",vet:"Dr. Carlos Mendes",cl:"Clínica PetVida",r:"Consulta geral"}];
+  const docs=[{i:"📄",n:"Carteira de Vacinação",s:"1.2 MB",d:"Mai 2026"},{i:"🧪",n:"Hemograma Completo",s:"0.8 MB",d:"Jan 2026"},{i:"📷",n:"Raio-X Coluna",s:"3.4 MB",d:"Set 2025"}];
+  const metrics=[{l:t.mVaccines,v:75,c:"#FFD580"},{l:t.mConsults,v:90,c:"#A8E6CF"},{l:"Rotina",v:88,c:"#B8D4FF"},{l:"Peso",v:95,c:"#FFB8C6"}];
+  return(<div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column"}}>
+    <div style={{flex:1,overflowY:"auto"}}>
+      <div style={{background:`linear-gradient(130deg,${C.coral} 0%,${C.coralDark} 100%)`,padding:"0 24px 22px",position:"relative",overflow:"hidden"}}>
+        <div style={{position:"absolute",right:-35,top:-35,width:140,height:140,borderRadius:"50%",background:"rgba(255,255,255,0.07)"}}/>
+        <StatusBar light/><div style={{fontFamily:"'Playfair Display', serif",fontSize:21,fontWeight:700,color:C.white,marginBottom:14}}>{t.healthTitle}</div>
+        <div style={{background:"rgba(255,255,255,0.15)",borderRadius:18,padding:"14px",display:"flex",alignItems:"center",gap:14}}>
+          <div style={{textAlign:"center"}}><div style={{fontSize:33,fontWeight:800,color:C.white,lineHeight:1}}>87</div><div style={{fontSize:10,color:"rgba(255,255,255,0.65)",fontWeight:600,marginTop:2}}>/ 100</div><div style={{fontSize:11,color:"rgba(255,255,255,0.8)",fontWeight:700,marginTop:3}}>{t.scoreLabel}</div></div>
+          <div style={{flex:1}}>{metrics.map(m=>(<div key={m.l} style={{marginBottom:6,display:"flex",alignItems:"center",gap:7}}><div style={{fontSize:10,color:"rgba(255,255,255,0.75)",fontWeight:600,width:54,flexShrink:0}}>{m.l}</div><div style={{flex:1,height:6,borderRadius:3,background:"rgba(255,255,255,0.2)"}}><div style={{width:`${m.v}%`,height:"100%",borderRadius:3,background:m.c}}/></div><div style={{fontSize:10,color:"rgba(255,255,255,0.8)",fontWeight:700,width:22}}>{m.v}</div></div>))}</div>
+        </div>
+      </div>
+      <div style={{background:C.white,display:"flex",borderBottom:"1px solid rgba(0,0,0,0.06)"}}>
+        {[["v",t.mVaccines],["c",t.mConsults],["d",t.mDocs]].map(([id,label])=>(<button key={id} onClick={()=>setTab(id)} style={{flex:1,padding:"13px 6px",fontSize:13,fontWeight:tab===id?800:600,color:tab===id?C.coral:C.light,background:"none",border:"none",borderBottom:tab===id?`2.5px solid ${C.coral}`:"2.5px solid transparent",cursor:"pointer",fontFamily:"inherit"}}>{label}</button>))}
+      </div>
+      <div style={{padding:"18px 24px 100px",background:C.beigeLight}}>
+        {tab==="v"&&<div style={{display:"flex",flexDirection:"column",gap:10}}>{vacc.map((v,i)=>(<div key={i} style={{background:C.white,borderRadius:15,padding:"13px 15px",display:"flex",alignItems:"center",gap:13,boxShadow:"0 2px 8px rgba(0,0,0,0.05)",borderLeft:v.w?`4px solid ${C.coral}`:`4px solid ${C.green}`}}><div style={{width:38,height:38,borderRadius:11,background:v.w?`${C.coral}15`:`${C.green}15`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:17,flexShrink:0}}>{v.w?"⚠️":"💉"}</div><div style={{flex:1}}><div style={{fontSize:14,fontWeight:700,color:C.dark}}>{v.n}</div><div style={{fontSize:12,color:v.w?C.coral:C.green,fontWeight:600,marginTop:2}}>{v.w?t.warnLabel:t.inDate}</div></div><div style={{fontSize:11,color:C.light,fontWeight:600}}>{v.d}</div></div>))}
+          <button onClick={()=>onNavigate("addvaccine")} style={{width:"100%",marginTop:4,padding:"13px",background:C.coral,color:C.white,borderRadius:13,fontSize:14,fontWeight:700,border:"none",cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",justifyContent:"center",gap:8}}><Plus size={15}/>{t.addVaccBtn}</button>
+          <div style={{display:"flex",gap:9,marginTop:9}}>
+            <button onClick={()=>onNavigate("breed")} style={{flex:1,padding:"12px",background:C.beige,color:C.mid,borderRadius:13,fontSize:13,fontWeight:700,border:"none",cursor:"pointer",fontFamily:"inherit"}}>🐕 Características da Raça</button>
+            <button onClick={()=>onNavigate("gps")} style={{flex:1,padding:"12px",background:"#E3F2FD",color:"#1565C0",borderRadius:13,fontSize:13,fontWeight:700,border:"none",cursor:"pointer",fontFamily:"inherit"}}>📡 Localizar Thor</button>
+          </div>
+        </div>}
+        {tab==="c"&&<div style={{display:"flex",flexDirection:"column",gap:10}}>{cons.map((c,i)=>(<div key={i} style={{background:C.white,borderRadius:15,padding:"15px",boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}><div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:8}}><div><div style={{fontSize:14,fontWeight:700,color:C.dark}}>{c.vet}</div><div style={{fontSize:12,color:C.light,fontWeight:500,marginTop:2}}>{c.cl}</div></div><div style={{fontSize:12,color:C.mid,fontWeight:700}}>{c.d}</div></div><div style={{background:C.beige,borderRadius:9,padding:"9px 11px"}}><div style={{fontSize:11,color:C.mid,fontWeight:700,marginBottom:2,textTransform:"uppercase",letterSpacing:0.8}}>{t.mConsults}</div><div style={{fontSize:13,color:C.dark,fontWeight:600}}>{c.r}</div></div></div>))}</div>}
+        {tab==="d"&&<div style={{display:"flex",flexDirection:"column",gap:10}}>{docs.map((d,i)=>(<div key={i} style={{background:C.white,borderRadius:15,padding:"13px 15px",display:"flex",alignItems:"center",gap:13,boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}><div style={{width:42,height:42,borderRadius:11,background:C.beige,display:"flex",alignItems:"center",justifyContent:"center",fontSize:19,flexShrink:0}}>{d.i}</div><div style={{flex:1}}><div style={{fontSize:14,fontWeight:700,color:C.dark}}>{d.n}</div><div style={{fontSize:11,color:C.light,fontWeight:500,marginTop:2}}>{d.s} · {d.d}</div></div><ChevronRight size={15} color={C.light}/></div>))}
+          <button style={{width:"100%",marginTop:4,padding:"13px",background:C.coral,color:C.white,borderRadius:13,fontSize:14,fontWeight:700,border:"none",cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",justifyContent:"center",gap:8}}><Plus size={15}/>{t.addDocBtn}</button>
+        </div>}
+      </div>
+    </div>
+    <BottomNav active={activeNav} onTab={onNavigate} t={t}/>
+  </div>);}
+
+/* ─── SERVICES ────────────────────────────────────────────────── */
+function ServicesScreen({onNavigate,activeNav,t,setProvider}){
+  const [cat,setCat]=useState("todos");
+  const cats=[["todos",t.allCat],["vet","🏥 Vet"],["banho","🛁"],["passeador","🦮"],["hotel","🏡"],["adestrador","🎓"]];
+  const providers=[{name:"Dr. Carlos Mendes",type:"vet",cat:"Veterinário",rating:4.9,rev:127,dist:"1,2 km",price:"R$120",e:"👨‍⚕️",ok:true},{name:"PetSpa Premium",type:"banho",cat:"Banho & Tosa",rating:4.8,rev:89,dist:"0,8 km",price:"R$65",e:"🛁",ok:true},{name:"João Passeador",type:"passeador",cat:"Passeador",rating:4.7,rev:56,dist:"2,1 km",price:"R$45",e:"🦮",ok:false},{name:"Hotel Bicho Feliz",type:"hotel",cat:"Hotel Pet",rating:4.6,rev:203,dist:"3,4 km",price:"R$89/noite",e:"🏡",ok:true},{name:"Dra. Ana Lima",type:"vet",cat:"Veterinária",rating:4.9,rev:218,dist:"4,0 km",price:"R$150",e:"👩‍⚕️",ok:true},{name:"Mundo Pet Training",type:"adestrador",cat:"Adestramento",rating:4.5,rev:42,dist:"5,2 km",price:"R$120",e:"🎓",ok:true}];
+  const filtered=cat==="todos"?providers:providers.filter(p=>p.type===cat);
+  return(<div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column"}}>
+    <div style={{flex:1,overflowY:"auto",background:C.beigeLight}}>
+      <StatusBar/>
+      <div style={{padding:"0 24px 14px"}}><div style={{fontFamily:"'Playfair Display', serif",fontSize:21,fontWeight:700,color:C.dark,marginBottom:13}}>{t.servTitle}</div>
+        <div style={{background:C.white,borderRadius:15,padding:"11px 16px",display:"flex",alignItems:"center",gap:9,boxShadow:"0 2px 10px rgba(0,0,0,0.06)"}}><Search size={17} color={C.light}/><input placeholder={t.searchServ} style={{flex:1,fontSize:14,color:C.dark,background:"transparent",border:"none",outline:"none",fontFamily:"inherit"}}/></div>
+      </div>
+      <div style={{padding:"0 16px 14px",display:"flex",gap:7,overflowX:"auto"}}>{cats.map(([id,l])=>(<button key={id} onClick={()=>setCat(id)} style={{padding:"7px 14px",borderRadius:18,background:cat===id?C.coral:C.white,color:cat===id?C.white:C.mid,fontSize:12,fontWeight:700,border:cat===id?"none":`1px solid ${C.beige}`,cursor:"pointer",fontFamily:"inherit",whiteSpace:"nowrap",flexShrink:0}}>{l}</button>))}</div>
+      <div style={{padding:"0 24px 32px",display:"flex",flexDirection:"column",gap:11}}>
+        <div style={{fontFamily:"'Playfair Display', serif",fontSize:15,fontWeight:700,color:C.dark,marginBottom:2}}>{filtered.length} {t.nearProviders}</div>
+        {filtered.map((p,i)=>(<div key={i} onClick={()=>{setProvider(p);onNavigate("servicedetail");}} style={{background:C.white,borderRadius:18,padding:"15px",boxShadow:"0 2px 10px rgba(0,0,0,0.06)",cursor:"pointer"}}>
+          <div style={{display:"flex",gap:13,marginBottom:11}}><div style={{width:50,height:50,borderRadius:14,background:C.beige,display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,flexShrink:0}}>{p.e}</div>
+            <div style={{flex:1}}><div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}><div style={{fontSize:14,fontWeight:800,color:C.dark}}>{p.name}</div><div style={{fontSize:11,color:p.ok?C.green:C.light,fontWeight:700,background:p.ok?`${C.green}15`:`${C.light}20`,padding:"3px 8px",borderRadius:8}}>{p.ok?t.available:t.unavailable}</div></div>
+              <div style={{fontSize:12,color:C.light,fontWeight:500,marginTop:2}}>{p.cat}</div>
+              <div style={{display:"flex",alignItems:"center",gap:7,marginTop:5}}><Star size={11} fill={C.coral} color={C.coral}/><span style={{fontSize:12,fontWeight:700,color:C.dark}}>{p.rating}</span><span style={{fontSize:11,color:C.light}}>({p.rev}) · {p.dist}</span></div>
+            </div>
+          </div>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}><div style={{fontSize:13,color:C.mid,fontWeight:700}}>{p.price}</div><div style={{padding:"8px 16px",background:p.ok?C.coral:C.beige,color:p.ok?C.white:C.light,borderRadius:11,fontSize:12,fontWeight:700}}>{p.ok?t.viewDet:t.unavailable}</div></div>
+        </div>))}
+      </div>
+    </div>
+    <BottomNav active={activeNav} onTab={onNavigate} t={t}/>
+  </div>);}
+
+/* ─── BLOOD GUIDE (NEW — How to Donate) ──────────────────────── */
+function BloodGuideScreen({onNavigate,activeNav,t}){
+  const [openMyth,setOpenMyth]=useState(null);
+  const [petTab,setPetTab]=useState("dog");
+  const myths=[[t.bgM1q,t.bgM1a],[t.bgM2q,t.bgM2a],[t.bgM3q,t.bgM3a]];
+  const steps=[{n:"01",title:t.bgStep1,desc:t.bgStep1d},{n:"02",title:t.bgStep2,desc:t.bgStep2d},{n:"03",title:t.bgStep3,desc:t.bgStep3d},{n:"04",title:t.bgStep4,desc:t.bgStep4d}];
+  const reqDog=[t.bgReq1,t.bgReq2,t.bgReq3,t.bgReq4,t.bgReq5];
+  const reqCat=[t.bgReq1c,t.bgReq2,t.bgReq3,t.bgReq4,t.bgReq5];
+  const centers=[{name:"Hospital Vet. USP",dist:"2,3 km",type:"Banco de Sangue Oficial"},{name:"Clínica PetVida",dist:"4,1 km",type:"Centro de Coleta Parceiro"},{name:"Hospital AniVet",dist:"6,7 km",type:"Banco de Sangue Oficial"}];
+  return(<div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column"}}>
+    <div style={{flex:1,overflowY:"auto"}}>
+      {/* Hero header */}
+      <div style={{background:`linear-gradient(140deg,${C.blood} 0%,${C.bloodDark} 100%)`,padding:"0 24px 26px",position:"relative",overflow:"hidden"}}>
+        <div style={{position:"absolute",right:-50,top:-50,width:200,height:200,borderRadius:"50%",background:"rgba(255,255,255,0.05)"}}/>
+        <div style={{position:"absolute",left:-30,bottom:-20,width:120,height:120,borderRadius:"50%",background:"rgba(255,255,255,0.04)"}}/>
+        <StatusBar light/>
+        <button onClick={()=>onNavigate("home")} style={{background:"rgba(255,255,255,0.12)",border:"none",display:"flex",alignItems:"center",gap:7,color:C.white,marginBottom:18,fontSize:13,fontWeight:600,borderRadius:10,padding:"6px 12px",cursor:"pointer",fontFamily:"inherit"}}>
+          <ArrowLeft size={15}/>{t.bgBack}
+        </button>
+        <div style={{fontSize:36,marginBottom:10}}>🩸</div>
+        <div style={{fontFamily:"'Playfair Display', serif",fontSize:24,fontWeight:700,color:C.white,lineHeight:1.2,marginBottom:6}}>{t.bgTitle}</div>
+        <div style={{color:"rgba(255,255,255,0.7)",fontSize:13,fontWeight:500,marginBottom:20}}>{t.bgSub}</div>
+        {/* Impact stats */}
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8}}>
+          {[[t.bgStat1,t.bgStat1s,"🏥"],[t.bgStat2,t.bgStat2s,"📊"],[t.bgStat3,t.bgStat3s,"❤️"]].map(([stat,sub,icon],i)=>(<div key={i} style={{background:"rgba(255,255,255,0.12)",borderRadius:14,padding:"12px 8px",textAlign:"center"}}>
+            <div style={{fontSize:20,marginBottom:4}}>{icon}</div>
+            <div style={{fontSize:11,color:C.white,fontWeight:800,lineHeight:1.3,whiteSpace:"pre-line"}}>{stat}</div>
+            <div style={{fontSize:10,color:"rgba(255,255,255,0.65)",fontWeight:500,marginTop:3,lineHeight:1.3}}>{sub}</div>
+          </div>))}
+        </div>
+      </div>
+
+      <div style={{padding:"20px 24px 32px",background:C.beigeLight}}>
+        {/* Why it matters */}
+        <div style={{background:C.white,borderRadius:18,padding:"18px",marginBottom:20,boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}>
+          <div style={{fontFamily:"'Playfair Display', serif",fontSize:17,fontWeight:700,color:C.dark,marginBottom:10}}>{t.bgWhyTitle}</div>
+          <div style={{fontSize:13,color:C.mid,fontWeight:500,lineHeight:1.6}}>{t.bgWhyText}</div>
+        </div>
+
+        {/* How it works */}
+        <div style={{fontFamily:"'Playfair Display', serif",fontSize:17,fontWeight:700,color:C.dark,marginBottom:12}}>{t.bgHowTitle}</div>
+        <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:20}}>
+          {steps.map(s=>(<div key={s.n} style={{background:C.white,borderRadius:15,padding:"15px",display:"flex",gap:13,boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}>
+            <div style={{width:34,height:34,borderRadius:10,background:C.blood,color:C.white,fontSize:11,fontWeight:800,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>{s.n}</div>
+            <div><div style={{fontSize:14,fontWeight:700,color:C.dark}}>{s.title}</div><div style={{fontSize:12,color:C.light,fontWeight:500,marginTop:3,lineHeight:1.4}}>{s.desc}</div></div>
+          </div>))}
+        </div>
+
+        {/* Requirements */}
+        <div style={{fontFamily:"'Playfair Display', serif",fontSize:17,fontWeight:700,color:C.dark,marginBottom:12}}>{t.bgReqTitle}</div>
+        <div style={{background:C.white,borderRadius:18,overflow:"hidden",marginBottom:20,boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}>
+          <div style={{display:"flex"}}>{[["dog",t.bgReqDog,"🐶"],["cat",t.bgReqCat,"🐱"]].map(([id,label,icon])=>(<button key={id} onClick={()=>setPetTab(id)} style={{flex:1,padding:"12px",fontSize:13,fontWeight:petTab===id?800:600,color:petTab===id?C.blood:C.light,background:"none",border:"none",borderBottom:petTab===id?`2.5px solid ${C.blood}`:"2.5px solid transparent",cursor:"pointer",fontFamily:"inherit"}}>{icon} {label}</button>))}</div>
+          <div style={{padding:"14px 16px"}}>
+            {(petTab==="dog"?reqDog:reqCat).map((r,i)=>(<div key={i} style={{display:"flex",alignItems:"center",gap:10,padding:"8px 0",borderBottom:i<4?"1px solid rgba(0,0,0,0.05)":"none"}}>
+              <div style={{width:20,height:20,borderRadius:"50%",background:`${C.green}15`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,flexShrink:0}}>✅</div>
+              <div style={{fontSize:13,color:C.dark,fontWeight:500}}>{r}</div>
+            </div>))}
+          </div>
+        </div>
+
+        {/* Myths */}
+        <div style={{fontFamily:"'Playfair Display', serif",fontSize:17,fontWeight:700,color:C.dark,marginBottom:12}}>{t.bgMythTitle}</div>
+        <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:20}}>
+          {myths.map(([q,a],i)=>(<div key={i} style={{background:C.white,borderRadius:15,overflow:"hidden",boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}>
+            <div onClick={()=>setOpenMyth(openMyth===i?null:i)} style={{padding:"14px 16px",display:"flex",justifyContent:"space-between",alignItems:"center",cursor:"pointer"}}>
+              <div style={{display:"flex",alignItems:"center",gap:10}}>
+                <span style={{fontSize:14}}>❌</span>
+                <div style={{fontSize:13,fontWeight:700,color:C.dark,lineHeight:1.3}}>{q}</div>
+              </div>
+              <div style={{color:C.light,fontSize:16,flexShrink:0,marginLeft:8}}>{openMyth===i?"▲":"▼"}</div>
+            </div>
+            {openMyth===i&&<div style={{padding:"0 16px 14px 40px",fontSize:13,color:C.green,fontWeight:600,lineHeight:1.5}}>✅ {a}</div>}
+          </div>))}
+        </div>
+
+        {/* Nearby centers */}
+        <div style={{fontFamily:"'Playfair Display', serif",fontSize:17,fontWeight:700,color:C.dark,marginBottom:12}}>{t.bgNearTitle}</div>
+        <div style={{display:"flex",flexDirection:"column",gap:9,marginBottom:24}}>
+          {centers.map((cen,i)=>(<div key={i} style={{background:C.white,borderRadius:14,padding:"13px 15px",display:"flex",alignItems:"center",gap:13,boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}>
+            <div style={{width:38,height:38,borderRadius:11,background:`${C.blood}12`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:17}}>🏥</div>
+            <div style={{flex:1}}><div style={{fontSize:14,fontWeight:700,color:C.dark}}>{cen.name}</div><div style={{fontSize:11,color:C.light,fontWeight:500,marginTop:2}}>{cen.type}</div></div>
+            <div style={{background:`${C.blood}12`,color:C.blood,fontSize:11,fontWeight:800,padding:"5px 10px",borderRadius:9}}>{cen.dist}</div>
+          </div>))}
+        </div>
+
+        <button onClick={()=>onNavigate("blooddonation")} style={{width:"100%",padding:"16px",background:C.blood,color:C.white,borderRadius:18,fontSize:15,fontWeight:800,border:"none",cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",justifyContent:"center",gap:10}}>
+          🩸 {t.bgCta}
+        </button>
+      </div>
+    </div>
+    <BottomNav active={activeNav} onTab={onNavigate} t={t}/>
+  </div>);}
+
+/* ─── BLOOD DONATION (Registration) ──────────────────────────── */
+function BloodDonationScreen({onNavigate,activeNav,t}){
+  const [registered,setRegistered]=useState(false);
+  return(<div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column"}}>
+    <div style={{flex:1,overflowY:"auto"}}>
+      <div style={{background:`linear-gradient(135deg,${C.blood} 0%,${C.bloodDark} 100%)`,padding:"0 24px 26px",position:"relative",overflow:"hidden"}}>
+        <div style={{position:"absolute",right:-50,top:-50,width:200,height:200,borderRadius:"50%",background:"rgba(255,255,255,0.05)"}}/>
+        <StatusBar light/>
+        <button onClick={()=>onNavigate("blood")} style={{background:"none",display:"flex",alignItems:"center",gap:7,color:"rgba(255,255,255,0.8)",marginBottom:18,fontSize:13,fontWeight:600,border:"none",cursor:"pointer",fontFamily:"inherit"}}><ArrowLeft size={16}/>{t.bgBack}</button>
+        <div style={{fontSize:38,marginBottom:8}}>🩸</div>
+        <div style={{fontFamily:"'Playfair Display', serif",fontSize:22,fontWeight:700,color:C.white,lineHeight:1.2,marginBottom:6}}>Cadastro de Doador</div>
+        <div style={{color:"rgba(255,255,255,0.7)",fontSize:13,fontWeight:500}}>Verifique a elegibilidade do Thor e cadastre agora</div>
+      </div>
+      <div style={{padding:"20px 24px 32px",background:C.beigeLight}}>
+        <div style={{background:C.white,borderRadius:18,padding:"16px",marginBottom:20,boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}>
+          <div style={{fontSize:12,fontWeight:800,color:C.mid,textTransform:"uppercase",letterSpacing:1,marginBottom:12}}>Thor está elegível?</div>
+          {[{t:"Peso mínimo 25kg",ok:true},{t:"Entre 1 e 8 anos",ok:true},{t:"Vacinação em dia",ok:false},{t:"Sem doenças infecciosas",ok:true},{t:"Sem doação há 3 meses",ok:true}].map((e,i)=>(<div key={i} style={{display:"flex",alignItems:"center",gap:10,padding:"9px 0",borderBottom:i<4?"1px solid rgba(0,0,0,0.05)":"none"}}><span style={{fontSize:15,flexShrink:0}}>{e.ok?"✅":"⚠️"}</span><div style={{fontSize:13,color:e.ok?C.dark:C.blood,fontWeight:e.ok?500:700}}>{e.t}</div></div>))}
+          <div style={{marginTop:12,padding:"11px 12px",borderRadius:11,background:"#FFF3E0",fontSize:12,color:"#E65100",fontWeight:600,lineHeight:1.4}}>⚠️ Thor precisa atualizar a vacinação antes de se cadastrar como doador.</div>
+        </div>
+        <button onClick={()=>setRegistered(!registered)} style={{width:"100%",padding:"16px",background:registered?C.green:C.blood,color:C.white,borderRadius:18,fontSize:15,fontWeight:800,display:"flex",alignItems:"center",justifyContent:"center",gap:9,border:"none",cursor:"pointer",fontFamily:"inherit",transition:"background 0.3s"}}>
+          {registered?"✅ Thor cadastrado como doador!":"🩸 Cadastrar Thor como Doador"}
+        </button>
+      </div>
+    </div>
+    <BottomNav active={activeNav} onTab={onNavigate} t={t}/>
+  </div>);}
+
+/* ─── MAP ─────────────────────────────────────────────────────── */
+function MapScreen({onNavigate,activeNav,t}){
+  const places=[{e:"🌳",n:"Parque Villa-Lobos",type:"Parque",dist:"1,2 km",r:4.8,rev:342,tag:"Pet-friendly"},{e:"☕",n:"Café dos Anjos",type:"Café",dist:"0,5 km",r:4.6,rev:89,tag:"Permite pets"},{e:"🏨",n:"Hotel Emiliano SP",type:"Hospedagem",dist:"4,1 km",r:4.9,rev:156,tag:"Aceita pets"},{e:"🏖️",n:"Pet Beach Club",type:"Lazer",dist:"6,8 km",r:4.7,rev:203,tag:"Pet-friendly"}];
+  const posts=[{u:"Ana & Luna 🐱",t:"há 23 min",txt:"Parque Villa-Lobos hoje de manhã estava incrível! Muitos pets e tutores simpáticos.",l:14},{u:"Pedro & Rex 🐶",t:"há 1h",txt:"Café dos Anjos foi show. Aceitaram o Rex na varanda sem problema!",l:31}];
+  return(<div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column"}}>
+    <div style={{flex:1,overflowY:"auto",background:C.beigeLight}}>
+      <StatusBar/>
+      <div style={{padding:"0 24px 14px"}}><div style={{fontFamily:"'Playfair Display', serif",fontSize:21,fontWeight:700,color:C.dark,marginBottom:12}}>{t.discTitle}</div>
+        <div style={{background:C.white,borderRadius:14,padding:"11px 16px",display:"flex",alignItems:"center",gap:9,boxShadow:"0 2px 10px rgba(0,0,0,0.06)"}}><Search size={16} color={C.light}/><input placeholder={t.searchPlaces} style={{flex:1,fontSize:14,color:C.dark,background:"transparent",border:"none",outline:"none",fontFamily:"inherit"}}/></div>
+      </div>
+      {/* Map visual */}
+      <div style={{margin:"0 24px 18px",borderRadius:18,overflow:"hidden",height:170,background:"#C8D8A8",position:"relative"}}>
+        <div style={{position:"absolute",inset:0,background:"linear-gradient(180deg,rgba(0,0,0,0) 50%,rgba(0,0,0,0.3) 100%)"}}/>
+        <div style={{position:"absolute",top:"42%",left:0,right:0,height:2,background:"rgba(255,255,255,0.5)"}}/>
+        <div style={{position:"absolute",top:0,bottom:0,left:"38%",width:2,background:"rgba(255,255,255,0.4)"}}/>
+        {[{top:"18%",left:"22%"},{top:"52%",left:"58%"},{top:"30%",left:"72%"},{top:"62%",left:"28%"}].map((pos,i)=>(<div key={i} style={{position:"absolute",top:pos.top,left:pos.left}}><div style={{width:24,height:24,borderRadius:"50% 50% 50% 0",background:C.coral,transform:"rotate(-45deg)",border:"2px solid white",display:"flex",alignItems:"center",justifyContent:"center"}}><div style={{transform:"rotate(45deg)",fontSize:9}}>🐾</div></div></div>))}
+        <div style={{position:"absolute",top:"46%",left:"50%"}}><div style={{width:14,height:14,borderRadius:"50%",background:"#4285F4",border:"3px solid white"}}/></div>
+        <div style={{position:"absolute",bottom:10,left:14,right:14,display:"flex",justifyContent:"space-between"}}>
+          <div style={{background:"rgba(0,0,0,0.5)",color:"white",fontSize:10,fontWeight:700,padding:"3px 9px",borderRadius:7}}>📍 São Paulo</div>
+          <div style={{background:C.coral,color:"white",fontSize:10,fontWeight:700,padding:"3px 9px",borderRadius:7}}>4 lugares</div>
+        </div>
+      </div>
+      <div style={{padding:"0 24px 18px"}}><div style={{fontFamily:"'Playfair Display', serif",fontSize:17,fontWeight:700,color:C.dark,marginBottom:12}}>{t.nearYou}</div>
+        <div style={{display:"flex",flexDirection:"column",gap:9}}>{places.map((p,i)=>(<div key={i} style={{background:C.white,borderRadius:14,padding:"13px 15px",display:"flex",alignItems:"center",gap:13,boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}>
+          <div style={{width:42,height:42,borderRadius:13,background:C.beige,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>{p.e}</div>
+          <div style={{flex:1}}><div style={{fontSize:14,fontWeight:700,color:C.dark}}>{p.n}</div><div style={{fontSize:11,color:C.light,fontWeight:500,marginTop:1}}>{p.type}</div>
+            <div style={{display:"flex",alignItems:"center",gap:5,marginTop:3}}><Star size={11} fill={C.coral} color={C.coral}/><span style={{fontSize:11,fontWeight:700,color:C.dark}}>{p.r}</span><span style={{fontSize:10,color:C.light}}>({p.rev}) · {p.dist}</span></div>
+          </div><div style={{background:`${C.green}15`,color:C.green,fontSize:10,fontWeight:800,padding:"3px 7px",borderRadius:7,flexShrink:0}}>{p.tag}</div>
+        </div>))}</div>
+      </div>
+      <div style={{padding:"0 24px 18px"}}><div style={{fontFamily:"'Playfair Display', serif",fontSize:17,fontWeight:700,color:C.dark,marginBottom:12}}>{t.community}</div>
+        <div style={{display:"flex",flexDirection:"column",gap:9}}>{posts.map((p,i)=>(<div key={i} style={{background:C.white,borderRadius:14,padding:"13px 15px",boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}>
+          <div style={{display:"flex",justifyContent:"space-between",marginBottom:7}}><div style={{fontSize:13,fontWeight:700,color:C.dark}}>{p.u}</div><div style={{fontSize:11,color:C.light,fontWeight:500}}>{p.t}</div></div>
+          <div style={{fontSize:13,color:C.mid,fontWeight:500,lineHeight:1.5,marginBottom:9}}>{p.txt}</div>
+          <div style={{display:"flex",alignItems:"center",gap:5}}><Heart size={13} color={C.coral} fill={C.coral}/><span style={{fontSize:12,color:C.coral,fontWeight:700}}>{p.l}</span></div>
+        </div>))}</div>
+      </div>
+      <div style={{padding:"0 24px 32px"}}><div style={{fontFamily:"'Playfair Display', serif",fontSize:17,fontWeight:700,color:C.dark,marginBottom:12}}>{t.adoptSection}</div>
+        <div onClick={()=>onNavigate("adoption")} style={{background:`linear-gradient(130deg,${C.green} 0%,#2D5A32 100%)`,borderRadius:18,padding:"18px",cursor:"pointer",position:"relative",overflow:"hidden"}}>
+          <div style={{position:"absolute",right:-15,top:-15,width:90,height:90,borderRadius:"50%",background:"rgba(255,255,255,0.08)"}}/>
+          <div style={{fontSize:26,marginBottom:6}}>🏠</div>
+          <div style={{fontFamily:"'Playfair Display', serif",fontSize:16,fontWeight:700,color:C.white,marginBottom:3}}>{t.petsWaiting}</div>
+          <div style={{fontSize:12,color:"rgba(255,255,255,0.7)",fontWeight:500,marginBottom:12}}>ONG Patinhas SP</div>
+          <div style={{background:"rgba(255,255,255,0.18)",borderRadius:11,padding:"8px 14px",display:"inline-block",fontSize:13,fontWeight:700,color:C.white}}>{t.viewPets}</div>
+        </div>
+      </div>
+    </div>
+    <BottomNav active={activeNav} onTab={onNavigate} t={t}/>
+  </div>);}
+
+/* ─── PROFILE ─────────────────────────────────────────────────── */
+function ProfileScreen({onNavigate,activeNav,t,lang,setLang}){
+  const [premium,setPremium]=useState(false);
+  const settings=[{i:"🔑",l:"QR Code do Thor",s:"Acesso rápido em emergências",a:"qrcode"},{i:"🔔",l:t.notifTitle.replace(" 🔔",""),s:"Lembretes e alertas",a:"notifications"},{i:"❓",l:"Perguntas Frequentes",s:"Dúvidas comuns sobre o app",a:"faq"},{i:"🔒",l:"Privacidade & LGPD",s:"Seus dados protegidos",a:null},{i:"📤",l:"Exportar prontuário",s:"PDF para veterinários",a:null},{i:"💬",l:"Suporte",s:"Chat e FAQ",a:null}];
+  return(<div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column"}}>
+    <div style={{flex:1,overflowY:"auto",background:C.beigeLight}}>
+      <StatusBar/>
+      <div style={{background:C.white,padding:"0 24px 22px",textAlign:"center"}}>
+        <div style={{display:"flex",flexDirection:"column",alignItems:"center",paddingBottom:16}}>
+          <div style={{width:76,height:76,borderRadius:"50%",background:`${C.coral}15`,border:`3px solid ${C.coral}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:34,marginBottom:11}}>🐶</div>
+          <div style={{fontFamily:"'Playfair Display', serif",fontSize:21,fontWeight:700,color:C.dark}}>Thor</div>
+          <div style={{fontSize:13,color:C.light,fontWeight:500,marginTop:3}}>Golden Retriever · 3 anos · Maria Silva</div>
+          <div style={{display:"flex",gap:22,marginTop:16,paddingTop:16,borderTop:`1px solid ${C.beige}`,width:"100%"}}>
+            {[["28 kg","Peso"],["Grande","Porte"],["Macho","Sexo"]].map(([v,l])=>(<div key={l} style={{flex:1,textAlign:"center"}}><div style={{fontSize:14,fontWeight:800,color:C.dark}}>{v}</div><div style={{fontSize:11,color:C.light,fontWeight:600,marginTop:2}}>{l}</div></div>))}
+          </div>
+        </div>
+      </div>
+      <div style={{padding:"18px 24px",display:"flex",flexDirection:"column",gap:14}}>
+        {/* Plan */}
+        <div style={{background:premium?`linear-gradient(130deg,${C.coral} 0%,${C.coralDark} 100%)`:C.white,borderRadius:18,padding:"16px",boxShadow:"0 2px 10px rgba(0,0,0,0.08)"}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+            <div><div style={{fontSize:11,color:premium?"rgba(255,255,255,0.7)":C.light,fontWeight:700,textTransform:"uppercase",letterSpacing:1,marginBottom:3}}>{t.planLabel}</div>
+              <div style={{fontFamily:"'Playfair Display', serif",fontSize:19,fontWeight:700,color:premium?C.white:C.dark}}>{premium?t.planPremium:t.planFree}</div>
+              <div style={{fontSize:12,color:premium?"rgba(255,255,255,0.65)":C.light,fontWeight:500,marginTop:3}}>{premium?"Todos os recursos desbloqueados":"R$19,90/mês"}</div>
+            </div>
+            <button onClick={()=>onNavigate("premium")} style={{padding:"9px 16px",background:premium?"rgba(255,255,255,0.2)":C.coral,color:C.white,borderRadius:13,fontSize:13,fontWeight:700,border:"none",cursor:"pointer",fontFamily:"inherit"}}>{premium?t.activeBtn:t.upgradeBtn}</button>
+          </div>
+        </div>
+        {/* Pets */}
+        <div style={{background:C.white,borderRadius:18,padding:"15px",boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}>
+          <div style={{fontSize:11,fontWeight:800,color:C.mid,textTransform:"uppercase",letterSpacing:1,marginBottom:13}}>{t.petsSection}</div>
+          <div style={{display:"flex",gap:11}}>
+            <div style={{textAlign:"center"}}><div style={{width:50,height:50,borderRadius:14,background:`${C.coral}15`,border:`2px solid ${C.coral}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:22}}>🐶</div><div style={{fontSize:11,fontWeight:700,color:C.dark,marginTop:4}}>Thor</div></div>
+            <div style={{textAlign:"center"}}><div style={{width:50,height:50,borderRadius:14,background:C.beige,border:`2px dashed ${C.light}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,color:C.light}}>+</div><div style={{fontSize:11,fontWeight:600,color:C.light,marginTop:4}}>{t.addPet}</div></div>
+          </div>
+        </div>
+        {/* Language */}
+        <div style={{background:C.white,borderRadius:18,padding:"15px",boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}>
+          <div style={{fontSize:11,fontWeight:800,color:C.mid,textTransform:"uppercase",letterSpacing:1,marginBottom:13,display:"flex",alignItems:"center",gap:6}}><Globe size={14} color={C.mid}/>{t.langLabel}</div>
+          <LangPicker lang={lang} setLang={setLang} dark/>
+        </div>
+        {/* Settings */}
+        <div style={{background:C.white,borderRadius:18,overflow:"hidden",boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}>
+          {settings.map((item,i)=>(<div key={i} onClick={()=>item.a&&onNavigate(item.a)} style={{display:"flex",alignItems:"center",gap:13,padding:"13px 15px",borderBottom:i<settings.length-1?`1px solid ${C.beige}`:"none",cursor:item.a?"pointer":"default"}}>
+            <div style={{width:34,height:34,borderRadius:9,background:C.beige,display:"flex",alignItems:"center",justifyContent:"center",fontSize:15,flexShrink:0}}>{item.i}</div>
+            <div style={{flex:1}}><div style={{fontSize:14,fontWeight:700,color:C.dark}}>{item.l}</div><div style={{fontSize:11,color:C.light,fontWeight:500,marginTop:1}}>{item.s}</div></div>
+            <ChevronRight size={14} color={C.light}/>
+          </div>))}
+        </div>
+        <button style={{width:"100%",padding:"13px",background:"transparent",color:C.blood,borderRadius:13,fontSize:14,fontWeight:700,border:`1.5px solid ${C.blood}30`,cursor:"pointer",fontFamily:"inherit"}}>{t.signOut}</button>
+      </div>
+    </div>
+    <BottomNav active={activeNav} onTab={onNavigate} t={t}/>
+  </div>);}
+
+/* ─── NOTIFICATIONS ───────────────────────────────────────────── */
+function NotificationsScreen({onNavigate,activeNav,t}){
+  const groups=[{label:t.gUrgent,items:[{i:"💉",title:t.rem1,body:t.rem1s,time:"agora",unread:true},{i:"📅",title:"Consulta amanhã",body:"Lembrete: consulta com Dr. Carlos Mendes às 09:00",time:"há 2h",unread:true}]},{label:t.gToday,items:[{i:"💊",title:t.rem3,body:"Está na hora do vermífugo trimestral",time:"há 4h",unread:false},{i:"⭐",title:"Avalie o último serviço",body:"Como foi o PetSpa Premium?",time:"há 6h",unread:false}]},{label:t.gWeek,items:[{i:"🎂",title:"Thor faz aniversário!",body:"Faltam 5 dias. 🐶🎉",time:"há 1d",unread:false},{i:"🩸",title:"Campanha de doação",body:"Hospital Vet. USP com campanha de coleta esta semana.",time:"há 2d",unread:false}]}];
+  return(<div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column"}}>
+    <div style={{flex:1,overflowY:"auto",background:C.beigeLight}}>
+      <StatusBar/>
+      <div style={{padding:"0 24px 20px"}}><SubHeader title={t.notifTitle} onBack={()=>onNavigate("home")}/></div>
+      <div style={{padding:"0 24px 32px",display:"flex",flexDirection:"column",gap:22}}>
+        {groups.map((g,gi)=>(<div key={gi}><div style={{fontSize:11,fontWeight:800,color:C.mid,textTransform:"uppercase",letterSpacing:1,marginBottom:11}}>{g.label}</div>
+          <div style={{display:"flex",flexDirection:"column",gap:8}}>{g.items.map((item,i)=>(<div key={i} style={{background:C.white,borderRadius:15,padding:"13px 15px",display:"flex",gap:11,boxShadow:"0 2px 8px rgba(0,0,0,0.05)",borderLeft:item.unread?`4px solid ${C.coral}`:"4px solid transparent"}}>
+            <div style={{width:38,height:38,borderRadius:11,background:item.unread?`${C.coral}15`:C.beige,display:"flex",alignItems:"center",justifyContent:"center",fontSize:17,flexShrink:0}}>{item.i}</div>
+            <div style={{flex:1}}><div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:3}}><div style={{fontSize:14,fontWeight:700,color:C.dark,lineHeight:1.2}}>{item.title}</div>{item.unread&&<div style={{width:8,height:8,borderRadius:"50%",background:C.coral,flexShrink:0,marginTop:4,marginLeft:8}}/>}</div>
+              <div style={{fontSize:12,color:C.mid,fontWeight:500,lineHeight:1.4,marginBottom:3}}>{item.body}</div>
+              <div style={{fontSize:11,color:C.light,fontWeight:600}}>{item.time}</div>
+            </div>
+          </div>))}</div>
+        </div>))}
+      </div>
+    </div>
+    <BottomNav active={activeNav} onTab={onNavigate} t={t}/>
+  </div>);}
+
+/* ─── ADD VACCINE ─────────────────────────────────────────────── */
+function AddVaccineScreen({onNavigate,t}){
+  const vaccines=["V10 Múltipla","Antirrábica","Giárdia","Leishmaniose","Gripe Canina","Coronavírus Canino","Bordetella","V4 Felina","Leucemia Felina","Raiva Felina","FIV/FeLV","Calicivirose"];
+  const clinics=["Clínica PetVida","Hospital Vet. USP","AniVet Hospital","Clínica dos Bichos","VetCare","PetMed Paulista","Hospital Animal SP","Outros"];
+  const [vName,setVName]=useState("");const [date,setDate]=useState("");const [clinic,setClinic]=useState("");const [vet,setVet]=useState("");const [next,setNext]=useState("");const [saved,setSaved]=useState(false);
+  if(saved)return(<div style={{position:"absolute",inset:0,background:C.beigeLight,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"40px 32px"}}><div style={{width:76,height:76,borderRadius:"50%",background:`${C.green}15`,border:`3px solid ${C.green}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:34,marginBottom:18}}>✅</div><div style={{fontFamily:"'Playfair Display', serif",fontSize:22,fontWeight:700,color:C.dark,textAlign:"center",marginBottom:10}}>{t.vaccSaved}</div><div style={{fontSize:13,color:C.light,fontWeight:500,textAlign:"center",lineHeight:1.5,marginBottom:28}}>{t.vaccSavedSub}</div><div style={{background:C.white,borderRadius:16,padding:"16px",width:"100%",marginBottom:24,boxShadow:"0 2px 12px rgba(0,0,0,0.08)"}}><div style={{fontSize:11,color:C.light,fontWeight:700,textTransform:"uppercase",letterSpacing:1,marginBottom:6}}>VACINA</div><div style={{fontSize:15,fontWeight:800,color:C.dark,marginBottom:3}}>{vName||"V10 Múltipla"}</div><div style={{fontSize:13,color:C.mid,fontWeight:500}}>{clinic||"Clínica PetVida"} · {date||"10/06/2026"}</div></div><button onClick={()=>onNavigate("health")} style={{width:"100%",padding:"15px",background:C.coral,color:C.white,borderRadius:17,fontSize:15,fontWeight:800,border:"none",cursor:"pointer",fontFamily:"inherit"}}>{t.backHealth}</button></div>);
+  const FText=(label,val,set,ph)=>(<div style={{marginBottom:16}}><div style={{fontSize:11,fontWeight:800,color:C.mid,textTransform:"uppercase",letterSpacing:1.1,marginBottom:9}}>{label}</div><div style={{background:C.beige,borderRadius:13,padding:"13px 15px"}}><input value={val} onChange={e=>set(e.target.value)} placeholder={ph} style={{width:"100%",fontSize:14,color:C.dark,fontWeight:500,background:"transparent",border:"none",outline:"none",fontFamily:"inherit"}}/></div></div>);
+  return(<div style={{position:"absolute",inset:0,background:C.beigeLight,overflowY:"auto"}}><StatusBar/><div style={{padding:"0 24px 48px"}}><SubHeader title={t.avTitle} onBack={()=>onNavigate("health")}/><div style={{background:`${C.coral}10`,borderRadius:14,padding:"12px 15px",marginBottom:22,display:"flex",gap:9,alignItems:"center"}}><span style={{fontSize:19}}>🐶</span><div><div style={{fontSize:13,fontWeight:700,color:C.dark}}>Thor</div><div style={{fontSize:11,color:C.light,fontWeight:500}}>Golden Retriever · 3 anos</div></div></div>
+    <EditableCombo label="VACINA" options={vaccines} value={vName} onChange={setVName} placeholder="Digite ou selecione a vacina..."/>
+    {FText("APLICAÇÃO",date,setDate,"DD/MM/AAAA")}
+    <EditableCombo label="CLÍNICA / HOSPITAL" options={clinics} value={clinic} onChange={setClinic} placeholder="Digite ou selecione a clínica..."/>
+    {FText(t.fieldVet,vet,setVet,"Nome do veterinário")}
+    {FText(t.fieldNext,next,setNext,"DD/MM/AAAA")}
+    <div style={{marginBottom:22}}><div style={{fontSize:11,fontWeight:800,color:C.mid,textTransform:"uppercase",letterSpacing:1.1,marginBottom:9}}>{t.fieldProof}</div><button style={{width:"100%",padding:"14px",background:C.white,borderRadius:13,border:`2px dashed ${C.beige}`,fontSize:13,fontWeight:700,color:C.light,cursor:"pointer",fontFamily:"inherit"}}>{t.attachBtn}</button></div>
+    <button onClick={()=>setSaved(true)} style={{width:"100%",padding:"16px",background:C.coral,color:C.white,borderRadius:17,fontSize:15,fontWeight:800,border:"none",cursor:"pointer",fontFamily:"inherit"}}>Salvar no Prontuário</button>
+  </div></div>);}
+
+/* ─── SERVICE DETAIL ──────────────────────────────────────────── */
+function ServiceDetailScreen({onNavigate,provider,activeNav,t}){
+  const p=provider||{name:"Dr. Carlos Mendes",cat:"Veterinário",rating:4.9,rev:127,dist:"1,2 km",e:"👨‍⚕️",ok:true};
+  const srvs=[{n:"Consulta Geral",dur:"30 min",price:"R$ 120"},{n:"Consulta de Retorno",dur:"20 min",price:"R$ 80"},{n:"Vacinação",dur:"15 min",price:"R$ 60"},{n:"Check-up Completo",dur:"60 min",price:"R$ 220"}];
+  const revs=[{u:"Ana S.",r:5,txt:"Profissional incrível, muito atencioso com meu cachorro!"},{u:"Pedro R.",r:5,txt:"Atendimento impecável. Explicou tudo com clareza."},{u:"Carol M.",r:4,txt:"Ótimo atendimento, só o tempo de espera foi um pouco longo."}];
+  return(<div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column"}}>
+    <div style={{flex:1,overflowY:"auto",background:C.beigeLight}}>
+      <div style={{background:`linear-gradient(130deg,${C.coral} 0%,${C.coralDark} 100%)`,padding:"0 24px 26px",position:"relative",overflow:"hidden"}}>
+        <div style={{position:"absolute",right:-35,top:-35,width:140,height:140,borderRadius:"50%",background:"rgba(255,255,255,0.07)"}}/>
+        <StatusBar light/><SubHeader title="" onBack={()=>onNavigate("services")} light/>
+        <div style={{display:"flex",gap:16,alignItems:"flex-start"}}>
+          <div style={{width:68,height:68,borderRadius:18,background:"rgba(255,255,255,0.2)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:32,flexShrink:0,border:"2px solid rgba(255,255,255,0.35)"}}>{p.e}</div>
+          <div style={{flex:1}}><div style={{fontFamily:"'Playfair Display', serif",fontSize:19,fontWeight:700,color:C.white,lineHeight:1.2,marginBottom:3}}>{p.name}</div>
+            <div style={{color:"rgba(255,255,255,0.7)",fontSize:12,fontWeight:500,marginBottom:9}}>{p.cat}</div>
+            <div style={{display:"flex",flexWrap:"wrap",gap:7}}>
+              <div style={{background:"rgba(255,255,255,0.18)",borderRadius:9,padding:"4px 9px",fontSize:11,color:C.white,fontWeight:700,display:"flex",alignItems:"center",gap:3}}><Star size={10} fill="white" color="white"/> {p.rating} ({p.rev})</div>
+              <div style={{background:"rgba(255,255,255,0.18)",borderRadius:9,padding:"4px 9px",fontSize:11,color:C.white,fontWeight:700}}>📍 {p.dist}</div>
+              <div style={{background:"rgba(100,220,130,0.25)",borderRadius:9,padding:"4px 9px",fontSize:11,color:"#A8E6CF",fontWeight:700}}>{t.verifiedBadge}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style={{padding:"18px 24px 32px"}}>
+        <div style={{background:C.white,borderRadius:16,padding:"16px",marginBottom:18,boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}><div style={{fontSize:12,fontWeight:800,color:C.mid,textTransform:"uppercase",letterSpacing:1,marginBottom:9}}>{t.aboutLabel}</div><div style={{fontSize:13,color:C.dark,fontWeight:500,lineHeight:1.6}}>Médico veterinário com 12 anos de experiência. Especialista em pequenos animais. Formado pela USP, com pós-graduação em cardiologia veterinária. Atende com agendamento e oferece retorno virtual pelo app.</div></div>
+        <div style={{fontFamily:"'Playfair Display', serif",fontSize:16,fontWeight:700,color:C.dark,marginBottom:11}}>{t.servicesValLabel}</div>
+        <div style={{background:C.white,borderRadius:16,overflow:"hidden",marginBottom:18,boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}>{srvs.map((s,i)=>(<div key={i} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"13px 16px",borderBottom:i<srvs.length-1?`1px solid ${C.beige}`:"none"}}><div><div style={{fontSize:14,fontWeight:700,color:C.dark}}>{s.n}</div><div style={{fontSize:11,color:C.light,fontWeight:500,marginTop:1}}>⏱ {s.dur}</div></div><div style={{fontSize:14,fontWeight:800,color:C.coral}}>{s.price}</div></div>))}</div>
+        <div style={{fontFamily:"'Playfair Display', serif",fontSize:16,fontWeight:700,color:C.dark,marginBottom:11}}>{t.reviewsLabel}</div>
+        <div style={{display:"flex",flexDirection:"column",gap:9,marginBottom:24}}>{revs.map((r,i)=>(<div key={i} style={{background:C.white,borderRadius:14,padding:"13px 15px",boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}><div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:7}}><div style={{display:"flex",alignItems:"center",gap:7}}><div style={{width:30,height:30,borderRadius:"50%",background:C.beige,display:"flex",alignItems:"center",justifyContent:"center",fontSize:13}}>👤</div><div style={{fontSize:13,fontWeight:700,color:C.dark}}>{r.u}</div></div><div style={{display:"flex",gap:1}}>{[...Array(r.r)].map((_,s)=><Star key={s} size={11} fill={C.coral} color={C.coral}/>)}</div></div><div style={{fontSize:13,color:C.mid,fontWeight:500,lineHeight:1.4}}>{r.txt}</div></div>))}</div>
+        <button onClick={()=>onNavigate("booking")} style={{width:"100%",padding:"16px",background:C.coral,color:C.white,borderRadius:17,fontSize:15,fontWeight:800,border:"none",cursor:"pointer",fontFamily:"inherit"}}>{t.bookConsult}</button>
+      </div>
+    </div>
+    <BottomNav active={activeNav} onTab={onNavigate} t={t}/>
+  </div>);}
+
+/* ─── BOOKING ─────────────────────────────────────────────────── */
+function BookingScreen({onNavigate,provider,t}){
+  const p=provider||{name:"Dr. Carlos Mendes",e:"👨‍⚕️"};
+  const [selDate,setSelDate]=useState(1);const [selTime,setSelTime]=useState("09:30");const [pay,setPay]=useState("pix");const [notes,setNotes]=useState("");
+  const dates=[{d:"Seg",n:"09/06",av:true},{d:"Ter",n:"10/06",av:true},{d:"Qua",n:"11/06",av:false},{d:"Qui",n:"12/06",av:true},{d:"Sex",n:"13/06",av:true},{d:"Sáb",n:"14/06",av:true}];
+  const times=["08:00","08:30","09:00","09:30","10:00","10:30","14:00","14:30","15:00","15:30","16:00","16:30"];
+  const busy=["09:00","14:30","16:00"];
+  return(<div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column"}}>
+    <div style={{flex:1,overflowY:"auto",background:C.beigeLight}}>
+      <StatusBar/><div style={{padding:"0 24px 8px"}}><SubHeader title={`${t.bookTitle} · ${p.name.split(" ").slice(0,2).join(" ")}`} onBack={()=>onNavigate("servicedetail")}/></div>
+      <div style={{padding:"0 24px 32px"}}>
+        <div style={{background:C.white,borderRadius:16,padding:"14px",marginBottom:18,display:"flex",alignItems:"center",gap:13,boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}><div style={{fontSize:26}}>{p.e}</div><div><div style={{fontSize:14,fontWeight:800,color:C.dark}}>{p.name}</div><div style={{fontSize:12,color:C.light,fontWeight:500}}>Consulta Geral · R$ 120</div></div></div>
+        <div style={{marginBottom:20}}><div style={{fontSize:12,fontWeight:800,color:C.mid,textTransform:"uppercase",letterSpacing:1,marginBottom:12}}>{t.petSection}</div>
+          <div style={{background:C.white,borderRadius:14,padding:"13px 15px",display:"flex",alignItems:"center",gap:13,boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}><div style={{width:38,height:38,borderRadius:11,background:`${C.coral}15`,border:`2px solid ${C.coral}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:19}}>🐶</div><div style={{flex:1}}><div style={{fontSize:14,fontWeight:700,color:C.dark}}>Thor</div><div style={{fontSize:11,color:C.light,fontWeight:500}}>Golden Retriever · 3 anos</div></div><div style={{width:22,height:22,borderRadius:"50%",background:C.coral,display:"flex",alignItems:"center",justifyContent:"center"}}><Check size={13} color="white"/></div></div>
+        </div>
+        <div style={{marginBottom:20}}><div style={{fontSize:12,fontWeight:800,color:C.mid,textTransform:"uppercase",letterSpacing:1,marginBottom:12}}>{t.dateSection}</div>
+          <div style={{display:"flex",gap:8,overflowX:"auto",paddingBottom:3}}>{dates.map((d,i)=>(<button key={i} onClick={()=>d.av&&setSelDate(i)} disabled={!d.av} style={{flexShrink:0,width:54,padding:"11px 7px",borderRadius:14,background:!d.av?"#F5F5F5":selDate===i?C.coral:C.white,border:selDate===i?"none":`1px solid ${d.av?C.beige:"#eee"}`,display:"flex",flexDirection:"column",alignItems:"center",gap:3,cursor:d.av?"pointer":"not-allowed",boxShadow:selDate===i?"0 4px 12px rgba(196,83,61,0.3)":"none",fontFamily:"inherit"}}>
+            <div style={{fontSize:10,fontWeight:700,color:!d.av?"#ccc":selDate===i?"rgba(255,255,255,0.75)":C.light}}>{d.d}</div>
+            <div style={{fontSize:13,fontWeight:800,color:!d.av?"#ccc":selDate===i?C.white:C.dark}}>{d.n.slice(0,2)}</div>
+            <div style={{fontSize:10,color:!d.av?"#ccc":selDate===i?"rgba(255,255,255,0.7)":C.light}}>{d.n.slice(3)}</div>
+          </button>))}</div>
+        </div>
+        <div style={{marginBottom:20}}><div style={{fontSize:12,fontWeight:800,color:C.mid,textTransform:"uppercase",letterSpacing:1,marginBottom:12}}>{t.timeSection}</div>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:7}}>{times.map((tm,i)=>{const isBusy=busy.includes(tm);const isSel=selTime===tm;return(<button key={i} onClick={()=>!isBusy&&setSelTime(tm)} disabled={isBusy} style={{padding:"10px",borderRadius:11,background:isBusy?"#F5F5F5":isSel?C.coral:C.white,border:isSel?"none":`1px solid ${isBusy?"#eee":C.beige}`,fontSize:13,fontWeight:700,color:isBusy?"#ccc":isSel?C.white:C.dark,cursor:isBusy?"not-allowed":"pointer",fontFamily:"inherit"}}>{tm}</button>);})}</div>
+        </div>
+        <div style={{marginBottom:20}}><div style={{fontSize:12,fontWeight:800,color:C.mid,textTransform:"uppercase",letterSpacing:1,marginBottom:12}}>{t.paySection}</div>
+          <div style={{display:"flex",gap:9}}>{[{id:"pix",i:"⚡",l:"PIX",s:t.instant},{id:"card",i:"💳",l:"Cartão",s:t.creditDebit}].map(py=>(<button key={py.id} onClick={()=>setPay(py.id)} style={{flex:1,padding:"13px",borderRadius:14,background:pay===py.id?`${C.coral}12`:C.white,border:pay===py.id?`2px solid ${C.coral}`:`2px solid ${C.beige}`,display:"flex",flexDirection:"column",alignItems:"center",gap:3,cursor:"pointer",fontFamily:"inherit"}}><div style={{fontSize:20}}>{py.i}</div><div style={{fontSize:13,fontWeight:700,color:pay===py.id?C.coral:C.dark}}>{py.l}</div><div style={{fontSize:10,color:C.light,fontWeight:500}}>{py.s}</div></button>))}</div>
+        </div>
+        <div style={{marginBottom:20}}><div style={{fontSize:12,fontWeight:800,color:C.mid,textTransform:"uppercase",letterSpacing:1,marginBottom:12}}>{t.notesSection}</div>
+          <div style={{background:C.white,borderRadius:14,padding:"13px 15px",boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}><textarea value={notes} onChange={e=>setNotes(e.target.value)} placeholder={t.notesPH} rows={3} style={{width:"100%",fontSize:13,color:C.dark,background:"transparent",border:"none",outline:"none",fontFamily:"inherit",resize:"none",lineHeight:1.5}}/></div>
+        </div>
+        <div style={{background:C.white,borderRadius:14,padding:"14px",marginBottom:18,boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}>
+          <div style={{fontSize:11,fontWeight:800,color:C.mid,textTransform:"uppercase",letterSpacing:1,marginBottom:11}}>{t.summaryLabel}</div>
+          {[[t.serviceRow,"Consulta Geral"],[t.dateRow,`${dates[selDate].d}, ${dates[selDate].n}`],[t.timeRow,selTime],[t.payRow,pay==="pix"?"PIX":"Cartão"]].map(([k,v])=>(<div key={k} style={{display:"flex",justifyContent:"space-between",marginBottom:5}}><div style={{fontSize:13,color:C.light,fontWeight:600}}>{k}</div><div style={{fontSize:13,color:C.dark,fontWeight:700}}>{v}</div></div>))}
+          <div style={{borderTop:`1px solid ${C.beige}`,paddingTop:9,marginTop:5,display:"flex",justifyContent:"space-between"}}><div style={{fontSize:14,fontWeight:700,color:C.dark}}>{t.totalRow}</div><div style={{fontSize:15,fontWeight:800,color:C.coral}}>R$ 120,00</div></div>
+        </div>
+        <button onClick={()=>onNavigate("bookingsuccess")} style={{width:"100%",padding:"16px",background:C.coral,color:C.white,borderRadius:17,fontSize:15,fontWeight:800,border:"none",cursor:"pointer",fontFamily:"inherit"}}>{t.confirmBook}</button>
+      </div>
+    </div>
+  </div>);}
+
+/* ─── BOOKING SUCCESS ─────────────────────────────────────────── */
+function BookingSuccessScreen({onNavigate,provider,t}){
+  const p=provider||{name:"Dr. Carlos Mendes",e:"👨‍⚕️"};
+  return(<div style={{position:"absolute",inset:0,background:C.beigeLight,display:"flex",flexDirection:"column"}}><StatusBar/>
+    <div style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"20px 32px"}}>
+      <div style={{width:88,height:88,borderRadius:"50%",background:`${C.green}15`,border:`3px solid ${C.green}`,display:"flex",alignItems:"center",justifyContent:"center",marginBottom:22}}><Check size={38} color={C.green} strokeWidth={2.5}/></div>
+      <div style={{fontFamily:"'Playfair Display', serif",fontSize:24,fontWeight:700,color:C.dark,textAlign:"center",marginBottom:7,whiteSpace:"pre-line"}}>{t.bookSuccTitle}</div>
+      <div style={{fontSize:13,color:C.light,fontWeight:500,textAlign:"center",lineHeight:1.5,marginBottom:28}}>{t.bookSuccSub}</div>
+      <div style={{background:C.white,borderRadius:20,padding:"18px",width:"100%",marginBottom:28,boxShadow:"0 4px 20px rgba(0,0,0,0.08)"}}>
+        <div style={{display:"flex",gap:13,alignItems:"center",marginBottom:14,paddingBottom:14,borderBottom:`1px solid ${C.beige}`}}><div style={{width:48,height:48,borderRadius:14,background:C.beige,display:"flex",alignItems:"center",justifyContent:"center",fontSize:24}}>{p.e}</div><div><div style={{fontSize:15,fontWeight:800,color:C.dark}}>{p.name}</div><div style={{fontSize:12,color:C.light,fontWeight:500,marginTop:2}}>Consulta Geral</div></div></div>
+        {[[<Calendar size={15} color={C.coral}/>,"Data","Terça, 10/06/2026"],[<Clock size={15} color={C.coral}/>,"Horário","09:30 — ~10:00"],["🐶","Pet","Thor (Golden Retriever)"],["⚡","PIX","R$ 120,00"]].map((item,i)=>(<div key={i} style={{display:"flex",alignItems:"center",gap:11,marginBottom:i<3?11:0}}><div style={{width:30,height:30,borderRadius:9,background:`${C.coral}10`,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>{typeof item[0]==="string"?<span style={{fontSize:15}}>{item[0]}</span>:item[0]}</div><div><div style={{fontSize:11,color:C.light,fontWeight:600}}>{item[1]}</div><div style={{fontSize:13,fontWeight:700,color:C.dark}}>{item[2]}</div></div></div>))}
+      </div>
+      <div style={{display:"flex",gap:11,width:"100%"}}>
+        <button onClick={()=>onNavigate("agenda")} style={{flex:1,padding:"13px",background:C.white,color:C.coral,borderRadius:15,fontSize:13,fontWeight:700,border:`2px solid ${C.coral}`,cursor:"pointer",fontFamily:"inherit"}}>{t.viewAgenda}</button>
+        <button onClick={()=>onNavigate("home")} style={{flex:1,padding:"13px",background:C.coral,color:C.white,borderRadius:15,fontSize:13,fontWeight:800,border:"none",cursor:"pointer",fontFamily:"inherit"}}>{t.backHome}</button>
+      </div>
+    </div>
+  </div>);}
+
+/* ─── QR CODE ─────────────────────────────────────────────────── */
+function QRCodeScreen({onNavigate,t}){
+  const [copied,setCopied]=useState(false);
+  return(<div style={{position:"absolute",inset:0,background:C.beigeLight,display:"flex",flexDirection:"column"}}><StatusBar/>
+    <div style={{flex:1,overflowY:"auto"}}><div style={{padding:"0 24px 18px"}}><SubHeader title={t.qrTitle} onBack={()=>onNavigate("home")}/></div>
+      <div style={{display:"flex",flexDirection:"column",alignItems:"center",padding:"0 32px 32px"}}>
+        <div style={{background:C.white,borderRadius:22,padding:"22px",boxShadow:"0 8px 32px rgba(0,0,0,0.1)",marginBottom:18,display:"flex",flexDirection:"column",alignItems:"center",width:"100%"}}>
+          <svg width={21*8} height={21*8} viewBox="0 0 21 21" style={{marginBottom:14}}>
+            <rect width="21" height="21" fill="white"/>
+            <rect x="0" y="0" width="7" height="7" fill={C.dark}/><rect x="1" y="1" width="5" height="5" fill="white"/><rect x="2" y="2" width="3" height="3" fill={C.dark}/>
+            <rect x="14" y="0" width="7" height="7" fill={C.dark}/><rect x="15" y="1" width="5" height="5" fill="white"/><rect x="16" y="2" width="3" height="3" fill={C.dark}/>
+            <rect x="0" y="14" width="7" height="7" fill={C.dark}/><rect x="1" y="15" width="5" height="5" fill="white"/><rect x="2" y="16" width="3" height="3" fill={C.dark}/>
+            {QR_DOTS.map((d,i)=><rect key={i} x={d.x} y={d.y} width="1" height="1" fill={C.dark}/>)}
+          </svg>
+          <div style={{textAlign:"center"}}><div style={{fontFamily:"'Playfair Display', serif",fontSize:17,fontWeight:700,color:C.dark}}>Thor</div><div style={{fontSize:12,color:C.light,fontWeight:500,marginTop:3}}>Golden Retriever · Macho · 3 anos</div><div style={{fontSize:11,color:C.light,fontWeight:600,marginTop:2}}>Maria Silva · ID #TH-2024-4892</div></div>
+        </div>
+        <div style={{background:`${C.coral}10`,border:`1.5px solid ${C.coral}20`,borderRadius:15,padding:"13px 15px",marginBottom:20,width:"100%",display:"flex",gap:11,alignItems:"flex-start"}}>
+          <span style={{fontSize:19,flexShrink:0}}>🚨</span>
+          <div><div style={{fontSize:13,fontWeight:700,color:C.coral,marginBottom:3}}>{t.qrEmerg}</div><div style={{fontSize:12,color:C.mid,fontWeight:500,lineHeight:1.5}}>{t.qrEmergText}</div></div>
+        </div>
+        <div style={{background:C.white,borderRadius:16,padding:"15px",marginBottom:20,width:"100%",boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}><div style={{fontSize:11,fontWeight:800,color:C.mid,textTransform:"uppercase",letterSpacing:1,marginBottom:11}}>{t.qrContact}</div>
+          {[["Tutor","Maria Silva"],["Telefone","+55 11 99999-0000"],["Veterinário","Dr. Carlos Mendes"]].map((item,i)=>(<div key={i} style={{display:"flex",justifyContent:"space-between",marginBottom:7}}><div style={{fontSize:13,color:C.light,fontWeight:600}}>{item[0]}</div><div style={{fontSize:13,color:C.dark,fontWeight:700}}>{item[1]}</div></div>))}
+        </div>
+        <div style={{display:"flex",gap:11,width:"100%"}}>
+          <button onClick={()=>{setCopied(true);setTimeout(()=>setCopied(false),2000);}} style={{flex:1,padding:"13px",background:copied?`${C.green}15`:C.white,color:copied?C.green:C.coral,borderRadius:15,fontSize:13,fontWeight:700,border:`2px solid ${copied?C.green:C.coral}`,cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",justifyContent:"center",gap:5,transition:"all 0.2s"}}>
+            {copied?<><Check size={15}/>{t.copied}</>:<><Share2 size={15}/>{t.shareBtn}</>}
+          </button>
+          <button style={{flex:1,padding:"13px",background:C.coral,color:C.white,borderRadius:15,fontSize:13,fontWeight:800,border:"none",cursor:"pointer",fontFamily:"inherit"}}>{t.savePdf}</button>
+        </div>
+      </div>
+    </div>
+  </div>);}
+
+/* ─── AGENDA ──────────────────────────────────────────────────── */
+function AgendaScreen({onNavigate,activeNav,t}){
+  const [tab,setTab]=useState("up");
+  const st={confirmado:{bg:`${C.green}15`,c:C.green,l:t.stConfirmed},concluido:{bg:C.beige,c:C.light,l:t.stDone},cancelado:{bg:"#FCE4EC",c:C.blood,l:t.stCanceled}};
+  const upcoming=[{e:"👨‍⚕️",name:"Dr. Carlos Mendes",service:"Consulta Geral",date:"Ter, 10/06",time:"09:30",status:"confirmado"},{e:"🛁",name:"PetSpa Premium",service:"Banho & Tosa",date:"Sáb, 14/06",time:"14:00",status:"confirmado"}];
+  const history=[{e:"👩‍⚕️",name:"Dra. Ana Lima",service:"Check-up anual",date:"28/04/2026",status:"concluido"},{e:"💉",name:"Clínica PetVida",service:"Vacinação Giárdia",date:"05/03/2026",status:"concluido"},{e:"🛁",name:"PetSpa Premium",service:"Banho & Tosa",date:"15/08/2025",status:"cancelado"}];
+  return(<div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column"}}>
+    <div style={{flex:1,overflowY:"auto",background:C.beigeLight}}>
+      <StatusBar/><div style={{padding:"0 24px 0"}}><SubHeader title={t.agendaTitle} onBack={()=>onNavigate("home")}/></div>
+      <div style={{background:C.white,display:"flex",marginBottom:2}}>
+        {[["up",t.tabUpcoming],["hist",t.tabHistory]].map(([id,label])=>(<button key={id} onClick={()=>setTab(id)} style={{flex:1,padding:"13px",fontSize:13,fontWeight:tab===id?800:600,color:tab===id?C.coral:C.light,background:"none",border:"none",borderBottom:tab===id?`2.5px solid ${C.coral}`:"2.5px solid transparent",cursor:"pointer",fontFamily:"inherit"}}>{label}</button>))}
+      </div>
+      <div style={{padding:"14px 24px 32px"}}>
+        {tab==="up"&&<div style={{display:"flex",flexDirection:"column",gap:13}}>
+          <div style={{background:`${C.coral}10`,borderRadius:12,padding:"11px 14px",fontSize:12,color:C.coral,fontWeight:600}}>🔔 {upcoming.length} {t.tabUpcoming.toLowerCase()}</div>
+          {upcoming.map((a,i)=>(<div key={i} style={{background:C.white,borderRadius:18,padding:"16px",boxShadow:"0 2px 10px rgba(0,0,0,0.06)"}}>
+            <div style={{display:"flex",gap:13,marginBottom:12}}><div style={{width:48,height:48,borderRadius:14,background:C.beige,display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,flexShrink:0}}>{a.e}</div>
+              <div style={{flex:1}}><div style={{fontSize:14,fontWeight:800,color:C.dark}}>{a.name}</div><div style={{fontSize:12,color:C.light,fontWeight:500,marginTop:2}}>{a.service}</div>
+                <div style={{display:"flex",gap:7,marginTop:7}}><div style={{background:C.beige,borderRadius:7,padding:"3px 9px",fontSize:11,fontWeight:700,color:C.mid}}>📅 {a.date}</div><div style={{background:C.beige,borderRadius:7,padding:"3px 9px",fontSize:11,fontWeight:700,color:C.mid}}>⏰ {a.time}</div></div>
+              </div>
+            </div>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",paddingTop:12,borderTop:`1px solid ${C.beige}`}}>
+              <div style={{background:st[a.status].bg,color:st[a.status].c,fontSize:11,fontWeight:800,padding:"4px 11px",borderRadius:9}}>{st[a.status].l}</div>
+              <div style={{display:"flex",gap:7}}>
+                <button style={{padding:"7px 12px",background:C.beige,color:C.mid,borderRadius:9,fontSize:12,fontWeight:700,border:"none",cursor:"pointer",fontFamily:"inherit"}}>{t.reschedule}</button>
+                <button style={{padding:"7px 12px",background:"#FCE4EC",color:C.blood,borderRadius:9,fontSize:12,fontWeight:700,border:"none",cursor:"pointer",fontFamily:"inherit"}}>{t.cancelBtn}</button>
+              </div>
+            </div>
+          </div>))}
+          <button onClick={()=>onNavigate("services")} style={{width:"100%",padding:"13px",background:C.coral,color:C.white,borderRadius:14,fontSize:14,fontWeight:800,border:"none",cursor:"pointer",fontFamily:"inherit"}}>{t.newApt}</button>
+        </div>}
+        {tab==="hist"&&<div style={{display:"flex",flexDirection:"column",gap:9}}>{history.map((a,i)=>(<div key={i} style={{background:C.white,borderRadius:14,padding:"13px 15px",display:"flex",alignItems:"center",gap:13,boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}><div style={{width:42,height:42,borderRadius:12,background:C.beige,display:"flex",alignItems:"center",justifyContent:"center",fontSize:19,flexShrink:0}}>{a.e}</div><div style={{flex:1}}><div style={{fontSize:13,fontWeight:700,color:C.dark}}>{a.name}</div><div style={{fontSize:12,color:C.light,fontWeight:500,marginTop:2}}>{a.service} · {a.date}</div></div><div style={{background:st[a.status].bg,color:st[a.status].c,fontSize:10,fontWeight:800,padding:"3px 7px",borderRadius:7}}>{st[a.status].l}</div></div>))}</div>}
+      </div>
+    </div>
+    <BottomNav active={activeNav} onTab={onNavigate} t={t}/>
+  </div>);}
+
+/* ─── PETBOT ──────────────────────────────────────────────────── */
+function PetBotScreen({onNavigate,activeNav,t,lang}){
+  const initMsg=lang==="en"?"Hi! I'm PetBot, Thor's AI vet assistant. 🐾 Ask me anything about his health, nutrition or behavior!":lang==="es"?"¡Hola! Soy PetBot, el asistente vet IA de Thor. 🐾 ¡Pregúntame sobre su salud, nutrición o comportamiento!":"Olá! Sou o PetBot, assistente veterinário IA do Thor. 🐾 Pergunte sobre saúde, nutrição ou comportamento — responderei com base no histórico dele!";
+  const [msgs,setMsgs]=useState([{from:"bot",text:initMsg}]);
+  const [input,setInput]=useState("");const [typing,setTyping]=useState(false);
+  async function send(msg){
+    const userMsg=msg||input;
+    if(!userMsg.trim())return;
+    const newMsgs=[...msgs,{from:"user",text:userMsg}];
+    setMsgs(newMsgs);
+    setInput("");setTyping(true);
+    const lower=userMsg.toLowerCase();
+    const isEN=lang==="en";const isES=lang==="es";
+    await new Promise(r=>setTimeout(r,900+Math.random()*700));
+    let reply;
+    if(lower.match(/manga|mango/)){
+      reply=isEN?"Yes, Thor can eat mango in moderation! 🥭 Always remove the skin and pit first — the pit can cause intestinal obstruction and the skin is hard to digest. One or two small slices occasionally are a fine treat. Fruits should make up no more than 10% of the daily diet.":isES?"¡Sí, Thor puede comer mango con moderación! 🥭 Quita siempre la piel y el hueso — el hueso puede causar obstrucción y la piel es difícil de digerir. Una o dos rodajas pequeñas ocasionalmente son suficientes. Las frutas no deben superar el 10% de la dieta diaria.":"Sim, o Thor pode comer manga com moderação! 🥭 Retire sempre a casca e o caroço antes de oferecer — o caroço pode causar obstrução intestinal e a casca é difícil de digerir. Uma ou duas fatias pequenas ocasionalmente são ótimas como petisco. Frutas devem representar no máximo 10% da dieta diária.";
+    }else if(lower.match(/banho|bath|baño|bañar|frequ/)){
+      reply=isEN?"For a Golden Retriever like Thor, bathing every 4 to 6 weeks is ideal. 🛁 Washing too often dries out the skin and strips the natural oils from his coat. Brushing at least 3 times a week is essential to prevent tangles in his thick fur. After each walk, wipe his paws with a damp cloth.":isES?"Para un Golden Retriever como Thor, lo ideal es bañarlo cada 4 a 6 semanas. 🛁 Bañarlo con mucha frecuencia puede resecar la piel y eliminar los aceites naturales del pelaje. Cepillarlo al menos 3 veces por semana es esencial. Después de cada paseo, limpia sus patas con un paño húmedo.":"Para um Golden Retriever como o Thor, o ideal é dar banho a cada 4 a 6 semanas. 🛁 Lavar com muita frequência resseca a pele e remove os óleos naturais do pelo. Escovar pelo menos 3x por semana é essencial para evitar nós no pelo denso dele. Após cada passeio, limpe as patas com um pano úmido.";
+    }else if(lower.match(/peso|weight|kg|ideal|gordo|magro/)){
+      reply=isEN?"Thor is at his ideal weight! 🎉 At 28 kg, he's well within the healthy range for male Golden Retrievers (25–34 kg). His last checkup with Dr. Carlos Mendes on 28/04/2026 confirmed everything is normal. Keep up the balanced diet and daily walks to maintain this balance.":isES?"¡Thor tiene el peso ideal! 🎉 Con 28 kg está dentro del rango saludable para Golden Retrievers machos (25–34 kg). El último chequeo con el Dr. Carlos Mendes el 28/04/2026 confirmó que todo está normal. Continúa con la alimentación balanceada y los paseos diarios.":"O Thor está no peso ideal! 🎉 Com 28 kg, ele está dentro da faixa saudável para machos Golden Retriever (25–34 kg). O último check-up com o Dr. Carlos Mendes em 28/04/2026 confirmou que está tudo normal. Continue com a ração balanceada e os passeios diários para manter esse equilíbrio.";
+    }else if(lower.match(/leishman/)){
+      reply=isEN?"The main symptoms of Leishmaniasis include: progressive weight loss, skin lesions and flaking, hair loss (especially around the eyes), excessive nail growth, lethargy, anemia, and nosebleeds. ⚕️ Thor has all essential vaccines up to date, but the Leishmaniasis vaccine may offer extra protection depending on your region. Consult Dr. Carlos Mendes for guidance.":isES?"Los principales síntomas de Leishmaniasis: pérdida de peso progresiva, lesiones cutáneas y descamación, caída del pelo (especialmente alrededor de los ojos), uñas que crecen en exceso, apatía, anemia y sangrado nasal. ⚕️ Thor tiene todas las vacunas esenciales al día — la vacuna de Leishmaniasis puede ser protección extra según la región. Consulta al Dr. Carlos Mendes.":"Os principais sintomas de Leishmaniose incluem: perda de peso progressiva, lesões e descamação na pele, queda de pelo (especialmente ao redor dos olhos), unhas crescendo excessivamente, apatia, anemia e sangramento nasal. ⚕️ O Thor tem todas as vacinas essenciais em dia. A vacina de Leishmaniose pode ser proteção extra dependendo da região — consulte o Dr. Carlos Mendes.";
+    }else if(lower.match(/vacin|vaccine|vacuna|v10|refor/)){
+      reply=isEN?"⚠️ Important alert: Thor's V10 Multiple Vaccine expires in just 12 days! Schedule the booster as soon as possible to keep full protection. His other vaccines are current — Giardia (expires 05/03/2027) and Rabies (expires 20/12/2026). I can help you schedule this directly through the app!":isES?"⚠️ ¡Alerta importante: la vacuna V10 Múltiple de Thor vence en 12 días! Programa el refuerzo lo antes posible para mantener la protección completa. Las demás vacunas están al día — Giardia (vence 05/03/2027) y Antirrábica (vence 20/12/2026). ¡Puedo ayudarte a agendar desde la app!":"⚠️ Alerta importante: a vacina V10 Múltipla do Thor vence em 12 dias! Agende o reforço o quanto antes para manter a proteção completa. As demais vacinas estão em dia — Giárdia (vence 05/03/2027) e Antirrábica (vence 20/12/2026). Posso ajudar a agendar pelo app!";
+    }else if(lower.match(/vermi|worm|parasit/)){
+      reply=isEN?"Thor's deworming is 3 weeks overdue! 💊 For healthy adult dogs like him, every 3 months is the recommended frequency. You can get the medication through the Services section in the app, or ask Dr. Carlos Mendes at the next appointment. Reminder: intestinal parasites can also be transmitted to humans!":isES?"¡El vermífugo de Thor lleva 3 semanas pendiente! 💊 Para perros adultos sanos como él, lo ideal es cada 3 meses. Puedes adquirirlo en la sección Servicios de la app o pedirle indicación al Dr. Carlos Mendes. ¡Recuerda que los parásitos intestinales también se transmiten a los humanos!":"O vermífugo do Thor está pendente há 3 semanas! 💊 Para cães adultos saudáveis como ele, o ideal é a cada 3 meses. Pode adquirir pelo app na seção Serviços ou pedir indicação ao Dr. Carlos Mendes na próxima consulta. Lembrando: parasitas intestinais também podem ser transmitidos para humanos!";
+    }else if(lower.match(/chocolate|uva|cebola|alho|xilitol|grape|onion|garlic|xylitol|abacate|avocado/)){
+      reply=isEN?"NEVER give Thor: grapes or raisins (kidney failure), chocolate and coffee (cardiac toxicity), onion and garlic (anemia), avocado (toxic persin), macadamia nuts (neurological damage), xylitol/sweeteners (blood sugar crash), alcohol, and cooked bones. ⚠️ If he accidentally ingested any of these, go to the vet immediately — time is critical!":isES?"NUNCA le des a Thor: uva y pasas (insuficiencia renal), chocolate y café (toxicidad cardíaca), cebolla y ajo (anemia), aguacate (persina tóxica), nueces de macadamia, xilitol/edulcorantes, alcohol y huesos cocidos. ⚠️ Si ingirió algo accidentalmente, ¡ve al veterinario de inmediato!":"NUNCA ofereça ao Thor: uva e passa (insuficiência renal), chocolate e café (toxicidade cardíaca), cebola e alho (anemia), abacate (peroxina tóxica), macadâmia, xilitol/adoçantes, álcool e ossos cozidos. ⚠️ Se ele ingeriu qualquer desses acidentalmente, vá ao veterinário imediatamente — o tempo é crítico!";
+    }else if(lower.match(/comer|eat|aliment|food|fruta|fruit|ração|snack|petisco/)){
+      reply=isEN?"Thor can safely enjoy as treats: seedless apple, banana (in moderation), seedless watermelon, blueberries, cooked carrot, and cooked chicken or fish without bones. 🍎 Always offer small portions — treats should represent no more than 10% of daily calories. His main diet should be quality kibble appropriate for his age and size.":isES?"Thor puede comer como snacks de forma segura: manzana sin semillas, banana con moderación, sandía sin semillas, arándanos, zanahoria cocida y pollo o pescado cocido sin huesos. 🍎 Siempre en pequeñas porciones — los snacks no deben superar el 10% de las calorías diarias.":"O Thor pode comer como petiscos: maçã sem sementes, banana com moderação, melancia sem sementes, mirtilo, cenoura cozida e frango ou peixe cozido sem ossos. 🍎 Sempre em pequenas porções — petiscos devem representar no máximo 10% das calorias diárias. A alimentação principal deve ser ração seca de qualidade adequada para a idade e porte.";
+    }else{
+      reply=isEN?`Great question about Thor! 🐾 Based on his records, he's in excellent overall health — ideal weight (28 kg), vaccines mostly current (V10 expires in 12 days, worth scheduling the booster!), and no registered allergies. His last checkup with Dr. Carlos Mendes on 28/04/2026 showed everything normal. For a more specific assessment on this topic, I recommend a consultation — I can help schedule it through the app!`:isES?`¡Buena pregunta sobre Thor! 🐾 Según su historial, está en excelente salud — peso ideal (28 kg), vacunas al día en su mayoría (la V10 vence en 12 días — ¡vale la pena programar el refuerzo!), sin alergias registradas. Su último chequeo con el Dr. Carlos Mendes el 28/04/2026 mostró todo normal. Para una evaluación más específica, recomiendo agendar una consulta desde la app.`:`Ótima pergunta sobre o Thor! 🐾 Pelo prontuário, ele está em excelente estado geral — peso ideal (28 kg), vacinas em dia na maioria (V10 vence em 12 dias, vale agendar o reforço!), sem alergias registradas. O último check-up com o Dr. Carlos Mendes em 28/04/2026 mostrou tudo normal. Para avaliação mais específica sobre esse tema, recomendo uma consulta — posso ajudar a agendar pelo app!`;
+    }
+    setMsgs(prev=>[...prev,{from:"bot",text:reply}]);
+    setTyping(false);
+  }
+  return(<div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column"}}>
+    <div style={{background:C.white,borderBottom:`1px solid ${C.beige}`}}><StatusBar/>
+      <div style={{padding:"0 24px 13px",display:"flex",alignItems:"center",gap:11}}>
+        <button onClick={()=>onNavigate("home")} style={{background:C.beige,border:"none",width:34,height:34,borderRadius:11,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer"}}><ArrowLeft size={17} color={C.mid}/></button>
+        <div style={{width:38,height:38,borderRadius:11,background:`${C.coral}15`,border:`2px solid ${C.coral}30`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:19}}>🤖</div>
+        <div><div style={{fontFamily:"'Playfair Display', serif",fontSize:15,fontWeight:700,color:C.dark}}>{t.pbTitle}</div><div style={{fontSize:11,color:C.green,fontWeight:700}}>● {t.pbStatus}</div></div>
+        <div style={{marginLeft:"auto",background:"#FFF3E0",borderRadius:9,padding:"3px 9px",fontSize:10,color:"#E65100",fontWeight:700}}>{t.pbDisc}</div>
+      </div>
+    </div>
+    <div style={{flex:1,overflowY:"auto",padding:"14px 14px 8px",background:C.beigeLight,display:"flex",flexDirection:"column",gap:10}}>
+      {msgs.map((m,i)=>(<div key={i} style={{display:"flex",justifyContent:m.from==="user"?"flex-end":"flex-start",gap:7,alignItems:"flex-end"}}>
+        {m.from==="bot"&&<div style={{width:26,height:26,borderRadius:"50%",background:`${C.coral}15`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,flexShrink:0}}>🤖</div>}
+        <div style={{maxWidth:"80%",padding:"11px 13px",borderRadius:m.from==="user"?"17px 17px 4px 17px":"17px 17px 17px 4px",background:m.from==="user"?C.coral:C.white,color:m.from==="user"?C.white:C.dark,fontSize:13,fontWeight:500,lineHeight:1.6,boxShadow:"0 2px 8px rgba(0,0,0,0.06)",whiteSpace:"pre-wrap"}}>{m.text}</div>
+      </div>))}
+      {typing&&<div style={{display:"flex",alignItems:"center",gap:7}}><div style={{width:26,height:26,borderRadius:"50%",background:`${C.coral}15`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:13}}>🤖</div><div style={{background:C.white,borderRadius:"17px 17px 17px 4px",padding:"14px",boxShadow:"0 2px 8px rgba(0,0,0,0.06)",display:"flex",gap:5,alignItems:"center"}}><div style={{width:7,height:7,borderRadius:"50%",background:C.coral,animation:"pulse 1s infinite"}}/>  <div style={{width:7,height:7,borderRadius:"50%",background:C.coral,opacity:0.6}}/><div style={{width:7,height:7,borderRadius:"50%",background:C.coral,opacity:0.3}}/></div></div>}
+      <div style={{display:"flex",flexWrap:"wrap",gap:7,marginTop:4}}>{[t.pbS1,t.pbS2,t.pbS3,t.pbS4].map((s,i)=>(<button key={i} onClick={()=>send(s)} style={{padding:"7px 12px",background:C.white,color:C.coral,borderRadius:18,fontSize:11,fontWeight:600,border:`1.5px solid ${C.coral}30`,cursor:"pointer",fontFamily:"inherit"}}>{s}</button>))}</div>
+    </div>
+    <div style={{background:C.white,padding:"11px 14px 22px",borderTop:`1px solid ${C.beige}`,display:"flex",gap:9,alignItems:"center"}}>
+      <div style={{flex:1,background:C.beige,borderRadius:18,padding:"11px 15px",display:"flex",alignItems:"center"}}><input value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==="Enter"&&send()} placeholder={t.pbPH} style={{flex:1,fontSize:14,color:C.dark,background:"transparent",border:"none",outline:"none",fontFamily:"inherit"}}/></div>
+      <button onClick={()=>send()} style={{width:42,height:42,borderRadius:"50%",background:C.coral,display:"flex",alignItems:"center",justifyContent:"center",border:"none",cursor:"pointer"}}>
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13" stroke="white" strokeWidth="2.5" strokeLinecap="round"/><path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+      </button>
+    </div>
+  </div>);}
+
+/* ─── ROUTINE ─────────────────────────────────────────────────── */
+function RoutineScreen({onNavigate,activeNav,t}){
+  const taskDefs=["🚶 Passeio manhã","🍽️ Alimentação manhã","🚶 Passeio tarde","🍽️ Alimentação noite","🏋️ Exercício livre","🛁 Banho & Tosa","💊 Vermífugo preventivo"];
+  const times=["07:30","08:00","17:00","19:00","18:30",t.weekDays[6]==="S"?"Semanal":"Weekly",t.weekDays[1]==="S"?"Mensal":"Monthly"];
+  const [tasks,setTasks]=useState(taskDefs.map((l,i)=>({id:i,icon:l.split(" ")[0],label:l.slice(2),done:i<3,time:times[i]})));
+  const toggle=id=>setTasks(prev=>prev.map(tk=>tk.id===id?{...tk,done:!tk.done}:tk));
+  const done=tasks.filter(tk=>tk.done).length,pct=Math.round(done/tasks.length*100),r=42,circ=2*Math.PI*r;
+  return(<div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column"}}>
+    <div style={{flex:1,overflowY:"auto",background:C.beigeLight}}>
+      <StatusBar/><div style={{padding:"0 24px 0"}}><SubHeader title={t.routineTitle} onBack={()=>onNavigate("home")}/></div>
+      <div style={{padding:"0 24px 20px",display:"flex",gap:14,alignItems:"center"}}>
+        <div style={{position:"relative",width:100,height:100,flexShrink:0}}>
+          <svg width="100" height="100" style={{transform:"rotate(-90deg)"}}>
+            <circle cx="50" cy="50" r={r} fill="none" stroke={C.beige} strokeWidth="9"/>
+            <circle cx="50" cy="50" r={r} fill="none" stroke={C.coral} strokeWidth="9" strokeDasharray={circ} strokeDashoffset={circ-(pct/100)*circ} strokeLinecap="round"/>
+          </svg>
+          <div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center"}}><div style={{fontSize:19,fontWeight:800,color:C.dark}}>{pct}%</div><div style={{fontSize:9,color:C.light,fontWeight:600}}>{t.routineToday}</div></div>
+        </div>
+        <div><div style={{fontFamily:"'Playfair Display', serif",fontSize:17,fontWeight:700,color:C.dark,marginBottom:5}}>{done}/{tasks.length} {t.taskLabel.split(" ")[0]}<br/>{t.taskLabel.split(" ").slice(1).join(" ")}</div>
+          <div style={{background:"#FFF3E0",borderRadius:11,padding:"7px 11px",display:"inline-flex",alignItems:"center",gap:5}}><span style={{fontSize:15}}>🔥</span><div><div style={{fontSize:12,fontWeight:800,color:"#E65100"}}>12 {t.routineToday==="today"?"days":"días" in t?"días":"dias"}</div><div style={{fontSize:10,color:"#BF360C",fontWeight:600}}>{t.routineStreak}</div></div></div>
+        </div>
+      </div>
+      <div style={{padding:"0 24px 14px"}}>
+        <div style={{display:"flex",gap:5}}>{t.weekDays.map((d,i)=>(<div key={i} style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",gap:3}}><div style={{fontSize:9,color:C.light,fontWeight:600}}>{d}</div><div style={{width:26,height:26,borderRadius:"50%",background:i<6?C.coral:C.beige,display:"flex",alignItems:"center",justifyContent:"center",fontSize:12}}>{i<6?"✓":""}</div></div>))}
+        </div>
+      </div>
+      <div style={{padding:"0 24px 32px",display:"flex",flexDirection:"column",gap:9}}>
+        <div style={{fontFamily:"'Playfair Display', serif",fontSize:15,fontWeight:700,color:C.dark,marginBottom:2}}>{t.taskLabel}</div>
+        {tasks.map(task=>(<div key={task.id} onClick={()=>toggle(task.id)} style={{background:C.white,borderRadius:14,padding:"13px 15px",display:"flex",alignItems:"center",gap:13,boxShadow:"0 2px 8px rgba(0,0,0,0.05)",cursor:"pointer",opacity:task.done?0.78:1}}>
+          <div style={{width:38,height:38,borderRadius:11,background:task.done?`${C.green}15`:C.beige,display:"flex",alignItems:"center",justifyContent:"center",fontSize:17,flexShrink:0}}>{task.icon}</div>
+          <div style={{flex:1}}><div style={{fontSize:14,fontWeight:700,color:C.dark,textDecoration:task.done?"line-through":"none"}}>{task.label}</div><div style={{fontSize:11,color:C.light,fontWeight:500,marginTop:2}}>⏰ {task.time}</div></div>
+          <div style={{width:22,height:22,borderRadius:"50%",background:task.done?C.green:C.beige,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,border:task.done?"none":`2px solid ${C.beige}`}}>{task.done&&<Check size={13} color="white"/>}</div>
+        </div>))}
+      </div>
+    </div>
+    <BottomNav active={activeNav} onTab={onNavigate} t={t}/>
+  </div>);}
+
+/* ─── ADOPTION ────────────────────────────────────────────────── */
+function AdoptionScreen({onNavigate,activeNav,t}){
+  const [filter,setFilter]=useState("todos");const [interested,setInterested]=useState({});
+  const pets=[{id:1,type:"cachorro",e:"🐕",name:"Bolinha",breed:"SRD",age:"2 anos",size:"Médio",shelter:"ONG Patinhas SP",dist:"1.4 km",vacinado:true,castrado:false},{id:2,type:"gato",e:"🐈",name:"Lua",breed:"SRD",age:"8 meses",size:"Pequeno",shelter:"Abrigo Amor Animal",dist:"2.1 km",vacinado:true,castrado:true},{id:3,type:"cachorro",e:"🐩",name:"Fred",breed:"Poodle Mix",age:"4 anos",size:"Pequeno",shelter:"ONG Patinhas SP",dist:"1.4 km",vacinado:true,castrado:true},{id:4,type:"gato",e:"🐱",name:"Nala",breed:"Persa Mix",age:"3 anos",size:"Médio",shelter:"Casa dos Gatos SP",dist:"3.7 km",vacinado:true,castrado:true},{id:5,type:"cachorro",e:"🐶",name:"Max",breed:"Labrador Mix",age:"1 ano",size:"Grande",shelter:"Abrigo Amor Animal",dist:"2.1 km",vacinado:false,castrado:false}];
+  const filtered=filter==="todos"?pets:pets.filter(p=>p.type===filter);
+  return(<div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column"}}>
+    <div style={{flex:1,overflowY:"auto",background:C.beigeLight}}>
+      <div style={{background:`linear-gradient(130deg,${C.green} 0%,#2D5A32 100%)`,padding:"0 24px 22px",position:"relative",overflow:"hidden"}}>
+        <div style={{position:"absolute",right:-35,top:-35,width:140,height:140,borderRadius:"50%",background:"rgba(255,255,255,0.07)"}}/>
+        <StatusBar light/>
+        <button onClick={()=>onNavigate("map")} style={{background:"rgba(255,255,255,0.14)",border:"none",display:"flex",alignItems:"center",gap:7,color:C.white,marginBottom:14,fontSize:13,fontWeight:600,borderRadius:10,padding:"5px 11px",cursor:"pointer",fontFamily:"inherit"}}><ArrowLeft size={15}/>{t.bgBack}</button>
+        <div style={{fontFamily:"'Playfair Display', serif",fontSize:22,fontWeight:700,color:C.white,marginBottom:4}}>{t.adoptTitle}</div>
+        <div style={{color:"rgba(255,255,255,0.7)",fontSize:12,fontWeight:500}}>ONG Patinhas SP · Abrigo Amor Animal</div>
+      </div>
+      <div style={{padding:"14px 16px 8px",display:"flex",gap:7}}>{[[" todos",t.filterAll],["cachorro",t.filterDogs],["gato",t.filterCats]].map(([id,label])=>(<button key={id.trim()} onClick={()=>setFilter(id.trim())} style={{padding:"7px 13px",borderRadius:18,background:filter===id.trim()?C.green:C.white,color:filter===id.trim()?C.white:C.mid,fontSize:12,fontWeight:700,border:`1px solid ${filter===id.trim()?C.green:C.beige}`,cursor:"pointer",fontFamily:"inherit",whiteSpace:"nowrap"}}>{label}</button>))}</div>
+      <div style={{padding:"8px 24px 32px",display:"flex",flexDirection:"column",gap:13}}>
+        <div style={{fontSize:13,color:C.light,fontWeight:600}}>{filtered.length} {t.petsNear}</div>
+        {filtered.map(pet=>(<div key={pet.id} style={{background:C.white,borderRadius:18,overflow:"hidden",boxShadow:"0 2px 10px rgba(0,0,0,0.06)"}}>
+          <div style={{background:`${C.green}08`,padding:"18px 18px 14px",display:"flex",gap:14,alignItems:"flex-start"}}>
+            <div style={{width:60,height:60,borderRadius:16,background:`${C.green}20`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:28,flexShrink:0}}>{pet.e}</div>
+            <div style={{flex:1}}><div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}><div style={{fontFamily:"'Playfair Display', serif",fontSize:19,fontWeight:700,color:C.dark}}>{pet.name}</div><div style={{background:`${C.green}15`,color:C.green,fontSize:11,fontWeight:700,padding:"3px 9px",borderRadius:9}}>{pet.dist}</div></div>
+              <div style={{fontSize:12,color:C.light,fontWeight:500,marginTop:3}}>{pet.breed} · {pet.age} · {pet.size}</div>
+              <div style={{display:"flex",gap:5,marginTop:8,flexWrap:"wrap"}}>
+                {pet.vacinado&&<div style={{background:`${C.green}15`,color:C.green,fontSize:10,fontWeight:700,padding:"2px 7px",borderRadius:7}}>{t.vaccinatedBadge}</div>}
+                {pet.castrado&&<div style={{background:`${C.coral}15`,color:C.coral,fontSize:10,fontWeight:700,padding:"2px 7px",borderRadius:7}}>{t.neuteredBadge}</div>}
+                <div style={{background:C.beige,color:C.mid,fontSize:10,fontWeight:700,padding:"2px 7px",borderRadius:7}}>📍 {pet.shelter}</div>
+              </div>
+            </div>
+          </div>
+          <div style={{padding:"12px 18px",display:"flex",justifyContent:"flex-end"}}>
+            <button onClick={()=>setInterested(prev=>({...prev,[pet.id]:!prev[pet.id]}))} style={{padding:"9px 18px",background:interested[pet.id]?`${C.green}15`:C.green,color:interested[pet.id]?C.green:C.white,borderRadius:12,fontSize:13,fontWeight:700,border:interested[pet.id]?`2px solid ${C.green}`:"none",cursor:"pointer",fontFamily:"inherit",transition:"all 0.2s"}}>
+              {interested[pet.id]?t.adoptDone:t.adoptCta}
+            </button>
+          </div>
+        </div>))}
+      </div>
+    </div>
+    <BottomNav active={activeNav} onTab={onNavigate} t={t}/>
+  </div>);}
+
+/* ─── PREMIUM ─────────────────────────────────────────────────── */
+function PremiumScreen({onNavigate,t}){
+  const [annual,setAnnual]=useState(false);const [subscribed,setSubscribed]=useState(false);
+  const features=[[t.featLabel,t.freeCol,t.premCol,true],[t.mVaccines+" ilimitadas","3 pets","Ilimitado",false],[t.servTitle.replace(" 🛒",""),"✓","✓",true],["PetBot IA","5/mês","Ilimitado",false],["Export PDF prontuário","–","✓",false],["QR Code emergência","✓","✓",true],["Agendamento prioritário","–","✓",false],["Descontos parceiros","–","Até 15%",false],["Compartilhamento familiar","–","3 contas",false]];
+  if(subscribed)return(<div style={{position:"absolute",inset:0,background:`linear-gradient(160deg,${C.coral} 0%,${C.coralDark} 100%)`,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"40px 32px"}}><div style={{fontSize:50,marginBottom:18}}>✨</div><div style={{fontFamily:"'Playfair Display', serif",fontSize:26,fontWeight:700,color:C.white,textAlign:"center",marginBottom:11,whiteSpace:"pre-line"}}>{t.premSuccess}</div><div style={{fontSize:13,color:"rgba(255,255,255,0.75)",textAlign:"center",lineHeight:1.6,marginBottom:28}}>{t.premSuccessSub}</div><button onClick={()=>onNavigate("home")} style={{width:"100%",padding:"16px",background:C.white,color:C.coral,borderRadius:17,fontSize:15,fontWeight:800,border:"none",cursor:"pointer",fontFamily:"inherit"}}>{t.exploreBtn}</button></div>);
+  return(<div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column"}}>
+    <div style={{flex:1,overflowY:"auto"}}>
+      <div style={{background:`linear-gradient(155deg,${C.coral} 0%,${C.coralDark} 100%)`,padding:"0 24px 26px",position:"relative",overflow:"hidden"}}>
+        <div style={{position:"absolute",right:-55,top:-55,width:200,height:200,borderRadius:"50%",background:"rgba(255,255,255,0.07)"}}/>
+        <StatusBar light/><button onClick={()=>onNavigate("profile")} style={{background:"rgba(255,255,255,0.14)",border:"none",display:"flex",alignItems:"center",gap:7,color:C.white,marginBottom:14,fontSize:13,fontWeight:600,borderRadius:10,padding:"5px 11px",cursor:"pointer",fontFamily:"inherit"}}><ArrowLeft size={15}/>{t.bgBack}</button>
+        <div style={{fontSize:34,marginBottom:9}}>✨</div>
+        <div style={{fontFamily:"'Playfair Display', serif",fontSize:24,fontWeight:700,color:C.white,marginBottom:5}}>{t.premTitle}</div>
+        <div style={{color:"rgba(255,255,255,0.7)",fontSize:13,fontWeight:500}}>{t.premSub}</div>
+      </div>
+      <div style={{padding:"18px 24px 32px",background:C.beigeLight}}>
+        <div style={{background:C.white,borderRadius:18,padding:"5px",display:"flex",marginBottom:22,boxShadow:"0 2px 8px rgba(0,0,0,0.06)"}}>{[["monthly",t.planMonthly,false],["annual",t.planAnnual,true]].map(([id,label,isAnn])=>(<button key={id} onClick={()=>setAnnual(isAnn)} style={{flex:1,padding:"11px",borderRadius:14,background:annual===isAnn?C.coral:"transparent",color:annual===isAnn?C.white:C.mid,fontSize:14,fontWeight:700,border:"none",cursor:"pointer",fontFamily:"inherit",position:"relative"}}>{label}{isAnn&&<div style={{position:"absolute",top:-7,right:7,background:C.green,color:C.white,fontSize:8,fontWeight:800,padding:"2px 5px",borderRadius:7}}>-25%</div>}</button>))}</div>
+        <div style={{background:`linear-gradient(135deg,${C.coral} 0%,${C.coralDark} 100%)`,borderRadius:20,padding:"20px",marginBottom:22,textAlign:"center"}}>
+          <div style={{color:"rgba(255,255,255,0.7)",fontSize:12,fontWeight:600,marginBottom:3}}>{t.premTitle}</div>
+          <div style={{fontFamily:"'Playfair Display', serif",fontSize:38,fontWeight:700,color:C.white}}>{annual?"R$14,90":"R$19,90"}<span style={{fontSize:15,fontWeight:500}}>/mês</span></div>
+          {annual&&<div style={{color:"rgba(255,255,255,0.7)",fontSize:12,marginTop:3}}>R$178,80/ano · Economize R$60</div>}
+          <div style={{marginTop:13,background:"rgba(255,255,255,0.15)",borderRadius:11,padding:"7px 14px",display:"inline-block",fontSize:12,color:C.white,fontWeight:600}}>{t.trialBadge}</div>
+        </div>
+        <div style={{background:C.white,borderRadius:16,overflow:"hidden",marginBottom:22,boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}>
+          <div style={{display:"grid",gridTemplateColumns:"1fr auto auto",padding:"10px 14px",background:C.beige,gap:7}}>
+            <div style={{fontSize:10,fontWeight:800,color:C.mid,textTransform:"uppercase"}}>{t.featLabel}</div>
+            <div style={{fontSize:10,fontWeight:800,color:C.mid,textAlign:"center",width:42}}>{t.freeCol}</div>
+            <div style={{fontSize:10,fontWeight:800,color:C.coral,textAlign:"center",width:56}}>{t.premCol}</div>
+          </div>
+          {features.slice(1).map((f,i)=>(<div key={i} style={{display:"grid",gridTemplateColumns:"1fr auto auto",padding:"10px 14px",borderBottom:i<features.length-2?`1px solid ${C.beige}`:"none",gap:7,alignItems:"center"}}>
+            <div style={{fontSize:12,color:C.dark,fontWeight:500}}>{f[0]}</div>
+            <div style={{textAlign:"center",width:42}}>{f[1]==="✓"?<span style={{color:C.green,fontSize:14}}>✓</span>:f[1]==="–"?<span style={{color:C.light}}>–</span>:<span style={{fontSize:10,fontWeight:700,color:C.mid}}>{f[1]}</span>}</div>
+            <div style={{textAlign:"center",width:56}}>{f[2]==="✓"?<span style={{color:C.coral,fontSize:14}}>✓</span>:<span style={{fontSize:10,fontWeight:700,color:C.coral}}>{f[2]}</span>}</div>
+          </div>))}
+        </div>
+        <button onClick={()=>setSubscribed(true)} style={{width:"100%",padding:"16px",background:C.coral,color:C.white,borderRadius:17,fontSize:15,fontWeight:800,border:"none",cursor:"pointer",fontFamily:"inherit",marginBottom:11}}>{t.startTrial}</button>
+        <div style={{textAlign:"center",fontSize:11,color:C.light,fontWeight:500,lineHeight:1.6,whiteSpace:"pre-line"}}>{t.noCommit}</div>
+      </div>
+    </div>
+  </div>);}
+
+/* ─── APP ROOT ────────────────────────────────────────────────── */
+function PetHubApp(){
+  const [screen,setScreen]=useState("welcome");
+  const [activeNav,setActiveNav]=useState("home");
+  const [provider,setProvider]=useState(null);
+  const [language,setLanguage]=useState("pt");
+  const t=i18n[language];
+  function nav(id,data={}){
+    setScreen(id);
+    if(["home","health","services","blood","profile"].includes(id))setActiveNav(id);
+    if(data?.provider)setProvider(data.provider);
+  }
+  function setLang(l){setLanguage(l);}
+  const props={onNavigate:nav,activeNav,t,lang:language,setLang,provider};
+  const showLogo=!["welcome","onboarding"].includes(screen);
+  const lightLogo=["blood","blooddonation","servicedetail","gps"].includes(screen);
+  return(<div style={{minHeight:"100vh",background:"linear-gradient(135deg,#1a1a2e,#16213e,#0f3460)",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"20px"}}>
+    <style>{`@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}`}</style>
+    <div style={{width:390,height:844,borderRadius:44,overflow:"hidden",boxShadow:"0 40px 100px rgba(0,0,0,0.6),0 0 0 2px rgba(255,255,255,0.1)",position:"relative",fontFamily:"'Nunito',sans-serif",background:"#FAF6EE"}}>
+      {showLogo&&(
+        <div onClick={()=>{setScreen("home");setActiveNav("home");}}
+          style={{position:"absolute",top:13,left:16,zIndex:999,display:"flex",alignItems:"center",gap:4,fontFamily:"'Playfair Display',serif",fontSize:13,fontWeight:700,color:lightLogo?"rgba(255,255,255,0.85)":C.coral,cursor:"pointer",letterSpacing:0.3}}>
+          🐾 <span>PetHub</span>
+        </div>
+      )}
+      {screen==="welcome"       &&<WelcomeScreen onNext={()=>setScreen("onboarding")} lang={language} setLang={setLang}/>}
+      {screen==="onboarding"    &&<OnboardingScreen onNext={()=>nav("home")} lang={language}/>}
+      {screen==="home"          &&<HomeScreen {...props}/>}
+      {screen==="health"        &&<HealthScreen {...props}/>}
+      {screen==="services"      &&<ServicesScreen {...props} setProvider={p=>{setProvider(p);}}/>}
+      {screen==="blood"         &&<BloodGuideScreen {...props}/>}
+      {screen==="blooddonation" &&<BloodDonationScreen {...props}/>}
+      {screen==="map"           &&<MapScreen {...props}/>}
+      {screen==="profile"       &&<ProfileScreen {...props}/>}
+      {screen==="notifications" &&<NotificationsScreen {...props}/>}
+      {screen==="addvaccine"    &&<AddVaccineScreen onNavigate={nav} t={t}/>}
+      {screen==="servicedetail" &&<ServiceDetailScreen {...props}/>}
+      {screen==="booking"       &&<BookingScreen onNavigate={nav} provider={provider} t={t}/>}
+      {screen==="bookingsuccess"&&<BookingSuccessScreen onNavigate={nav} provider={provider} t={t}/>}
+      {screen==="qrcode"        &&<QRCodeScreen onNavigate={nav} t={t}/>}
+      {screen==="agenda"        &&<AgendaScreen {...props}/>}
+      {screen==="petbot"        &&<PetBotScreen {...props}/>}
+      {screen==="routine"       &&<RoutineScreen {...props}/>}
+      {screen==="adoption"      &&<AdoptionScreen {...props}/>}
+      {screen==="premium"       &&<PremiumScreen onNavigate={nav} t={t}/>}
+      {screen==="gps"           &&<GPSScreen onNavigate={nav} t={t}/>}
+      {screen==="breed"         &&<BreedScreen onNavigate={nav}/>}
+      {screen==="faq"           &&<FAQScreen onNavigate={nav}/>}
+    </div>
+    <div style={{color:"rgba(255,255,255,0.3)",marginTop:18,fontSize:12,fontWeight:600,letterSpacing:0.5,textAlign:"center"}}>
+      PetHub · 23 telas · PT | EN | ES · MBA International
+    </div>
+  </div>);}
+
+/* ─── GPS SCREEN ──────────────────────────────────────────────── */
+function GPSScreen({onNavigate,t}){
+  const [phase,setPhase]=useState(0);
+  const [dot,setDot]=useState(0);
+  useEffect(()=>{
+    const t1=setTimeout(()=>setPhase(1),600);
+    const t2=setTimeout(()=>setPhase(2),3200);
+    const t3=setTimeout(()=>setPhase(3),5800);
+    const iv=setInterval(()=>setDot(d=>(d+1)%3),500);
+    return()=>{clearTimeout(t1);clearTimeout(t2);clearTimeout(t3);clearInterval(iv);};
+  },[]);
+  const phases=["Inicializando..","Buscando sinal da coleira GPS..","Conectando ao chip #BR-2024-4892..",""];
+  return(<div style={{position:"absolute",inset:0,background:C.beigeLight,display:"flex",flexDirection:"column"}}>
+    <StatusBar/><div style={{padding:"0 24px"}}><SubHeader title="📡 Localizar Thor" onBack={()=>onNavigate("home")}/></div>
+    {phase<3?(
+      <div style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"32px"}}>
+        <div style={{position:"relative",width:210,height:210,marginBottom:36}}>
+          {[0,1,2,3].map(i=>(<div key={i} style={{position:"absolute",inset:i*22,borderRadius:"50%",border:`2.5px solid ${C.coral}`,opacity:dot===i%3?0.85:0.18,transition:"opacity 0.4s"}}/>))}
+          <div style={{position:"absolute",inset:0,display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"column"}}>
+            <div style={{fontSize:48,marginBottom:4}}>{phase<2?"📡":"🔗"}</div>
+            <div style={{fontSize:10,color:C.coral,fontWeight:800,letterSpacing:1}}>{["","SCAN","LINK",""][phase]}</div>
+          </div>
+        </div>
+        <div style={{fontFamily:"'Playfair Display',serif",fontSize:19,fontWeight:700,color:C.dark,textAlign:"center",marginBottom:10}}>{phases[phase]}</div>
+        <div style={{display:"flex",gap:5}}>{[0,1,2].map(d=>(<div key={d} style={{width:6,height:6,borderRadius:"50%",background:dot===d?C.coral:C.beige,transition:"background 0.3s"}}/>))}</div>
+        <div style={{marginTop:28,background:C.white,borderRadius:14,padding:"13px 18px",fontSize:12,color:C.mid,fontWeight:500,textAlign:"center",lineHeight:1.5,maxWidth:280}}>
+          💡 O rastreamento usa a <strong>Coleira GPS PetHub Smart</strong>, que transmite localização em tempo real via celular.
+        </div>
+      </div>
+    ):(
+      <div style={{flex:1,overflowY:"auto"}}>
+        <div style={{background:`linear-gradient(130deg,${C.green} 0%,#1E4D25 100%)`,padding:"20px 24px 24px",textAlign:"center"}}>
+          <div style={{fontSize:38,marginBottom:8}}>🎯</div>
+          <div style={{fontFamily:"'Playfair Display',serif",fontSize:22,fontWeight:700,color:C.white}}>Thor localizado!</div>
+          <div style={{color:"rgba(255,255,255,0.7)",fontSize:13,fontWeight:500,marginTop:5}}>Chip #BR-2024-4892 · Coleira GPS · Sinal ●●●○</div>
+        </div>
+        <div style={{padding:"18px 24px 32px"}}>
+          <div style={{background:"#C8D8A8",borderRadius:18,height:185,position:"relative",overflow:"hidden",marginBottom:18}}>
+            <div style={{position:"absolute",inset:0,backgroundImage:"linear-gradient(rgba(255,255,255,0.12) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.12) 1px,transparent 1px)",backgroundSize:"36px 36px"}}/>
+            <div style={{position:"absolute",top:"48%",left:0,right:0,height:7,background:"rgba(255,255,255,0.45)"}}/>
+            <div style={{position:"absolute",top:0,bottom:0,left:"39%",width:7,background:"rgba(255,255,255,0.4)"}}/>
+            <div style={{position:"absolute",bottom:"22%",left:"27%",width:13,height:13,borderRadius:"50%",background:"#4285F4",border:"3px solid white",boxShadow:"0 0 0 5px rgba(66,133,244,0.2)"}}/>
+            <div style={{position:"absolute",top:"22%",right:"17%",textAlign:"center"}}>
+              <div style={{fontSize:26}}>🐕</div>
+              <div style={{background:C.coral,color:"white",fontSize:9,fontWeight:800,padding:"2px 7px",borderRadius:6,marginTop:2,whiteSpace:"nowrap"}}>Thor está aqui!</div>
+            </div>
+            <svg style={{position:"absolute",inset:0,width:"100%",height:"100%"}} viewBox="0 0 300 185">
+              <line x1="90" y1="143" x2="238" y2="47" stroke={C.coral} strokeWidth="2" strokeDasharray="6,4" opacity="0.7"/>
+            </svg>
+            <div style={{position:"absolute",top:10,left:10,background:"rgba(0,0,0,0.45)",color:"white",fontSize:10,fontWeight:700,padding:"4px 9px",borderRadius:7}}>📍 Pinheiros, SP</div>
+          </div>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:18}}>
+            {[["📍","Distância","~120 metros"],["⏱️","Última atualização","Agora mesmo"],["🔋","Bateria coleira","78%"],["📶","Força do sinal","Boa (4 barras)"]].map(([ic,l,v],i)=>(
+              <div key={i} style={{background:C.white,borderRadius:14,padding:"14px",boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}>
+                <div style={{fontSize:20,marginBottom:5}}>{ic}</div>
+                <div style={{fontSize:10,color:C.light,fontWeight:700,textTransform:"uppercase",letterSpacing:0.8,marginBottom:3}}>{l}</div>
+                <div style={{fontSize:13,fontWeight:800,color:C.dark}}>{v}</div>
+              </div>
+            ))}
+          </div>
+          <div style={{background:C.white,borderRadius:16,padding:"16px",marginBottom:18,boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}>
+            <div style={{fontSize:12,fontWeight:800,color:C.mid,textTransform:"uppercase",letterSpacing:1,marginBottom:12}}>Histórico de hoje</div>
+            {[{t:"Agora",l:"Rua Teodoro Sampaio, 320 — Pinheiros",d:"~120m"},{t:"14:20",l:"Parque Villa-Lobos",d:"~800m"},{t:"11:05",l:"Casa (local de origem)",d:"0m"}].map((item,i)=>(
+              <div key={i} style={{display:"flex",gap:10,alignItems:"flex-start",paddingBottom:i<2?10:0,borderBottom:i<2?`1px solid ${C.beige}`:"none",marginBottom:i<2?10:0}}>
+                <div style={{width:8,height:8,borderRadius:"50%",background:i===0?C.coral:C.beige,marginTop:4,flexShrink:0}}/>
+                <div style={{flex:1}}><div style={{fontSize:13,fontWeight:700,color:C.dark}}>{item.l}</div><div style={{fontSize:11,color:C.light,fontWeight:500,marginTop:2}}>{item.t}</div></div>
+                <div style={{fontSize:11,color:C.mid,fontWeight:700,flexShrink:0}}>{item.d}</div>
+              </div>
+            ))}
+          </div>
+          <div style={{background:"#FFF3E0",borderRadius:13,padding:"12px 14px",marginBottom:18,fontSize:12,color:"#E65100",fontWeight:600,lineHeight:1.5}}>
+            💡 <strong>Sobre o rastreamento:</strong> A Coleira GPS PetHub Smart usa rede celular + GPS ativo. Chips RFID convencionais não transmitem localização — eles são lidos apenas por scanners próximos (ex: veterinários).
+          </div>
+          <button onClick={()=>onNavigate("home")} style={{width:"100%",padding:"14px",background:C.coral,color:C.white,borderRadius:16,fontSize:14,fontWeight:800,border:"none",cursor:"pointer",fontFamily:"inherit"}}>✅ Concluir rastreamento</button>
+        </div>
+      </div>
+    )}
+  </div>);}
+
+/* ─── BREED SCREEN ────────────────────────────────────────────── */
+function BreedScreen({onNavigate}){
+  const traits=[{icon:"💛",label:"Temperamento",value:"Amigável · Confiante · Afetivo · Brincalhão"},{icon:"📏",label:"Porte",value:"Grande (25–34 kg · 55–61 cm)"},{icon:"⚡",label:"Energia",value:"Alta — 1 a 2h de exercício diário"},{icon:"🎂",label:"Expectativa de vida",value:"10 a 12 anos"},{icon:"🧠",label:"Inteligência",value:"Muito alta — aprende comandos rapidamente"},{icon:"🤝",label:"Com crianças",value:"Excelente — muito paciente e gentil"}];
+  const health=[{ic:"⚠️",name:"Displasia do quadril",info:"Monitorar a partir dos 2 anos com raio-X"},{ic:"⚠️",name:"Epilepsia",info:"Incidência moderada na raça"},{ic:"⚠️",name:"Câncer",info:"Golden tem predisposição alta (>60% após 10 anos)"},{ic:"ℹ️",name:"Obesidade",info:"Tendem a comer em excesso — controle a ração"},{ic:"ℹ️",name:"Displasia do cotovelo",info:"Principalmente em machos"},{ic:"✅",name:"Pele e pelagem",info:"Escovação 2-3x/semana evita nós e queda excessiva"}];
+  const care=[["🛁","Banho","A cada 4–6 semanas"],["✂️","Escovação","2–3x por semana"],["🦷","Dentes","Escovar 3x/semana"],["💅","Unhas","Cortar a cada 3–4 semanas"],["👂","Ouvidos","Limpar 1x/semana (propenso a infecções)"],["🏃","Exercício","1–2h diárias (caminhada + brincadeiras)"]];
+  return(<div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column"}}>
+    <div style={{flex:1,overflowY:"auto"}}>
+      <div style={{background:`linear-gradient(130deg,${C.coral} 0%,${C.coralDark} 100%)`,padding:"0 24px 24px",position:"relative",overflow:"hidden"}}>
+        <div style={{position:"absolute",right:-40,top:-40,width:160,height:160,borderRadius:"50%",background:"rgba(255,255,255,0.07)"}}/>
+        <StatusBar light/><button onClick={()=>onNavigate("health")} style={{background:"rgba(255,255,255,0.14)",border:"none",display:"flex",alignItems:"center",gap:7,color:C.white,marginBottom:14,fontSize:13,fontWeight:600,borderRadius:10,padding:"6px 12px",cursor:"pointer",fontFamily:"inherit"}}><ArrowLeft size={15}/>Voltar</button>
+        <div style={{fontSize:36,marginBottom:8}}>🐕</div>
+        <div style={{fontFamily:"'Playfair Display',serif",fontSize:22,fontWeight:700,color:C.white,lineHeight:1.2,marginBottom:4}}>Golden Retriever</div>
+        <div style={{color:"rgba(255,255,255,0.7)",fontSize:13,fontWeight:500}}>Características da Raça do Thor</div>
+      </div>
+      <div style={{padding:"18px 24px 32px",background:C.beigeLight}}>
+        <div style={{fontFamily:"'Playfair Display',serif",fontSize:17,fontWeight:700,color:C.dark,marginBottom:12}}>🧬 Perfil da Raça</div>
+        <div style={{display:"flex",flexDirection:"column",gap:9,marginBottom:22}}>
+          {traits.map((tr,i)=>(<div key={i} style={{background:C.white,borderRadius:14,padding:"13px 15px",display:"flex",gap:13,alignItems:"flex-start",boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}>
+            <div style={{fontSize:22,flexShrink:0}}>{tr.icon}</div>
+            <div><div style={{fontSize:11,color:C.light,fontWeight:700,textTransform:"uppercase",letterSpacing:0.8,marginBottom:3}}>{tr.label}</div><div style={{fontSize:13,fontWeight:700,color:C.dark}}>{tr.value}</div></div>
+          </div>))}
+        </div>
+        <div style={{fontFamily:"'Playfair Display',serif",fontSize:17,fontWeight:700,color:C.dark,marginBottom:12}}>🏥 Saúde & Predisposições</div>
+        <div style={{display:"flex",flexDirection:"column",gap:9,marginBottom:22}}>
+          {health.map((h,i)=>(<div key={i} style={{background:C.white,borderRadius:14,padding:"13px 15px",display:"flex",gap:12,alignItems:"flex-start",boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}>
+            <div style={{fontSize:18,flexShrink:0}}>{h.ic}</div>
+            <div><div style={{fontSize:14,fontWeight:700,color:C.dark}}>{h.name}</div><div style={{fontSize:12,color:C.mid,fontWeight:500,marginTop:3}}>{h.info}</div></div>
+          </div>))}
+        </div>
+        <div style={{fontFamily:"'Playfair Display',serif",fontSize:17,fontWeight:700,color:C.dark,marginBottom:12}}>🛁 Cuidados Essenciais</div>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:9,marginBottom:22}}>
+          {care.map(([ic,l,v],i)=>(<div key={i} style={{background:C.white,borderRadius:14,padding:"14px",boxShadow:"0 2px 8px rgba(0,0,0,0.05)",textAlign:"center"}}>
+            <div style={{fontSize:22,marginBottom:5}}>{ic}</div>
+            <div style={{fontSize:12,fontWeight:800,color:C.dark,marginBottom:3}}>{l}</div>
+            <div style={{fontSize:11,color:C.light,fontWeight:500,lineHeight:1.4}}>{v}</div>
+          </div>))}
+        </div>
+        <div style={{background:`${C.coral}10`,borderRadius:14,padding:"14px",fontSize:12,color:C.coral,fontWeight:600,lineHeight:1.6}}>
+          🌟 <strong>Curiosidade:</strong> Goldens são usados como cães-guia, de terapia e de busca e resgate. São uma das raças mais populares do mundo justamente pelo temperamento equilibrado e facilidade de treinamento.
+        </div>
+      </div>
+    </div>
+  </div>);}
+
+/* ─── FAQ SCREEN ──────────────────────────────────────────────── */
+function FAQScreen({onNavigate}){
+  const [open,setOpen]=useState(null);
+  const toggle=i=>setOpen(open===i?null:i);
+  const faqs=[
+    {cat:"🏥 Saúde",items:[
+      {q:"Quando devo levar meu pet ao veterinário?",a:"Além das consultas anuais de rotina, leve ao vet se observar: perda de apetite por mais de 24h, vômitos ou diarreia repetidos, letargia, dificuldade de respirar, feridas que não cicatrizam ou mudanças repentinas de comportamento. Não espere piorar — o PetHub pode ajudar a agendar uma consulta urgente."},
+      {q:"Com que frequência devo vacinar meu pet?",a:"Para cães: V10 anualmente, Antirrábica anualmente ou conforme legislação local. Para gatos: V4 anualmente, Leucemia Felina anualmente. Pets jovens (filhotes) precisam de reforços a cada 21-30 dias nas primeiras vacinas. O prontuário do PetHub te notifica automaticamente."},
+      {q:"Como identifico se meu pet está com dor?",a:"Animais escondem dor por instinto. Sinais de alerta: recusa de movimentos habituais, gemidos ao ser tocado em alguma área, lamber ou morder uma região específica, postura arqueada, falta de apetite e isolamento. Se notar 2 ou mais sinais, consulte um veterinário."},
+    ]},
+    {cat:"🍖 Nutrição",items:[
+      {q:"Quais alimentos são proibidos para cães?",a:"NUNCA ofereça: uva e passa (insuficiência renal), chocolate e café (toxicidade cardíaca), cebola e alho (anemia), abacate (peroxina tóxica), macadâmia (sistema nervoso), xilitol/adoçante (glicemia), álcool e ossos cozidos (perfuram intestino). A lista completa está no PetBot — pergunte 'O que Thor pode comer?'"},
+      {q:"Quantas refeições por dia para um adulto?",a:"Cães adultos: geralmente 2 refeições por dia (manhã e noite) com quantidade conforme o peso e a raça — consulte a embalagem da ração e seu veterinário. Evite deixar ração à vontade para raças como Golden Retriever, que tendem à obesidade."},
+      {q:"Meu pet pode comer comida caseira?",a:"Sim, mas com cuidado. Proteínas magras (frango, peixe), arroz, legumes como cenoura e abobrinha são bem-vindos. Evite sal, condimentos, alho e cebola. Comida caseira pode ser nutritiva mas requer equilíbrio — consulte um veterinário nutricionista para formular a dieta correta."},
+    ]},
+    {cat:"🧠 Comportamento",items:[
+      {q:"Meu cachorro está comendo cocô — o que fazer?",a:"Esse comportamento se chama coprofagia e pode ter várias causas: deficiência nutricional, parasitas, tédio, ansiedade ou comportamento aprendido. Primeiro, verifique se o vermífugo está em dia (o do Thor está pendente há 3 semanas!). Enriqueça o ambiente com brinquedos, exercícios e interação. Se persistir, consulte o vet para descartar causas médicas."},
+      {q:"Meu pet está com ciúmes do novo bebê/animal — como lidar?",a:"Introduza mudanças gradualmente. Deixe o pet investigar o cheiro da novidade antes do encontro físico. Mantenha a rotina do pet inalterada e reserve tempo de qualidade exclusivo para ele diariamente. Nunca puna comportamentos de ciúme — reforce com atenção os momentos de calma. Adestramento ajuda muito nessa fase."},
+      {q:"Como reduzir a ansiedade de separação?",a:"Comece com saídas curtas e aumente gradualmente. Não faça despedidas dramáticas. Deixe roupas com seu cheiro. Use brinquedos de enriquecimento como Kong recheado. Em casos severos, o veterinário pode recomendar tratamento medicamentoso associado a terapia comportamental."},
+    ]},
+    {cat:"📱 Sobre o App",items:[
+      {q:"Como exportar o prontuário do meu pet?",a:"Acesse Saúde → ícone de compartilhar no canto superior direito → Exportar como PDF. O arquivo gerado inclui vacinas, consultas, documentos e o histórico completo do Thor. Ideal para levar ao veterinário ou compartilhar em caso de emergência."},
+      {q:"Como cancelar o plano Premium?",a:"Acesse Perfil → Meu Plano → Gerenciar Assinatura → Cancelar. O cancelamento é imediato e você perde os benefícios Premium ao final do período já pago. Não há multa ou fidelidade. Seus dados e prontuário são sempre seus, independente do plano."},
+      {q:"O PetHub vende meus dados para terceiros?",a:"Não. O PetHub segue rigorosamente a LGPD (Lei Geral de Proteção de Dados). Seus dados e os do seu pet não são vendidos. Compartilhamos apenas dados anonimizados e agregados com parceiros de pesquisa veterinária, sempre com sua autorização. Você é o titular dos dados do Thor."},
+    ]},
+  ];
+  let idx=0;
+  return(<div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column"}}>
+    <div style={{flex:1,overflowY:"auto"}}>
+      <StatusBar/><div style={{padding:"0 24px 0"}}><SubHeader title="❓ Perguntas Frequentes" onBack={()=>onNavigate("profile")}/></div>
+      <div style={{padding:"0 24px 32px"}}>
+        {faqs.map(section=>(
+          <div key={section.cat} style={{marginBottom:22}}>
+            <div style={{fontFamily:"'Playfair Display',serif",fontSize:16,fontWeight:700,color:C.dark,marginBottom:10}}>{section.cat}</div>
+            <div style={{display:"flex",flexDirection:"column",gap:8}}>
+              {section.items.map(item=>{
+                const i=idx++;
+                return(<div key={i} style={{background:C.white,borderRadius:14,overflow:"hidden",boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}>
+                  <div onClick={()=>toggle(i)} style={{padding:"14px 16px",display:"flex",justifyContent:"space-between",alignItems:"center",cursor:"pointer"}}>
+                    <div style={{fontSize:13,fontWeight:700,color:C.dark,lineHeight:1.4,paddingRight:10,flex:1}}>{item.q}</div>
+                    <div style={{color:C.coral,fontSize:14,flexShrink:0,fontWeight:800}}>{open===i?"▲":"▼"}</div>
+                  </div>
+                  {open===i&&<div style={{padding:"0 16px 14px",fontSize:13,color:C.mid,fontWeight:500,lineHeight:1.6,borderTop:`1px solid ${C.beige}`}}>{item.a}</div>}
+                </div>);
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>);}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<PetHubApp/>);
+</script>
+</body>
+</html>
