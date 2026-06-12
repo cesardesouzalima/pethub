@@ -4,13 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PetHub</title>
-<meta name="description" content="PetHub — Plataforma completa para cuidar do seu pet">
-<meta name="theme-color" content="#C4533D">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="PetHub">
+<title>PetHub Prototype</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
@@ -23,6 +17,77 @@ input,select,textarea{font-family:'Nunito',sans-serif}button{cursor:pointer}
 </head>
 <body>
 <div id="root"></div>
+<div id="phs" style="position:fixed;inset:0;z-index:99999;background:linear-gradient(158deg,#E8441A 0%,#BF2C0C 58%,#7A1A05 100%);display:flex;flex-direction:column;align-items:center;overflow:hidden;font-family:sans-serif;transition:opacity .55s,transform .55s">
+<div id="phs-cf" style="position:absolute;inset:0;pointer-events:none;overflow:hidden"></div>
+<div id="phs-logo" style="position:relative;z-index:5;text-align:center;margin-top:44px;opacity:0;transition:opacity .6s,transform .6s;transform:translateY(-16px)">
+  <div style="font-size:38px;font-weight:700;color:white;letter-spacing:-.5px">&#128062; PetHub</div>
+  <div style="font-size:12px;color:rgba(255,255,255,.6);font-weight:600;margin-top:4px;letter-spacing:.5px">Tudo para o seu melhor amigo</div>
+</div>
+<div id="phs-dog" style="position:relative;z-index:4;margin-top:20px;opacity:0;transform:translateY(80px);transition:opacity .7s,transform .7s cubic-bezier(.175,.885,.32,1.275)">
+  <div style="width:222px;height:222px;border-radius:50%;border:4px solid rgba(255,255,255,.28);box-shadow:0 8px 36px rgba(0,0,0,.5);overflow:visible;position:relative">
+    <div style="width:222px;height:222px;border-radius:50%;overflow:hidden">
+      <img src="data:image/jpeg;base64,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" style="width:100%;height:100%;object-fit:cover;object-position:center 8%"/>
+    </div>
+    <div id="phs-paw" style="position:absolute;bottom:-8px;right:16px;z-index:10;transition:transform .55s cubic-bezier(.34,1.35,.64,1)">
+      <svg viewBox="0 0 68 104" width="68" height="104">
+        <rect x="15" y="0" width="28" height="68" rx="14" fill="#2B1008"/>
+        <rect x="19" y="0" width="13" height="52" rx="6" fill="#3D1A0C"/>
+        <ellipse cx="31" cy="75" rx="24" ry="17" fill="#2B1008"/>
+        <ellipse cx="31" cy="74" rx="14" ry="9" fill="#1A0805"/>
+        <ellipse cx="17" cy="84" rx="8.5" ry="6.5" fill="#2B1008" transform="rotate(-15,17,84)"/>
+        <ellipse cx="30" cy="90" rx="8.5" ry="6.5" fill="#2B1008"/>
+        <ellipse cx="43" cy="84" rx="8.5" ry="6.5" fill="#2B1008" transform="rotate(15,43,84)"/>
+      </svg>
+    </div>
+  </div>
+</div>
+<div id="phs-bw" style="position:relative;z-index:5;margin-top:28px;opacity:0;transition:opacity .5s">
+  <div id="phs-btn" onclick="phsPress()" style="padding:16px 38px;background:rgba(255,255,255,.18);color:white;border:2.5px solid rgba(255,255,255,.7);border-radius:30px;font-size:16px;font-weight:800;cursor:pointer;transition:all .22s;display:inline-block;letter-spacing:.3px">Entrar no PetHub &#8594;</div>
+</div>
+<div id="phs-hint" style="margin-top:14px;color:rgba(255,255,255,.5);font-size:12px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;opacity:0;transition:opacity .5s">toque para entrar</div>
+</div>
+<style>@keyframes phs-cf{0%{transform:translateY(-28px) rotate(0);opacity:1}100%{transform:translateY(600px) rotate(760deg);opacity:0}}</style>
+<script>
+(function(){
+  var C=["#FFD700","#FF6B6B","#4ECDC4","#FF8E53","#A8E6CF","#FF6EB4","#FFF176","#87CEEB"];
+  var S=["●","■","▲","★","♥","◆","✦"];
+  var cf=document.getElementById("phs-cf");
+  for(var i=0;i<24;i++){
+    var e=document.createElement("span");
+    e.textContent=S[i%7];
+    e.style.cssText="position:absolute;left:"+(3+(i*3.8)%91)+"%;top:-26px;color:"+C[i%8]+";font-size:"+(9+(i%3)*5)+"px;animation:phs-cf "+(1.8+(i%5)*.2).toFixed(1)+"s "+(i*.16).toFixed(2)+"s ease-in infinite;pointer-events:none";
+    cf.appendChild(e);
+  }
+  setTimeout(function(){
+    var l=document.getElementById("phs-logo");
+    l.style.opacity="1";l.style.transform="translateY(0)";
+  },200);
+  setTimeout(function(){
+    var d=document.getElementById("phs-dog");
+    d.style.opacity="1";d.style.transform="translateY(0)";
+  },400);
+  setTimeout(function(){
+    document.getElementById("phs-bw").style.opacity="1";
+    document.getElementById("phs-hint").style.opacity="1";
+  },1000);
+  var busy=false;
+  window.phsPress=function(){
+    if(busy)return;busy=true;
+    document.getElementById("phs-paw").style.transform="translateY(62px) rotate(-8deg)";
+    setTimeout(function(){
+      var b=document.getElementById("phs-btn");
+      b.style.background="rgba(255,255,255,.92)";
+      b.style.color="#C23010";
+      b.style.transform="scale(.92)";
+    },520);
+    setTimeout(function(){
+      var sp=document.getElementById("phs");
+      sp.style.opacity="0";sp.style.transform="scale(1.04)";
+      setTimeout(function(){sp.remove();},660);
+    },950);
+  };
+})();
+</script>
 <script type="text/babel">
 const {useState,useEffect}=React;
 
@@ -985,36 +1050,52 @@ function PetBotScreen({onNavigate,activeNav,t,lang}){
   const initMsg=lang==="en"?"Hi! I'm PetBot, Thor's AI vet assistant. 🐾 Ask me anything about his health, nutrition or behavior!":lang==="es"?"¡Hola! Soy PetBot, el asistente vet IA de Thor. 🐾 ¡Pregúntame sobre su salud, nutrición o comportamiento!":"Olá! Sou o PetBot, assistente veterinário IA do Thor. 🐾 Pergunte sobre saúde, nutrição ou comportamento — responderei com base no histórico dele!";
   const [msgs,setMsgs]=useState([{from:"bot",text:initMsg}]);
   const [input,setInput]=useState("");const [typing,setTyping]=useState(false);
+  const sysPrompt=`Você é PetBot, assistente veterinário IA integrado ao app PetHub. Você tem acesso ao prontuário completo do pet do usuário.
+
+PERFIL DO PET:
+- Nome: Thor
+- Raça: Golden Retriever
+- Sexo: Macho
+- Idade: 3 anos
+- Peso: 28kg (dentro do ideal para a raça: 25-34kg)
+- Chip: #BR-2024-4892 (implantado em 15/03/2021)
+
+HISTÓRICO MÉDICO RECENTE:
+- Vacina V10 Múltipla: VENCENDO EM 12 DIAS (urgente!)
+- Último check-up: 28/04/2026 com Dr. Carlos Mendes — tudo normal
+- Vermífugo: pendente há 3 semanas
+- Vacina Giárdia: em dia (vence 05/03/2027)
+- Vacina Antirrábica: em dia (vence 20/12/2026)
+- Alergias registradas: nenhuma
+- Histórico de cirurgias: nenhuma
+- Tutor: Maria Silva
+
+INSTRUÇÕES:
+- Responda de forma amigável, clara e didática em até 3 parágrafos curtos
+- Use emojis com moderação (1-2 por resposta)
+- Quando relevante, mencione dados do histórico do Thor para personalizar a resposta
+- Sempre avise que não substitui consulta veterinária em casos de saúde/sintomas
+- Responda no mesmo idioma da pergunta (PT, EN ou ES)
+- Para perguntas sobre alimentação proibida: seja direto sobre o que pode e o que não pode
+- Para sintomas preocupantes: oriente a buscar o vet e mencione que pode ajudar a agendar pelo app`;
+
   async function send(msg){
     const userMsg=msg||input;
     if(!userMsg.trim())return;
     const newMsgs=[...msgs,{from:"user",text:userMsg}];
     setMsgs(newMsgs);
     setInput("");setTyping(true);
-    const lower=userMsg.toLowerCase();
-    const isEN=lang==="en";const isES=lang==="es";
-    await new Promise(r=>setTimeout(r,900+Math.random()*700));
-    let reply;
-    if(lower.match(/manga|mango/)){
-      reply=isEN?"Yes, Thor can eat mango in moderation! 🥭 Always remove the skin and pit first — the pit can cause intestinal obstruction and the skin is hard to digest. One or two small slices occasionally are a fine treat. Fruits should make up no more than 10% of the daily diet.":isES?"¡Sí, Thor puede comer mango con moderación! 🥭 Quita siempre la piel y el hueso — el hueso puede causar obstrucción y la piel es difícil de digerir. Una o dos rodajas pequeñas ocasionalmente son suficientes. Las frutas no deben superar el 10% de la dieta diaria.":"Sim, o Thor pode comer manga com moderação! 🥭 Retire sempre a casca e o caroço antes de oferecer — o caroço pode causar obstrução intestinal e a casca é difícil de digerir. Uma ou duas fatias pequenas ocasionalmente são ótimas como petisco. Frutas devem representar no máximo 10% da dieta diária.";
-    }else if(lower.match(/banho|bath|baño|bañar|frequ/)){
-      reply=isEN?"For a Golden Retriever like Thor, bathing every 4 to 6 weeks is ideal. 🛁 Washing too often dries out the skin and strips the natural oils from his coat. Brushing at least 3 times a week is essential to prevent tangles in his thick fur. After each walk, wipe his paws with a damp cloth.":isES?"Para un Golden Retriever como Thor, lo ideal es bañarlo cada 4 a 6 semanas. 🛁 Bañarlo con mucha frecuencia puede resecar la piel y eliminar los aceites naturales del pelaje. Cepillarlo al menos 3 veces por semana es esencial. Después de cada paseo, limpia sus patas con un paño húmedo.":"Para um Golden Retriever como o Thor, o ideal é dar banho a cada 4 a 6 semanas. 🛁 Lavar com muita frequência resseca a pele e remove os óleos naturais do pelo. Escovar pelo menos 3x por semana é essencial para evitar nós no pelo denso dele. Após cada passeio, limpe as patas com um pano úmido.";
-    }else if(lower.match(/peso|weight|kg|ideal|gordo|magro/)){
-      reply=isEN?"Thor is at his ideal weight! 🎉 At 28 kg, he's well within the healthy range for male Golden Retrievers (25–34 kg). His last checkup with Dr. Carlos Mendes on 28/04/2026 confirmed everything is normal. Keep up the balanced diet and daily walks to maintain this balance.":isES?"¡Thor tiene el peso ideal! 🎉 Con 28 kg está dentro del rango saludable para Golden Retrievers machos (25–34 kg). El último chequeo con el Dr. Carlos Mendes el 28/04/2026 confirmó que todo está normal. Continúa con la alimentación balanceada y los paseos diarios.":"O Thor está no peso ideal! 🎉 Com 28 kg, ele está dentro da faixa saudável para machos Golden Retriever (25–34 kg). O último check-up com o Dr. Carlos Mendes em 28/04/2026 confirmou que está tudo normal. Continue com a ração balanceada e os passeios diários para manter esse equilíbrio.";
-    }else if(lower.match(/leishman/)){
-      reply=isEN?"The main symptoms of Leishmaniasis include: progressive weight loss, skin lesions and flaking, hair loss (especially around the eyes), excessive nail growth, lethargy, anemia, and nosebleeds. ⚕️ Thor has all essential vaccines up to date, but the Leishmaniasis vaccine may offer extra protection depending on your region. Consult Dr. Carlos Mendes for guidance.":isES?"Los principales síntomas de Leishmaniasis: pérdida de peso progresiva, lesiones cutáneas y descamación, caída del pelo (especialmente alrededor de los ojos), uñas que crecen en exceso, apatía, anemia y sangrado nasal. ⚕️ Thor tiene todas las vacunas esenciales al día — la vacuna de Leishmaniasis puede ser protección extra según la región. Consulta al Dr. Carlos Mendes.":"Os principais sintomas de Leishmaniose incluem: perda de peso progressiva, lesões e descamação na pele, queda de pelo (especialmente ao redor dos olhos), unhas crescendo excessivamente, apatia, anemia e sangramento nasal. ⚕️ O Thor tem todas as vacinas essenciais em dia. A vacina de Leishmaniose pode ser proteção extra dependendo da região — consulte o Dr. Carlos Mendes.";
-    }else if(lower.match(/vacin|vaccine|vacuna|v10|refor/)){
-      reply=isEN?"⚠️ Important alert: Thor's V10 Multiple Vaccine expires in just 12 days! Schedule the booster as soon as possible to keep full protection. His other vaccines are current — Giardia (expires 05/03/2027) and Rabies (expires 20/12/2026). I can help you schedule this directly through the app!":isES?"⚠️ ¡Alerta importante: la vacuna V10 Múltiple de Thor vence en 12 días! Programa el refuerzo lo antes posible para mantener la protección completa. Las demás vacunas están al día — Giardia (vence 05/03/2027) y Antirrábica (vence 20/12/2026). ¡Puedo ayudarte a agendar desde la app!":"⚠️ Alerta importante: a vacina V10 Múltipla do Thor vence em 12 dias! Agende o reforço o quanto antes para manter a proteção completa. As demais vacinas estão em dia — Giárdia (vence 05/03/2027) e Antirrábica (vence 20/12/2026). Posso ajudar a agendar pelo app!";
-    }else if(lower.match(/vermi|worm|parasit/)){
-      reply=isEN?"Thor's deworming is 3 weeks overdue! 💊 For healthy adult dogs like him, every 3 months is the recommended frequency. You can get the medication through the Services section in the app, or ask Dr. Carlos Mendes at the next appointment. Reminder: intestinal parasites can also be transmitted to humans!":isES?"¡El vermífugo de Thor lleva 3 semanas pendiente! 💊 Para perros adultos sanos como él, lo ideal es cada 3 meses. Puedes adquirirlo en la sección Servicios de la app o pedirle indicación al Dr. Carlos Mendes. ¡Recuerda que los parásitos intestinales también se transmiten a los humanos!":"O vermífugo do Thor está pendente há 3 semanas! 💊 Para cães adultos saudáveis como ele, o ideal é a cada 3 meses. Pode adquirir pelo app na seção Serviços ou pedir indicação ao Dr. Carlos Mendes na próxima consulta. Lembrando: parasitas intestinais também podem ser transmitidos para humanos!";
-    }else if(lower.match(/chocolate|uva|cebola|alho|xilitol|grape|onion|garlic|xylitol|abacate|avocado/)){
-      reply=isEN?"NEVER give Thor: grapes or raisins (kidney failure), chocolate and coffee (cardiac toxicity), onion and garlic (anemia), avocado (toxic persin), macadamia nuts (neurological damage), xylitol/sweeteners (blood sugar crash), alcohol, and cooked bones. ⚠️ If he accidentally ingested any of these, go to the vet immediately — time is critical!":isES?"NUNCA le des a Thor: uva y pasas (insuficiencia renal), chocolate y café (toxicidad cardíaca), cebolla y ajo (anemia), aguacate (persina tóxica), nueces de macadamia, xilitol/edulcorantes, alcohol y huesos cocidos. ⚠️ Si ingirió algo accidentalmente, ¡ve al veterinario de inmediato!":"NUNCA ofereça ao Thor: uva e passa (insuficiência renal), chocolate e café (toxicidade cardíaca), cebola e alho (anemia), abacate (peroxina tóxica), macadâmia, xilitol/adoçantes, álcool e ossos cozidos. ⚠️ Se ele ingeriu qualquer desses acidentalmente, vá ao veterinário imediatamente — o tempo é crítico!";
-    }else if(lower.match(/comer|eat|aliment|food|fruta|fruit|ração|snack|petisco/)){
-      reply=isEN?"Thor can safely enjoy as treats: seedless apple, banana (in moderation), seedless watermelon, blueberries, cooked carrot, and cooked chicken or fish without bones. 🍎 Always offer small portions — treats should represent no more than 10% of daily calories. His main diet should be quality kibble appropriate for his age and size.":isES?"Thor puede comer como snacks de forma segura: manzana sin semillas, banana con moderación, sandía sin semillas, arándanos, zanahoria cocida y pollo o pescado cocido sin huesos. 🍎 Siempre en pequeñas porciones — los snacks no deben superar el 10% de las calorías diarias.":"O Thor pode comer como petiscos: maçã sem sementes, banana com moderação, melancia sem sementes, mirtilo, cenoura cozida e frango ou peixe cozido sem ossos. 🍎 Sempre em pequenas porções — petiscos devem representar no máximo 10% das calorias diárias. A alimentação principal deve ser ração seca de qualidade adequada para a idade e porte.";
-    }else{
-      reply=isEN?`Great question about Thor! 🐾 Based on his records, he's in excellent overall health — ideal weight (28 kg), vaccines mostly current (V10 expires in 12 days, worth scheduling the booster!), and no registered allergies. His last checkup with Dr. Carlos Mendes on 28/04/2026 showed everything normal. For a more specific assessment on this topic, I recommend a consultation — I can help schedule it through the app!`:isES?`¡Buena pregunta sobre Thor! 🐾 Según su historial, está en excelente salud — peso ideal (28 kg), vacunas al día en su mayoría (la V10 vence en 12 días — ¡vale la pena programar el refuerzo!), sin alergias registradas. Su último chequeo con el Dr. Carlos Mendes el 28/04/2026 mostró todo normal. Para una evaluación más específica, recomiendo agendar una consulta desde la app.`:`Ótima pergunta sobre o Thor! 🐾 Pelo prontuário, ele está em excelente estado geral — peso ideal (28 kg), vacinas em dia na maioria (V10 vence em 12 dias, vale agendar o reforço!), sem alergias registradas. O último check-up com o Dr. Carlos Mendes em 28/04/2026 mostrou tudo normal. Para avaliação mais específica sobre esse tema, recomendo uma consulta — posso ajudar a agendar pelo app!`;
-    }
-    setMsgs(prev=>[...prev,{from:"bot",text:reply}]);
+    const history=newMsgs.filter(m=>m.from).map(m=>({role:m.from==="user"?"user":"assistant",content:m.text}));
+    try{
+      const res=await fetch("https://api.anthropic.com/v1/messages",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:600,system:sysPrompt,messages:history.slice(-10)})
+      });
+      const data=await res.json();
+      const reply=data.content?.[0]?.text||"Desculpe, não consegui processar. Tente novamente.";
+      setMsgs(prev=>[...prev,{from:"bot",text:reply}]);
+    }catch(e){setMsgs(prev=>[...prev,{from:"bot",text:"⚠️ Sem conexão. Verifique a internet e tente novamente."}]);}
     setTyping(false);
   }
   return(<div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column"}}>
