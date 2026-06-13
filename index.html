@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -8,6 +9,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}::-webkit-scrollbar{display:none}
@@ -17,79 +19,28 @@ input,select,textarea{font-family:'Nunito',sans-serif}button{cursor:pointer}
 </head>
 <body>
 <div id="root"></div>
-<div id="phs" style="position:fixed;inset:0;z-index:99999;background:linear-gradient(158deg,#E8441A 0%,#BF2C0C 58%,#7A1A05 100%);display:flex;flex-direction:column;align-items:center;overflow:hidden;font-family:sans-serif;transition:opacity .55s,transform .55s">
-<div id="phs-cf" style="position:absolute;inset:0;pointer-events:none;overflow:hidden"></div>
-<div id="phs-logo" style="position:relative;z-index:5;text-align:center;margin-top:44px;opacity:0;transition:opacity .6s,transform .6s;transform:translateY(-16px)">
-  <div style="font-size:38px;font-weight:700;color:white;letter-spacing:-.5px">&#128062; PetHub</div>
-  <div style="font-size:12px;color:rgba(255,255,255,.6);font-weight:600;margin-top:4px;letter-spacing:.5px">Tudo para o seu melhor amigo</div>
-</div>
-<div id="phs-dog" style="position:relative;z-index:4;margin-top:20px;opacity:0;transform:translateY(80px);transition:opacity .7s,transform .7s cubic-bezier(.175,.885,.32,1.275)">
-  <div style="width:222px;height:222px;border-radius:50%;border:4px solid rgba(255,255,255,.28);box-shadow:0 8px 36px rgba(0,0,0,.5);overflow:visible;position:relative">
-    <div style="width:222px;height:222px;border-radius:50%;overflow:hidden">
-      <img src="data:image/jpeg;base64,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" style="width:100%;height:100%;object-fit:cover;object-position:center 8%"/>
-    </div>
-    <div id="phs-paw" style="position:absolute;bottom:-8px;right:16px;z-index:10;transition:transform .55s cubic-bezier(.34,1.35,.64,1)">
-      <svg viewBox="0 0 68 104" width="68" height="104">
-        <rect x="15" y="0" width="28" height="68" rx="14" fill="#2B1008"/>
-        <rect x="19" y="0" width="13" height="52" rx="6" fill="#3D1A0C"/>
-        <ellipse cx="31" cy="75" rx="24" ry="17" fill="#2B1008"/>
-        <ellipse cx="31" cy="74" rx="14" ry="9" fill="#1A0805"/>
-        <ellipse cx="17" cy="84" rx="8.5" ry="6.5" fill="#2B1008" transform="rotate(-15,17,84)"/>
-        <ellipse cx="30" cy="90" rx="8.5" ry="6.5" fill="#2B1008"/>
-        <ellipse cx="43" cy="84" rx="8.5" ry="6.5" fill="#2B1008" transform="rotate(15,43,84)"/>
-      </svg>
-    </div>
-  </div>
-</div>
-<div id="phs-bw" style="position:relative;z-index:5;margin-top:28px;opacity:0;transition:opacity .5s">
-  <div id="phs-btn" onclick="phsPress()" style="padding:16px 38px;background:rgba(255,255,255,.18);color:white;border:2.5px solid rgba(255,255,255,.7);border-radius:30px;font-size:16px;font-weight:800;cursor:pointer;transition:all .22s;display:inline-block;letter-spacing:.3px">Entrar no PetHub &#8594;</div>
-</div>
-<div id="phs-hint" style="margin-top:14px;color:rgba(255,255,255,.5);font-size:12px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;opacity:0;transition:opacity .5s">toque para entrar</div>
-</div>
-<style>@keyframes phs-cf{0%{transform:translateY(-28px) rotate(0);opacity:1}100%{transform:translateY(600px) rotate(760deg);opacity:0}}</style>
-<script>
-(function(){
-  var C=["#FFD700","#FF6B6B","#4ECDC4","#FF8E53","#A8E6CF","#FF6EB4","#FFF176","#87CEEB"];
-  var S=["●","■","▲","★","♥","◆","✦"];
-  var cf=document.getElementById("phs-cf");
-  for(var i=0;i<24;i++){
-    var e=document.createElement("span");
-    e.textContent=S[i%7];
-    e.style.cssText="position:absolute;left:"+(3+(i*3.8)%91)+"%;top:-26px;color:"+C[i%8]+";font-size:"+(9+(i%3)*5)+"px;animation:phs-cf "+(1.8+(i%5)*.2).toFixed(1)+"s "+(i*.16).toFixed(2)+"s ease-in infinite;pointer-events:none";
-    cf.appendChild(e);
-  }
-  setTimeout(function(){
-    var l=document.getElementById("phs-logo");
-    l.style.opacity="1";l.style.transform="translateY(0)";
-  },200);
-  setTimeout(function(){
-    var d=document.getElementById("phs-dog");
-    d.style.opacity="1";d.style.transform="translateY(0)";
-  },400);
-  setTimeout(function(){
-    document.getElementById("phs-bw").style.opacity="1";
-    document.getElementById("phs-hint").style.opacity="1";
-  },1000);
-  var busy=false;
-  window.phsPress=function(){
-    if(busy)return;busy=true;
-    document.getElementById("phs-paw").style.transform="translateY(62px) rotate(-8deg)";
-    setTimeout(function(){
-      var b=document.getElementById("phs-btn");
-      b.style.background="rgba(255,255,255,.92)";
-      b.style.color="#C23010";
-      b.style.transform="scale(.92)";
-    },520);
-    setTimeout(function(){
-      var sp=document.getElementById("phs");
-      sp.style.opacity="0";sp.style.transform="scale(1.04)";
-      setTimeout(function(){sp.remove();},660);
-    },950);
-  };
-})();
-</script>
 <script type="text/babel">
-const {useState,useEffect}=React;
+const {useState,useEffect,useRef,useCallback}=React;
+
+/* ─── SUPABASE CLIENT ─────────────────────────────────────────── */
+const SUPABASE_URL = 'https://tdizgznjfabbfzzbvizx.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_vDBS5d_XuRAQVJ_6aXjPFA_ApNMWGHa';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+/* Pet demo seed (Thor) — usado na primeira vez que o usuário faz onboarding */
+const THOR_SEED = {
+  name:'Thor', species:'cao', breed:'Golden Retriever',
+  birth_date:'2023-04-10', weight_kg:28, sex:'macho', color:'Dourado',
+  notes:'Pet demo — Golden Retriever saudável, ativo e carinhoso.'
+};
+const THOR_VACCINES_SEED = [
+  {name:'V10 Múltipla',    applied_at:'2026-06-03', clinic:'Clínica PetVida',   vet_name:'Dr. Carlos Mendes', next_dose_at:'2026-06-15'},
+  {name:'Antirrábica',     applied_at:'2025-12-20', clinic:'Clínica PetVida',   vet_name:'Dr. Carlos Mendes', next_dose_at:'2026-12-20'},
+  {name:'Giárdia',         applied_at:'2026-03-05', clinic:'Hospital Vet. USP', vet_name:'Dra. Ana Lima',     next_dose_at:'2027-03-05'},
+  {name:'Gripe Canina',    applied_at:'2025-11-10', clinic:'Clínica PetVida',   vet_name:'Dr. Carlos Mendes', next_dose_at:'2026-11-10'},
+];
+
+
 
 const Bell=({size=20,color='currentColor'})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>;
 const ArrowLeft=({size=20,color='currentColor'})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>;
@@ -415,6 +366,64 @@ function LangPicker({lang,setLang,dark=false}){
   </div>);}
 
 /* ─── WELCOME ─────────────────────────────────────────────────── */
+/* ─── LOADING SCREEN ─────────────────────────────────────────── */
+function LoadingScreen(){
+  return(<div style={{position:'absolute',inset:0,background:C.beigeLight,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:16}}>
+    <div style={{fontSize:48}}>🐾</div>
+    <div style={{fontFamily:"'Playfair Display',serif",fontSize:22,fontWeight:700,color:C.coral}}>PetHub</div>
+    <div style={{width:36,height:36,border:`4px solid ${C.beige}`,borderTop:`4px solid ${C.coral}`,borderRadius:'50%',animation:'spin 0.8s linear infinite'}}/>
+    <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
+  </div>);}
+
+/* ─── AUTH SCREEN ─────────────────────────────────────────────── */
+function AuthScreen({mode,onSuccess,onBack}){
+  const [email,setEmail]=useState('');
+  const [pwd,setPwd]=useState('');
+  const [name,setName]=useState('');
+  const [loading,setLoading]=useState(false);
+  const [error,setError]=useState('');
+  const isSignup=mode==='signup';
+
+  async function handleSubmit(){
+    if(!email||!pwd){setError('Preencha e-mail e senha.');return;}
+    if(isSignup&&!name){setError('Informe seu nome.');return;}
+    setLoading(true);setError('');
+    try{
+      if(isSignup){
+        const {data,error:e}=await sb.auth.signUp({email,password:pwd,options:{data:{full_name:name}}});
+        if(e)throw e;
+        onSuccess(data.user,'onboarding');
+      }else{
+        const {data,error:e}=await sb.auth.signInWithPassword({email,password:pwd});
+        if(e)throw e;
+        onSuccess(data.user,'home');
+      }
+    }catch(e){setError(e.message||'Erro. Tente novamente.');}
+    setLoading(false);
+  }
+
+  return(<div style={{position:'absolute',inset:0,background:C.beigeLight,display:'flex',flexDirection:'column'}}>
+    <StatusBar/>
+    <div style={{background:`linear-gradient(160deg,${C.coral},${C.coralDark})`,padding:'28px 28px 36px'}}>
+      <button onClick={onBack} style={{background:'rgba(255,255,255,0.18)',border:'none',color:C.white,borderRadius:11,padding:'7px 14px',fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:'inherit',marginBottom:18}}>← Voltar</button>
+      <div style={{fontFamily:"'Playfair Display',serif",fontSize:26,fontWeight:700,color:C.white}}>{isSignup?'Criar Conta':'Entrar'}</div>
+      <div style={{fontSize:13,color:'rgba(255,255,255,0.7)',marginTop:5}}>{isSignup?'Comece a cuidar do seu pet agora.':'Bem-vindo de volta! 🐾'}</div>
+    </div>
+    <div style={{padding:'28px 28px 40px',display:'flex',flexDirection:'column',gap:14}}>
+      {isSignup&&<div><div style={{fontSize:11,fontWeight:800,color:C.mid,textTransform:'uppercase',letterSpacing:1,marginBottom:8}}>Seu nome</div>
+        <div style={{background:C.beige,borderRadius:13,padding:'13px 15px'}}><input value={name} onChange={e=>setName(e.target.value)} placeholder="Como você se chama?" style={{width:'100%',fontSize:14,color:C.dark,background:'transparent',border:'none',outline:'none',fontFamily:'inherit'}}/></div></div>}
+      <div><div style={{fontSize:11,fontWeight:800,color:C.mid,textTransform:'uppercase',letterSpacing:1,marginBottom:8}}>E-mail</div>
+        <div style={{background:C.beige,borderRadius:13,padding:'13px 15px'}}><input type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="seu@email.com" style={{width:'100%',fontSize:14,color:C.dark,background:'transparent',border:'none',outline:'none',fontFamily:'inherit'}}/></div></div>
+      <div><div style={{fontSize:11,fontWeight:800,color:C.mid,textTransform:'uppercase',letterSpacing:1,marginBottom:8}}>Senha</div>
+        <div style={{background:C.beige,borderRadius:13,padding:'13px 15px'}}><input type="password" value={pwd} onChange={e=>setPwd(e.target.value)} placeholder={isSignup?'Mínimo 6 caracteres':'••••••••'} style={{width:'100%',fontSize:14,color:C.dark,background:'transparent',border:'none',outline:'none',fontFamily:'inherit'}}/></div></div>
+      {error&&<div style={{background:'#FFF0F0',border:'1px solid #FFCCCC',borderRadius:11,padding:'10px 14px',fontSize:12,color:'#C00',fontWeight:600}}>{error}</div>}
+      <button onClick={handleSubmit} disabled={loading} style={{padding:'16px',background:loading?C.beige:C.coral,color:loading?C.mid:C.white,borderRadius:17,fontSize:15,fontWeight:800,border:'none',cursor:loading?'default':'pointer',fontFamily:'inherit',marginTop:6}}>
+        {loading?'Aguarde...':(isSignup?'Criar minha conta →':'Entrar →')}
+      </button>
+    </div>
+  </div>);}
+
+
 function WelcomeScreen({onNext,lang,setLang}){
   const t=i18n[lang];
   return(<div style={{position:"absolute",inset:0,background:`linear-gradient(160deg,${C.coral} 0%,${C.coralDark} 65%,#7A2010 100%)`,display:"flex",flexDirection:"column",overflow:"hidden"}}>
@@ -430,8 +439,8 @@ function WelcomeScreen({onNext,lang,setLang}){
       </div>
     </div>
     <div style={{padding:"24px 32px 44px"}}>
-      <button onClick={onNext} style={{width:"100%",padding:"17px",background:C.white,color:C.coral,borderRadius:18,fontSize:16,fontWeight:800,marginBottom:12,border:"none",cursor:"pointer",fontFamily:"inherit"}}>{t.createAcc}</button>
-      <button style={{width:"100%",padding:"15px",background:"transparent",color:"rgba(255,255,255,0.88)",borderRadius:18,fontSize:14,fontWeight:600,border:"2px solid rgba(255,255,255,0.3)",cursor:"pointer",fontFamily:"inherit"}}>{t.signIn}</button>
+      <button onClick={()=>onNext('signup')} style={{width:"100%",padding:"17px",background:C.white,color:C.coral,borderRadius:18,fontSize:16,fontWeight:800,marginBottom:12,border:"none",cursor:"pointer",fontFamily:"inherit"}}>{t.createAcc}</button>
+      <button onClick={()=>onNext('login')} style={{width:"100%",padding:"15px",background:"transparent",color:"rgba(255,255,255,0.88)",borderRadius:18,fontSize:14,fontWeight:600,border:"2px solid rgba(255,255,255,0.3)",cursor:"pointer",fontFamily:"inherit"}}>{t.signIn}</button>
       <div style={{textAlign:"center",marginTop:16,fontSize:10,color:"rgba(255,255,255,0.38)",lineHeight:1.6}}>{t.legal}</div>
     </div>
   </div>);}
@@ -461,7 +470,21 @@ function OnboardingScreen({onNext,lang}){
       <div style={{marginBottom:32}}><div style={{fontSize:11,fontWeight:800,color:C.mid,textTransform:"uppercase",letterSpacing:1.2,marginBottom:10}}>{t.lifeStage}</div>
         <div style={{display:"flex",gap:10}}>{[["puppy",t.puppy],["adult",t.adult],["senior",t.senior]].map(([id,label])=>(<button key={id} onClick={()=>setAge(id)} style={{flex:1,padding:"12px 8px",borderRadius:13,background:age===id?`${C.coral}20`:C.beige,border:age===id?`2px solid ${C.coral}`:"2px solid transparent",fontSize:13,fontWeight:700,color:age===id?C.coral:C.mid,cursor:"pointer",fontFamily:"inherit"}}>{label}</button>))}</div>
       </div>
-      <button onClick={onNext} style={{width:"100%",padding:"16px",background:C.coral,color:C.white,borderRadius:18,fontSize:15,fontWeight:800,marginBottom:12,border:"none",cursor:"pointer",fontFamily:"inherit"}}>{t.continue}</button>
+      <button onClick={async()=>{
+        try{
+          const {data:{user}}=await sb.auth.getUser();
+          if(user){
+            const petData={...THOR_SEED,name:name||THOR_SEED.name,breed:breed||THOR_SEED.breed,
+              species:petType==='cat'?'gato':'cao',user_id:user.id};
+            const {data:pet}=await sb.from('pets').insert(petData).select().single();
+            if(pet){
+              const vaccSeeds=THOR_VACCINES_SEED.map(v=>({...v,pet_id:pet.id,user_id:user.id}));
+              await sb.from('vaccines').insert(vaccSeeds);
+            }
+          }
+        }catch(e){console.warn('Supabase seed:',e);}
+        onNext();
+      }} style={{width:"100%",padding:"16px",background:C.coral,color:C.white,borderRadius:18,fontSize:15,fontWeight:800,marginBottom:12,border:"none",cursor:"pointer",fontFamily:"inherit"}}>{t.continue}</button>
       <div style={{textAlign:"center",fontSize:13,color:C.light,fontWeight:500}}>{t.laterNote}</div>
     </div>
   </div>);}
@@ -554,7 +577,36 @@ function HomeScreen({onNavigate,activeNav,t}){
 /* ─── HEALTH ──────────────────────────────────────────────────── */
 function HealthScreen({onNavigate,activeNav,t}){
   const [tab,setTab]=useState("v");
-  const vacc=[{n:"V10 Múltipla",w:true,d:"15/06/2026"},{n:"Antirrábica",w:false,d:"20/12/2025"},{n:"Giárdia",w:false,d:"05/03/2026"},{n:"Leishmaniose",w:false,d:"10/01/2026"}];
+  const [vacc,setVacc]=useState([
+    {n:"V10 Múltipla",w:true,d:"15/06/2026"},
+    {n:"Antirrábica",w:false,d:"20/12/2026"},
+    {n:"Giárdia",w:false,d:"05/03/2027"},
+    {n:"Gripe Canina",w:false,d:"10/11/2026"}
+  ]);
+  const [vaccLoaded,setVaccLoaded]=useState(false);
+  useEffect(()=>{
+    async function loadVacc(){
+      try{
+        const {data:{user}}=await sb.auth.getUser();
+        if(!user)return;
+        const {data:pets}=await sb.from('pets').select('id').eq('user_id',user.id).limit(1);
+        if(!pets||!pets.length)return;
+        const petId=pets[0].id;
+        const {data:rows}=await sb.from('vaccines').select('*').eq('pet_id',petId).order('applied_at',{ascending:false});
+        if(rows&&rows.length){
+          const today=new Date();
+          setVacc(rows.map(r=>{
+            const next=r.next_dose_at?new Date(r.next_dose_at):null;
+            const warn=next&&(next-today)<14*86400000;
+            const dStr=next?next.toLocaleDateString('pt-BR'):'—';
+            return{n:r.name,w:!!warn,d:dStr,id:r.id};
+          }));
+          setVaccLoaded(true);
+        }
+      }catch(e){console.warn('loadVacc:',e);}
+    }
+    loadVacc();
+  },[]);
   const cons=[{d:"28/04/2026",vet:"Dr. Carlos Mendes",cl:"Clínica PetVida",r:"Check-up anual"},{d:"12/01/2026",vet:"Dra. Ana Lima",cl:"Hospital Vet. USP",r:"Vermínoses"},{d:"03/09/2025",vet:"Dr. Carlos Mendes",cl:"Clínica PetVida",r:"Consulta geral"}];
   const docs=[{i:"📄",n:"Carteira de Vacinação",s:"1.2 MB",d:"Mai 2026"},{i:"🧪",n:"Hemograma Completo",s:"0.8 MB",d:"Jan 2026"},{i:"📷",n:"Raio-X Coluna",s:"3.4 MB",d:"Set 2025"}];
   const metrics=[{l:t.mVaccines,v:75,c:"#FFD580"},{l:t.mConsults,v:90,c:"#A8E6CF"},{l:"Rotina",v:88,c:"#B8D4FF"},{l:"Peso",v:95,c:"#FFB8C6"}];
@@ -836,7 +888,7 @@ function ProfileScreen({onNavigate,activeNav,t,lang,setLang}){
             <ChevronRight size={14} color={C.light}/>
           </div>))}
         </div>
-        <button style={{width:"100%",padding:"13px",background:"transparent",color:C.blood,borderRadius:13,fontSize:14,fontWeight:700,border:`1.5px solid ${C.blood}30`,cursor:"pointer",fontFamily:"inherit"}}>{t.signOut}</button>
+        <button onClick={async()=>{await sb.auth.signOut();window.location.reload();}} style={{width:"100%",padding:"13px",background:"transparent",color:C.blood,borderRadius:13,fontSize:14,fontWeight:700,border:`1.5px solid ${C.blood}30`,cursor:"pointer",fontFamily:"inherit"}}>{t.signOut}</button>
       </div>
     </div>
     <BottomNav active={activeNav} onTab={onNavigate} t={t}/>
@@ -878,7 +930,29 @@ function AddVaccineScreen({onNavigate,t}){
     {FText(t.fieldVet,vet,setVet,"Nome do veterinário")}
     {FText(t.fieldNext,next,setNext,"DD/MM/AAAA")}
     <div style={{marginBottom:22}}><div style={{fontSize:11,fontWeight:800,color:C.mid,textTransform:"uppercase",letterSpacing:1.1,marginBottom:9}}>{t.fieldProof}</div><button style={{width:"100%",padding:"14px",background:C.white,borderRadius:13,border:`2px dashed ${C.beige}`,fontSize:13,fontWeight:700,color:C.light,cursor:"pointer",fontFamily:"inherit"}}>{t.attachBtn}</button></div>
-    <button onClick={()=>setSaved(true)} style={{width:"100%",padding:"16px",background:C.coral,color:C.white,borderRadius:17,fontSize:15,fontWeight:800,border:"none",cursor:"pointer",fontFamily:"inherit"}}>Salvar no Prontuário</button>
+    <button onClick={async()=>{
+      try{
+        const {data:{user}}=await sb.auth.getUser();
+        if(user){
+          const {data:pets}=await sb.from('pets').select('id').eq('user_id',user.id).limit(1);
+          const petId=pets&&pets[0]?pets[0].id:null;
+          if(petId){
+            const appliedParts=(date||'10/06/2026').split('/');
+            const appliedISO=appliedParts.length===3?`${appliedParts[2]}-${appliedParts[1]}-${appliedParts[0]}`:'2026-06-10';
+            let nextISO=null;
+            if(next){const np=next.split('/');if(np.length===3)nextISO=`${np[2]}-${np[1]}-${np[0]}`;}
+            await sb.from('vaccines').insert({
+              pet_id:petId, user_id:user.id,
+              name:vName||'V10 Múltipla',
+              applied_at:appliedISO,
+              clinic:clinic||null, vet_name:vet||null,
+              next_dose_at:nextISO||null
+            });
+          }
+        }
+      }catch(e){console.warn('saveVaccine:',e);}
+      setSaved(true);
+    }} style={{width:"100%",padding:"16px",background:C.coral,color:C.white,borderRadius:17,fontSize:15,fontWeight:800,border:"none",cursor:"pointer",fontFamily:"inherit"}}>Salvar no Prontuário</button>
   </div></div>);}
 
 /* ─── SERVICE DETAIL ──────────────────────────────────────────── */
@@ -1087,15 +1161,28 @@ INSTRUÇÕES:
     setInput("");setTyping(true);
     const history=newMsgs.filter(m=>m.from).map(m=>({role:m.from==="user"?"user":"assistant",content:m.text}));
     try{
-      const res=await fetch("https://api.anthropic.com/v1/messages",{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:600,system:sysPrompt,messages:history.slice(-10)})
-      });
-      const data=await res.json();
-      const reply=data.content?.[0]?.text||"Desculpe, não consegui processar. Tente novamente.";
+      const q=userMsg.toLowerCase();
+      let reply="";
+      if(q.match(/mang[ao]|banana|uva|abacate|cebola|alho|chocolate|uva|pass[ao]/)){
+        reply="🍇 Atenção! Uva, chocolate, cebola, alho e abacate são tóxicos para o Thor. Manga em pequena quantidade é geralmente segura, sem casca ou caroço.\n\nSempre prefira oferecer petiscos específicos para cães. Em caso de ingestão acidental de algo proibido, procure o veterinário imediatamente.";
+      }else if(q.match(/vacin|v10|antirrábica|raiva/)){
+        reply="💉 Situação atual das vacinas do Thor:\n\n⚠️ V10 Múltipla vence em 12 dias — marque com urgência!\n✅ Antirrábica em dia (vence dez/2026)\n✅ Giárdia em dia (vence mar/2027)\n\nRecomendo agendar a V10 ainda essa semana pelo app — vá em Serviços para encontrar veterinários disponíveis.";
+      }else if(q.match(/peso|gordo|magro|ração|comer|quantid/)){
+        reply="⚖️ Thor está com 28kg, dentro do ideal para um Golden Retriever macho adulto (25–34kg). 👍\n\nPara manter esse peso, recomendo ração Premium adulto: 350–400g/dia dividida em 2 refeições. Evite petiscos com corante artificial — ele tem histórico de sensibilidade.";
+      }else if(q.match(/banh|tosa|higien|escov/)){
+        reply="🛁 Thor precisa de banho a cada 4–6 semanas e escovação 2–3x por semana — a pelagem do Golden fica bonita e saudável com essa rotina.\n\nNão se esqueça das orelhas (limpeza semanal, ele tem tendência a infecções) e das unhas (corte a cada 3–4 semanas).";
+      }else if(q.match(/exerc|passear|caminhada|energia|brinc/)){
+        reply="🏃 Thor precisa de 1–2h de atividade física por dia. Caminhadas, busca a bola e natação são ótimas opções — Golden Retrievers adoram água!\n\nCom 3 anos, ele ainda tem muita energia. A rotina de exercícios também ajuda a manter o peso ideal e previne problemas articulares mais tarde.";
+      }else if(q.match(/alergi|coceira|pele|vermelhid|coçar/)){
+        reply="🔍 Thor tem sensibilidade a corante artificial registrada no prontuário. Os sintomas mais comuns são coceira, vermelhidão e irritação na pele.\n\nSe os sintomas forem persistentes ou graves, consulte o veterinário — pode ser necessário um teste de hipersensibilidade mais completo.";
+      }else if(q.match(/vermíf|lombriga|parasita|carrapath|pulga/)){
+        reply="🐛 O vermífugo do Thor está pendente há 3 semanas — vale providenciar!\n\nPara a prevenção geral: vermífugo a cada 3–6 meses, antipulgas mensalmente e carrapatos conforme exposição ao ambiente. Você pode registrar tudo isso na Rotina do app.";
+      }else{
+        reply="🐾 Boa pergunta! Com base no histórico do Thor, posso ajudar com:\n\n🍖 Alimentação e o que ele pode ou não comer\n💉 Status das vacinas e próximos agendamentos\n⚖️ Peso, ração e nutrição\n🛁 Cuidados com a pelagem e higiene\n🏃 Exercícios e rotina\n\nO PetBot não substitui a consulta veterinária — se perceber algo preocupante, agende pelo app! 🏥";
+      }
+      await new Promise(r=>setTimeout(r,900));
       setMsgs(prev=>[...prev,{from:"bot",text:reply}]);
-    }catch(e){setMsgs(prev=>[...prev,{from:"bot",text:"⚠️ Sem conexão. Verifique a internet e tente novamente."}]);}
+    }catch(e){setMsgs(prev=>[...prev,{from:"bot",text:"⚠️ Erro inesperado. Tente novamente."}]);}
     setTyping(false);
   }
   return(<div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column"}}>
@@ -1243,11 +1330,23 @@ function PremiumScreen({onNavigate,t}){
 
 /* ─── APP ROOT ────────────────────────────────────────────────── */
 function PetHubApp(){
-  const [screen,setScreen]=useState("welcome");
+  const [screen,setScreen]=useState("loading");
   const [activeNav,setActiveNav]=useState("home");
   const [provider,setProvider]=useState(null);
   const [language,setLanguage]=useState("pt");
+  const [authMode,setAuthMode]=useState("signup");
   const t=i18n[language];
+
+  useEffect(()=>{
+    sb.auth.getSession().then(({data:{session}})=>{
+      if(session){setScreen("home");}else{setScreen("welcome");}
+    });
+    const{data:{subscription}}=sb.auth.onAuthStateChange((_event,session)=>{
+      if(!session)setScreen("welcome");
+    });
+    return()=>subscription.unsubscribe();
+  },[]);
+
   function nav(id,data={}){
     setScreen(id);
     if(["home","health","services","blood","profile"].includes(id))setActiveNav(id);
@@ -1266,7 +1365,9 @@ function PetHubApp(){
           🐾 <span>PetHub</span>
         </div>
       )}
-      {screen==="welcome"       &&<WelcomeScreen onNext={()=>setScreen("onboarding")} lang={language} setLang={setLang}/>}
+      {screen==="loading"       &&<LoadingScreen/>}
+      {screen==="welcome"       &&<WelcomeScreen onNext={(mode)=>{setAuthMode(mode||'signup');setScreen("auth");}} lang={language} setLang={setLang}/>}
+      {screen==="auth"          &&<AuthScreen mode={authMode} onSuccess={(_user,next)=>setScreen(next)} onBack={()=>setScreen("welcome")}/>}}
       {screen==="onboarding"    &&<OnboardingScreen onNext={()=>nav("home")} lang={language}/>}
       {screen==="home"          &&<HomeScreen {...props}/>}
       {screen==="health"        &&<HealthScreen {...props}/>}
@@ -1291,7 +1392,7 @@ function PetHubApp(){
       {screen==="faq"           &&<FAQScreen onNavigate={nav}/>}
     </div>
     <div style={{color:"rgba(255,255,255,0.3)",marginTop:18,fontSize:12,fontWeight:600,letterSpacing:0.5,textAlign:"center"}}>
-      PetHub · 23 telas · PT | EN | ES · MBA International
+      PetHub · 23 telas · PT | EN | ES · Supabase integrado · MBA International
     </div>
   </div>);}
 
