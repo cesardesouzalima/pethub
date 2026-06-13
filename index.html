@@ -448,9 +448,17 @@ function WelcomeScreen({onNext,lang,setLang}){
 /* ─── ONBOARDING ──────────────────────────────────────────────── */
 function OnboardingScreen({onNext,lang}){
   const t=i18n[lang];
-  const [petType,setPetType]=useState("dog");const [name,setName]=useState("");const [breed,setBreed]=useState("");const [age,setAge]=useState("adult");
-  const dogBreeds=["Labrador","Golden Retriever","Bulldog Francês","Poodle","Shih Tzu","Yorkshire","Beagle","SRD"];
-  const catBreeds=["SRD","Siamês","Persa","Maine Coon","Ragdoll","Angorá Turco"];
+  const [petType,setPetType]=useState("dog");
+  const [name,setName]=useState("");
+  const [breed,setBreed]=useState("");
+  const [ageYears,setAgeYears]=useState(3);
+  const [avatar,setAvatar]=useState("🐶");
+  const dogBreeds=["Labrador","Golden Retriever","Bulldog Francês","Poodle","Shih Tzu","Yorkshire","Beagle","Pastor Alemão","Dachshund","Maltês","Rottweiler","SRD"];
+  const catBreeds=["SRD","Siamês","Persa","Maine Coon","Ragdoll","Angorá Turco","Bengal","Sphynx"];
+  const dogAvatars=["🐶","🐕","🦮","🐕‍🦺","🐩","🐾","🦴","🏅"];
+  const catAvatars=["🐱","🐈","😺","😸","🐈‍⬛","🐾","🎀","🌟"];
+  const otherAvatars=["🐰","🐹","🐦","🐠","🐢","🦜","🐇","🌿"];
+  const avatarList=petType==="cat"?catAvatars:petType==="dog"?dogAvatars:otherAvatars;
   return(<div style={{position:"absolute",inset:0,background:C.beigeLight,overflowY:"auto"}}>
     <StatusBar/>
     <div style={{padding:"0 24px 48px"}}>
@@ -458,24 +466,62 @@ function OnboardingScreen({onNext,lang}){
       <div style={{fontSize:11,color:C.light,fontWeight:700,letterSpacing:1.2,marginBottom:6,textTransform:"uppercase"}}>{t.step}</div>
       <div style={{fontFamily:"'Playfair Display', serif",fontSize:25,fontWeight:700,color:C.dark,lineHeight:1.3,marginBottom:6,whiteSpace:"pre-line"}}>{t.obTitle}</div>
       <div style={{fontSize:14,color:C.light,fontWeight:500,marginBottom:28}}>{t.obSub}</div>
+
+      {/* Tipo */}
       <div style={{marginBottom:22}}><div style={{fontSize:11,fontWeight:800,color:C.mid,textTransform:"uppercase",letterSpacing:1.2,marginBottom:10}}>{t.petType}</div>
-        <div style={{display:"flex",gap:10}}>{[{id:"dog",e:"🐶",l:t.dog},{id:"cat",e:"🐱",l:t.cat},{id:"other",e:"🐰",l:t.other}].map(pt=>(<button key={pt.id} onClick={()=>setPetType(pt.id)} style={{flex:1,padding:"16px 8px",borderRadius:16,background:petType===pt.id?C.coral:C.beige,display:"flex",flexDirection:"column",alignItems:"center",gap:7,border:"none",cursor:"pointer",fontFamily:"inherit"}}><span style={{fontSize:26}}>{pt.e}</span><span style={{fontSize:12,fontWeight:700,color:petType===pt.id?C.white:C.mid}}>{pt.l}</span></button>))}</div>
+        <div style={{display:"flex",gap:10}}>{[{id:"dog",e:"🐶",l:t.dog},{id:"cat",e:"🐱",l:t.cat},{id:"other",e:"🐰",l:t.other}].map(pt=>(<button key={pt.id} onClick={()=>{setPetType(pt.id);setAvatar(pt.e);}} style={{flex:1,padding:"16px 8px",borderRadius:16,background:petType===pt.id?C.coral:C.beige,display:"flex",flexDirection:"column",alignItems:"center",gap:7,border:"none",cursor:"pointer",fontFamily:"inherit"}}><span style={{fontSize:26}}>{pt.e}</span><span style={{fontSize:12,fontWeight:700,color:petType===pt.id?C.white:C.mid}}>{pt.l}</span></button>))}</div>
       </div>
+
+      {/* Avatar picker */}
+      <div style={{marginBottom:20}}>
+        <div style={{fontSize:11,fontWeight:800,color:C.mid,textTransform:"uppercase",letterSpacing:1.2,marginBottom:10}}>AVATAR DO PET</div>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(8,1fr)",gap:6}}>
+          {avatarList.map(em=>(<button key={em} onClick={()=>setAvatar(em)} style={{aspectRatio:"1",background:avatar===em?`${C.coral}20`:C.beige,border:avatar===em?`2px solid ${C.coral}`:"2px solid transparent",borderRadius:11,fontSize:20,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer"}}>{em}</button>))}
+        </div>
+      </div>
+
+      {/* Nome */}
       <div style={{marginBottom:18}}><div style={{fontSize:11,fontWeight:800,color:C.mid,textTransform:"uppercase",letterSpacing:1.2,marginBottom:10}}>{t.petName}</div>
-        <div style={{background:C.beige,borderRadius:14,padding:"14px 16px",display:"flex",alignItems:"center",gap:10}}><span style={{fontSize:17}}>✏️</span><input value={name} onChange={e=>setName(e.target.value)} placeholder={t.namePH} style={{flex:1,fontSize:15,color:C.dark,fontWeight:500,background:"transparent",border:"none",outline:"none",fontFamily:"inherit"}}/></div>
+        <div style={{background:C.beige,borderRadius:14,padding:"14px 16px",display:"flex",alignItems:"center",gap:10}}><span style={{fontSize:28}}>{avatar}</span><input value={name} onChange={e=>setName(e.target.value)} placeholder={t.namePH} style={{flex:1,fontSize:15,color:C.dark,fontWeight:500,background:"transparent",border:"none",outline:"none",fontFamily:"inherit"}}/></div>
       </div>
+
+      {/* Raça */}
       <div style={{marginBottom:18}}>
         <EditableCombo label={t.breed} options={petType==="cat"?catBreeds:dogBreeds} value={breed} onChange={setBreed} placeholder={t.breedPH}/>
       </div>
-      <div style={{marginBottom:32}}><div style={{fontSize:11,fontWeight:800,color:C.mid,textTransform:"uppercase",letterSpacing:1.2,marginBottom:10}}>{t.lifeStage}</div>
-        <div style={{display:"flex",gap:10}}>{[["puppy",t.puppy],["adult",t.adult],["senior",t.senior]].map(([id,label])=>(<button key={id} onClick={()=>setAge(id)} style={{flex:1,padding:"12px 8px",borderRadius:13,background:age===id?`${C.coral}20`:C.beige,border:age===id?`2px solid ${C.coral}`:"2px solid transparent",fontSize:13,fontWeight:700,color:age===id?C.coral:C.mid,cursor:"pointer",fontFamily:"inherit"}}>{label}</button>))}</div>
+
+      {/* Idade */}
+      <div style={{marginBottom:32}}>
+        <div style={{fontSize:11,fontWeight:800,color:C.mid,textTransform:"uppercase",letterSpacing:1.2,marginBottom:10}}>IDADE DO PET</div>
+        <div style={{background:C.beige,borderRadius:14,padding:"16px"}}>
+          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10}}>
+            <div style={{fontFamily:"'Playfair Display',serif",fontSize:28,fontWeight:700,color:C.coral}}>{ageYears}</div>
+            <div style={{fontSize:14,color:C.mid,fontWeight:600}}>{ageYears===1?"ano":"anos"}</div>
+          </div>
+          <input type="range" min="0" max="20" value={ageYears} onChange={e=>setAgeYears(Number(e.target.value))}
+            style={{width:"100%",accentColor:C.coral,height:4}}/>
+          <div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:C.light,fontWeight:600,marginTop:6}}>
+            <span>Filhote</span><span>Adulto</span><span>Sênior</span>
+          </div>
+        </div>
       </div>
       <button onClick={async()=>{
         try{
           const {data:{user}}=await sb.auth.getUser();
           if(user){
-            const petData={...THOR_SEED,name:name||THOR_SEED.name,breed:breed||THOR_SEED.breed,
-              species:petType==='cat'?'gato':'cao',user_id:user.id};
+            const birthYear=new Date().getFullYear()-ageYears;
+          const birthDate=`${birthYear}-06-01`;
+          const petData={
+            name:name||'Meu Pet',
+            species:petType==='cat'?'gato':'cao',
+            breed:breed||null,
+            birth_date:birthDate,
+            weight_kg:null,
+            sex:null,
+            avatar_url:avatar,
+            notes:null,
+            user_id:user.id
+          };
             const {data:pet}=await sb.from('pets').insert(petData).select().single();
             if(pet){
               const vaccSeeds=THOR_VACCINES_SEED.map(v=>({...v,pet_id:pet.id,user_id:user.id}));
@@ -493,11 +539,35 @@ function OnboardingScreen({onNext,lang}){
 function HomeScreen({onNavigate,activeNav,t}){
   const qas=[{id:"health",icon:"🏥",label:t.qaHealth,sub:t.qaHealthSub,bg:"#E8F5E9"},{id:"services",icon:"🛒",label:t.qaServices,sub:t.qaServicesSub,bg:"#FFF3E0"},{id:"gps",icon:"📡",label:t.qaGPS,sub:t.qaGPSSub,bg:"#E3F2FD"},{id:"map",icon:"🗺️",label:t.qaMap,sub:t.qaMapSub,bg:"#E8EAF6"},{id:"petbot",icon:"🤖",label:t.qaPetbot,sub:t.qaPetbotSub,bg:"#F3E5F5"},{id:"routine",icon:"📋",label:t.qaRoutine,sub:t.qaRoutineSub,bg:"#E0F7FA"}];
   const rems=[{icon:"💉",title:t.rem1,sub:t.rem1s,urgent:true},{icon:"🪥",title:t.rem2,sub:t.rem2s,urgent:false},{icon:"💊",title:t.rem3,sub:t.rem3s,urgent:false}];
+  const [userName,setUserName]=useState('');
+  const [pet,setPet]=useState({name:'',breed:'',ageStr:'',avatar:'🐶'});
+  useEffect(()=>{
+    async function load(){
+      try{
+        const {data:{user}}=await sb.auth.getUser();
+        if(!user)return;
+        const {data:prof}=await sb.from('profiles').select('full_name').eq('id',user.id).single();
+        if(prof?.full_name)setUserName(prof.full_name);
+        else setUserName(user.email?.split('@')[0]||'');
+        const {data:pets}=await sb.from('pets').select('*').eq('user_id',user.id).order('created_at',{ascending:true}).limit(1);
+        if(pets&&pets[0]){
+          const p=pets[0];
+          let ageStr='';
+          if(p.birth_date){
+            const yrs=Math.floor((Date.now()-new Date(p.birth_date))/(365.25*86400000));
+            ageStr=yrs===0?'< 1 ano':yrs===1?'1 ano':`${yrs} anos`;
+          }
+          setPet({name:p.name,breed:p.breed||'',ageStr,avatar:p.avatar_url||'🐶'});
+        }
+      }catch(e){console.warn('HomeScreen load:',e);}
+    }
+    load();
+  },[]);
   return(<div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column"}}>
     <div style={{flex:1,overflowY:"auto",background:C.beigeLight}}>
       <StatusBar/>
       <div style={{padding:"0 24px 18px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-        <div><div style={{fontSize:13,color:C.light,fontWeight:600}}>{t.greeting}</div><div style={{fontFamily:"'Playfair Display', serif",fontSize:21,fontWeight:700,color:C.dark}}>Maria Silva 👋</div></div>
+        <div><div style={{fontSize:13,color:C.light,fontWeight:600}}>{t.greeting}</div><div style={{fontFamily:"'Playfair Display', serif",fontSize:21,fontWeight:700,color:C.dark}}>{userName||'Maria Silva'} 👋</div></div>
         <button onClick={()=>onNavigate("notifications")} style={{width:44,height:44,borderRadius:13,background:C.white,display:"flex",alignItems:"center",justifyContent:"center",boxShadow:"0 2px 8px rgba(0,0,0,0.08)",position:"relative",border:"none",cursor:"pointer"}}>
           <Bell size={20} color={C.mid}/><div style={{position:"absolute",top:8,right:8,width:8,height:8,borderRadius:"50%",background:C.coral,border:"2px solid white"}}/>
         </button>
@@ -522,10 +592,10 @@ function HomeScreen({onNavigate,activeNav,t}){
         <div onClick={()=>onNavigate("qrcode")} style={{background:`linear-gradient(130deg,${C.coral} 0%,${C.coralDark} 100%)`,borderRadius:22,padding:"20px",display:"flex",alignItems:"center",gap:16,position:"relative",overflow:"hidden",cursor:"pointer"}}>
           <div style={{position:"absolute",right:-25,top:-25,width:120,height:120,borderRadius:"50%",background:"rgba(255,255,255,0.07)"}}/>
           <div style={{position:"absolute",top:12,right:14}}><QrCode size={16} color="rgba(255,255,255,0.4)"/></div>
-          <div style={{width:64,height:64,borderRadius:"50%",background:"rgba(255,255,255,0.18)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:30,flexShrink:0,border:"2px solid rgba(255,255,255,0.35)"}}>🐶</div>
+          <div style={{width:64,height:64,borderRadius:"50%",background:"rgba(255,255,255,0.18)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:32,flexShrink:0,border:"2px solid rgba(255,255,255,0.35)"}}>{pet.avatar||"🐾"}</div>
           <div style={{flex:1}}>
-            <div style={{fontFamily:"'Playfair Display', serif",fontSize:20,fontWeight:700,color:C.white}}>Thor</div>
-            <div style={{color:"rgba(255,255,255,0.7)",fontSize:12,fontWeight:500,marginBottom:10}}>Golden Retriever · 3 {t.adult === "Adulto" ? "anos" : t.adult === "Adult" ? "years" : "años"}</div>
+            <div style={{fontFamily:"'Playfair Display', serif",fontSize:20,fontWeight:700,color:C.white}}>{pet.name||"Thor"}</div>
+            <div style={{color:"rgba(255,255,255,0.7)",fontSize:12,fontWeight:500,marginBottom:10}}>{[pet.breed,pet.ageStr].filter(Boolean).join(" · ")||"Meu Pet"}</div>
             <div style={{display:"flex",gap:8}}>
               <div style={{background:"rgba(255,255,255,0.18)",borderRadius:9,padding:"4px 10px",fontSize:12,color:C.white,fontWeight:700}}>❤️ {t.scoreLabel} 87</div>
               <div style={{background:"rgba(255,150,50,0.3)",borderRadius:9,padding:"4px 10px",fontSize:12,color:"#FFD580",fontWeight:700}}>⚠️ Vacina</div>
