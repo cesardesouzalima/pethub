@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -55,7 +54,8 @@ const MapPin=({size=16,color='currentColor'})=><svg width={size} height={size} v
 const Star=({size=11,color='currentColor',fill='none'})=><svg width={size} height={size} viewBox="0 0 24 24" fill={fill} stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>;
 const Plus=({size=15,color='currentColor'})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>;
 const Heart=({size=13,color='currentColor',fill='none'})=><svg width={size} height={size} viewBox="0 0 24 24" fill={fill} stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>;
-const Check=({size=20,color='currentColor'})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>;
+const WhatsApp=({size=20})=><svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>;
+const Check=({size=20,color='currentColor'})=<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>;
 const Calendar=({size=15,color='currentColor'})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>;
 const Clock=({size=15,color='currentColor'})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>;
 const Share2=({size=15,color='currentColor'})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>;
@@ -380,6 +380,7 @@ function AuthScreen({mode,onSuccess,onBack}){
   const [email,setEmail]=useState('');
   const [pwd,setPwd]=useState('');
   const [name,setName]=useState('');
+  const [phone,setPhone]=useState('');
   const [loading,setLoading]=useState(false);
   const [error,setError]=useState('');
   const isSignup=mode==='signup';
@@ -387,11 +388,16 @@ function AuthScreen({mode,onSuccess,onBack}){
   async function handleSubmit(){
     if(!email||!pwd){setError('Preencha e-mail e senha.');return;}
     if(isSignup&&!name){setError('Informe seu nome.');return;}
+    if(isSignup&&!phone){setError('Informe seu telefone.');return;}
     setLoading(true);setError('');
     try{
       if(isSignup){
         const {data,error:e}=await sb.auth.signUp({email,password:pwd,options:{data:{full_name:name}}});
         if(e)throw e;
+        // Salvar telefone no perfil imediatamente
+        if(data.user){
+          await sb.from('profiles').upsert({id:data.user.id,full_name:name,phone:phone},{onConflict:'id'});
+        }
         onSuccess(data.user,'onboarding');
       }else{
         const {data,error:e}=await sb.auth.signInWithPassword({email,password:pwd});
@@ -412,6 +418,15 @@ function AuthScreen({mode,onSuccess,onBack}){
     <div style={{padding:'28px 28px 40px',display:'flex',flexDirection:'column',gap:14}}>
       {isSignup&&<div><div style={{fontSize:11,fontWeight:800,color:C.mid,textTransform:'uppercase',letterSpacing:1,marginBottom:8}}>Seu nome</div>
         <div style={{background:C.beige,borderRadius:13,padding:'13px 15px'}}><input value={name} onChange={e=>setName(e.target.value)} placeholder="Como você se chama?" style={{width:'100%',fontSize:14,color:C.dark,background:'transparent',border:'none',outline:'none',fontFamily:'inherit'}}/></div></div>}
+      {isSignup&&<div><div style={{fontSize:11,fontWeight:800,color:C.mid,textTransform:'uppercase',letterSpacing:1,marginBottom:8}}>Telefone / WhatsApp</div>
+        <div style={{background:C.beige,borderRadius:13,padding:'13px 15px',display:'flex',alignItems:'center',gap:8}}>
+          <span style={{fontSize:13,color:C.mid,fontWeight:700,flexShrink:0}}>+55</span>
+          <div style={{width:1,height:16,background:C.mid,opacity:0.3}}/>
+          <input type="tel" value={phone} onChange={e=>setPhone(e.target.value.replace(/\D/g,'').slice(0,11))}
+            placeholder="11 99999-0000"
+            style={{flex:1,fontSize:14,color:C.dark,background:'transparent',border:'none',outline:'none',fontFamily:'inherit'}}/>
+        </div>
+      </div>}
       <div><div style={{fontSize:11,fontWeight:800,color:C.mid,textTransform:'uppercase',letterSpacing:1,marginBottom:8}}>E-mail</div>
         <div style={{background:C.beige,borderRadius:13,padding:'13px 15px'}}><input type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="seu@email.com" style={{width:'100%',fontSize:14,color:C.dark,background:'transparent',border:'none',outline:'none',fontFamily:'inherit'}}/></div></div>
       <div><div style={{fontSize:11,fontWeight:800,color:C.mid,textTransform:'uppercase',letterSpacing:1,marginBottom:8}}>Senha</div>
@@ -423,6 +438,23 @@ function AuthScreen({mode,onSuccess,onBack}){
     </div>
   </div>);}
 
+
+/* ─── IDEAL WEIGHT MAP ────────────────────────────────────────── */
+const BREED_WEIGHT={
+  "Golden Retriever":{min:25,max:34},
+  "Labrador":{min:25,max:36},
+  "Bulldog Francês":{min:8,max:14},
+  "Poodle":{min:3,max:9},
+  "Shih Tzu":{min:4,max:7},
+  "Yorkshire":{min:2,max:3.5},
+  "Beagle":{min:9,max:11},
+  "Pastor Alemão":{min:22,max:40},
+  "Dachshund":{min:7,max:15},
+  "Maltês":{min:3,max:4},
+  "Rottweiler":{min:35,max:60},
+  "Pinscher":{min:1.5,max:3},
+  "SRD":{min:8,max:25},
+};
 
 function WelcomeScreen({onNext,lang,setLang}){
   const t=i18n[lang];
@@ -453,6 +485,8 @@ function OnboardingScreen({onNext,lang}){
   const [breed,setBreed]=useState("");
   const [ageYears,setAgeYears]=useState(3);
   const [avatar,setAvatar]=useState("🐶");
+  const [sex,setSex]=useState("");
+  const [castrado,setCastrado]=useState("");
   const dogBreeds=["Labrador","Golden Retriever","Bulldog Francês","Poodle","Shih Tzu","Yorkshire","Beagle","Pastor Alemão","Dachshund","Maltês","Rottweiler","SRD"];
   const catBreeds=["SRD","Siamês","Persa","Maine Coon","Ragdoll","Angorá Turco","Bengal","Sphynx"];
   const dogAvatars=["🐶","🐕","🦮","🐕‍🦺","🐩","🐾","🦴","🏅"];
@@ -490,6 +524,26 @@ function OnboardingScreen({onNext,lang}){
         <EditableCombo label={t.breed} options={petType==="cat"?catBreeds:dogBreeds} value={breed} onChange={setBreed} placeholder={t.breedPH}/>
       </div>
 
+      {/* Sexo */}
+      <div style={{marginBottom:18}}>
+        <div style={{fontSize:11,fontWeight:800,color:C.mid,textTransform:"uppercase",letterSpacing:1.2,marginBottom:10}}>SEXO</div>
+        <div style={{display:"flex",gap:10}}>
+          {[["macho","♂️ Macho"],["femea","♀️ Fêmea"]].map(([id,label])=>(
+            <button key={id} onClick={()=>setSex(id)} style={{flex:1,padding:"12px 8px",borderRadius:13,background:sex===id?`${C.coral}20`:C.beige,border:sex===id?`2px solid ${C.coral}`:"2px solid transparent",fontSize:13,fontWeight:700,color:sex===id?C.coral:C.mid,cursor:"pointer",fontFamily:"inherit"}}>{label}</button>
+          ))}
+        </div>
+      </div>
+
+      {/* Castrado */}
+      <div style={{marginBottom:18}}>
+        <div style={{fontSize:11,fontWeight:800,color:C.mid,textTransform:"uppercase",letterSpacing:1.2,marginBottom:10}}>CASTRADO</div>
+        <div style={{display:"flex",gap:10}}>
+          {[["sim","✅ Sim"],["nao","❌ Não"],["nao_sei","❓ Não sei"]].map(([id,label])=>(
+            <button key={id} onClick={()=>setCastrado(id)} style={{flex:1,padding:"12px 6px",borderRadius:13,background:castrado===id?`${C.coral}20`:C.beige,border:castrado===id?`2px solid ${C.coral}`:"2px solid transparent",fontSize:12,fontWeight:700,color:castrado===id?C.coral:C.mid,cursor:"pointer",fontFamily:"inherit"}}>{label}</button>
+          ))}
+        </div>
+      </div>
+
       {/* Idade */}
       <div style={{marginBottom:32}}>
         <div style={{fontSize:11,fontWeight:800,color:C.mid,textTransform:"uppercase",letterSpacing:1.2,marginBottom:10}}>IDADE DO PET</div>
@@ -517,9 +571,9 @@ function OnboardingScreen({onNext,lang}){
             breed:breed||null,
             birth_date:birthDate,
             weight_kg:null,
-            sex:null,
+            sex:sex||null,
             avatar_url:avatar,
-            notes:null,
+            notes:castrado?`castrado:${castrado}`:null,
             user_id:user.id
           };
             const {data:pet}=await sb.from('pets').insert(petData).select().single();
@@ -537,10 +591,96 @@ function OnboardingScreen({onNext,lang}){
 
 /* ─── HOME ────────────────────────────────────────────────────── */
 function HomeScreen({onNavigate,activeNav,t}){
-  const qas=[{id:"health",icon:"🏥",label:t.qaHealth,sub:t.qaHealthSub,bg:"#E8F5E9"},{id:"services",icon:"🛒",label:t.qaServices,sub:t.qaServicesSub,bg:"#FFF3E0"},{id:"gps",icon:"📡",label:t.qaGPS,sub:t.qaGPSSub,bg:"#E3F2FD"},{id:"map",icon:"🗺️",label:t.qaMap,sub:t.qaMapSub,bg:"#E8EAF6"},{id:"petbot",icon:"🤖",label:t.qaPetbot,sub:t.qaPetbotSub,bg:"#F3E5F5"},{id:"routine",icon:"📋",label:t.qaRoutine,sub:t.qaRoutineSub,bg:"#E0F7FA"}];
-  const rems=[{icon:"💉",title:t.rem1,sub:t.rem1s,urgent:true},{icon:"🪥",title:t.rem2,sub:t.rem2s,urgent:false},{icon:"💊",title:t.rem3,sub:t.rem3s,urgent:false}];
+  const qas=[{id:"health",icon:"🏥",label:t.qaHealth,sub:t.qaHealthSub,bg:"#E8F5E9"},{id:"teleconsult",icon:"📱",label:"Consulta Remota",sub:"Veterinário online",bg:"#E3F2FD"},{id:"gps",icon:"📡",label:t.qaGPS,sub:t.qaGPSSub,bg:"#EDE7F6"},{id:"map",icon:"🗺️",label:t.qaMap,sub:t.qaMapSub,bg:"#E8EAF6"},{id:"petbot",icon:"🤖",label:t.qaPetbot,sub:t.qaPetbotSub,bg:"#F3E5F5"},{id:"weight",icon:"⚖️",label:"Peso",sub:"Acompanhar evolução",bg:"#E8F5E9"}];
+  // alertas carregados dinamicamente do Supabase via estado [alerts]
   const [userName,setUserName]=useState('');
   const [pet,setPet]=useState({name:'',breed:'',ageStr:'',avatar:'🐶'});
+  const [alerts,setAlerts]=useState([]);
+  const [unreadCount,setUnreadCount]=useState(0);
+
+  useEffect(()=>{
+    async function loadAlerts(){
+      try{
+        const {data:{user}}=await sb.auth.getUser();
+        if(!user)return;
+        const {data:pets}=await sb.from('pets').select('id,name').eq('user_id',user.id).order('created_at',{ascending:false}).limit(1);
+        if(!pets||!pets[0])return;
+        const petId=pets[0].id;
+        const petNm=pets[0].name||'Pet';
+        const today=new Date();
+        const al=[];
+        // Vacinas
+        const {data:vRows}=await sb.from('vaccines').select('name,next_dose_at').eq('pet_id',petId);
+        (vRows||[]).forEach(v=>{
+          if(!v.next_dose_at)return;
+          const d=new Date(v.next_dose_at);
+          const days=Math.ceil((d-today)/86400000);
+          if(days<0)al.push({icon:"💉",title:`Vacina ${v.name}`,sub:`${petNm} · Vencida há ${Math.abs(days)} dias`,urgent:true,color:"red"});
+          else if(days<=7)al.push({icon:"💉",title:`Vacina ${v.name}`,sub:`${petNm} · Vence em ${days} dias`,urgent:true,color:"red"});
+          else if(days<=30)al.push({icon:"💉",title:`Vacina ${v.name}`,sub:`${petNm} · Vence em ${days} dias`,urgent:false,color:"yellow"});
+        });
+        // Preventivos
+        const {data:pRows}=await sb.from('medications').select('name,end_date,dosage').eq('pet_id',petId).eq('active',true).in('name',['antipulgas','vermifugo','carrapaticida']);
+        const PREV_ICONS={antipulgas:"🐛",vermifugo:"💊",carrapaticida:"🕷️"};
+        const PREV_LABELS={antipulgas:"Antipulgas",vermifugo:"Vermífugo",carrapaticida:"Carrapaticida"};
+        (pRows||[]).forEach(p=>{
+          if(!p.end_date)return;
+          const d=new Date(p.end_date);
+          const days=Math.ceil((d-today)/86400000);
+          const label=PREV_LABELS[p.name]||p.name;
+          const icon=PREV_ICONS[p.name]||"💊";
+          if(days<0)al.push({icon,title:label,sub:`${petNm} · Vencido há ${Math.abs(days)} dias`,urgent:true,color:"red"});
+          else if(days<=7)al.push({icon,title:label,sub:`${petNm} · Aplicar em ${days} dias`,urgent:true,color:"yellow"});
+        });
+        // Consulta — se > 12 meses sem consulta
+        const {data:cRows}=await sb.from('medical_records').select('consult_date').eq('pet_id',petId).neq('symptoms','__surgery__').order('consult_date',{ascending:false}).limit(1);
+        if(!cRows||!cRows.length){
+          al.push({icon:"🩺",title:"Consulta de rotina",sub:`${petNm} · Nenhuma consulta registrada`,urgent:false,color:"blue"});
+        }else{
+          const months=(today-new Date(cRows[0].consult_date))/(30*86400000);
+          if(months>12)al.push({icon:"🩺",title:"Check-up atrasado",sub:`${petNm} · Última consulta há ${Math.round(months)} meses`,urgent:false,color:"yellow"});
+        }
+        // Medicamentos vencendo
+        const {data:mRows}=await sb.from('medications').select('name,end_date').eq('pet_id',petId).eq('active',true).not('name','in','(antipulgas,vermifugo,carrapaticida)');
+        (mRows||[]).forEach(m=>{
+          if(!m.end_date)return;
+          const d=new Date(m.end_date);
+          const days=Math.ceil((d-today)/86400000);
+          if(days>=0&&days<=3)al.push({icon:"💊",title:`Medicamento: ${m.name}`,sub:`${petNm} · Acaba em ${days} dias`,urgent:true,color:"yellow"});
+        });
+        setAlerts(al.slice(0,5));
+        // Sync com tabela notifications no Supabase
+        try{
+          const {data:{user}}=await sb.auth.getUser();
+          if(user&&al.length){
+            const petSnap=await sb.from('pets').select('id').eq('user_id',user.id).order('created_at',{ascending:false}).limit(1);
+            const petId=petSnap.data?.[0]?.id||null;
+            const upserts=al.map((a,idx)=>({
+              user_id:user.id,
+              pet_id:petId,
+              alert_type:a.icon==="💉"?"vaccine":a.icon==="🐛"||a.icon==="💊"||a.icon==="🕷️"?"preventivo":a.icon==="🩺"?"consulta":"medicamento",
+              alert_key:`${a.icon}_${a.title}_${a.sub}`.slice(0,120).replace(/\s+/g,"_"),
+              title:a.title,
+              body:a.sub,
+              icon:a.icon,
+              urgent:a.color==="red",
+              color:a.color||"yellow",
+              is_read:false,
+              updated_at:new Date().toISOString()
+            }));
+            await sb.from('notifications').upsert(upserts,{onConflict:'user_id,alert_key',ignoreDuplicates:true});
+          }
+          // Contar não lidas
+          if(user){
+            const {count}=await sb.from('notifications').select('id',{count:'exact',head:true}).eq('user_id',user.id).eq('is_read',false);
+            setUnreadCount(count||0);
+          }
+        }catch(e){console.warn("notif sync:",e);}
+      }catch(e){console.warn("loadAlerts:",e);}
+    }
+    loadAlerts();
+  },[]);
+
   useEffect(()=>{
     async function load(){
       try{
@@ -569,7 +709,8 @@ function HomeScreen({onNavigate,activeNav,t}){
       <div style={{padding:"0 24px 18px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
         <div><div style={{fontSize:13,color:C.light,fontWeight:600}}>{t.greeting}</div><div style={{fontFamily:"'Playfair Display', serif",fontSize:21,fontWeight:700,color:C.dark}}>{userName||'Maria Silva'} 👋</div></div>
         <button onClick={()=>onNavigate("notifications")} style={{width:44,height:44,borderRadius:13,background:C.white,display:"flex",alignItems:"center",justifyContent:"center",boxShadow:"0 2px 8px rgba(0,0,0,0.08)",position:"relative",border:"none",cursor:"pointer"}}>
-          <Bell size={20} color={C.mid}/><div style={{position:"absolute",top:8,right:8,width:8,height:8,borderRadius:"50%",background:C.coral,border:"2px solid white"}}/>
+          {unreadCount>0&&<div style={{position:"absolute",top:5,right:5,minWidth:18,height:18,borderRadius:9,background:C.coral,border:"2px solid white",display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:800,color:"white",padding:"0 3px"}}>{unreadCount>9?"9+":unreadCount}</div>}
+          <Bell size={20} color={unreadCount>0?C.coral:C.mid}/>
         </button>
       </div>
 
@@ -624,7 +765,7 @@ function HomeScreen({onNavigate,activeNav,t}){
           <button style={{fontSize:13,color:C.coral,fontWeight:700,background:"none",border:"none",cursor:"pointer",fontFamily:"inherit"}}>{t.seeAll}</button>
         </div>
         <div style={{display:"flex",flexDirection:"column",gap:9}}>
-          {rems.map((r,i)=>(<div key={i} style={{background:C.white,borderRadius:15,padding:"13px 15px",display:"flex",alignItems:"center",gap:13,boxShadow:"0 2px 8px rgba(0,0,0,0.05)",borderLeft:r.urgent?`4px solid ${C.coral}`:"4px solid transparent"}}>
+          {(alerts.length>0?alerts:[{icon:"✅",title:"Tudo em dia!",sub:"Sem alertas pendentes",urgent:false,color:"green"}]).map((r,i)=>(<div key={i} style={{background:C.white,borderRadius:15,padding:"13px 15px",display:"flex",alignItems:"center",gap:13,boxShadow:"0 2px 8px rgba(0,0,0,0.05)",borderLeft:r.urgent?`4px solid ${C.coral}`:"4px solid transparent"}}>
             <div style={{width:38,height:38,borderRadius:11,background:r.urgent?`${C.coral}15`:C.beige,display:"flex",alignItems:"center",justifyContent:"center",fontSize:17,flexShrink:0}}>{r.icon}</div>
             <div style={{flex:1}}><div style={{fontSize:14,fontWeight:700,color:C.dark}}>{r.title}</div><div style={{fontSize:12,color:C.light,fontWeight:500,marginTop:2}}>{r.sub}</div></div>
             {r.urgent&&<div style={{background:`${C.coral}15`,color:C.coral,fontSize:9,fontWeight:800,padding:"4px 8px",borderRadius:8}}>{t.urgent}</div>}
@@ -647,66 +788,429 @@ function HomeScreen({onNavigate,activeNav,t}){
 /* ─── HEALTH ──────────────────────────────────────────────────── */
 function HealthScreen({onNavigate,activeNav,t}){
   const [tab,setTab]=useState("v");
-  const [vacc,setVacc]=useState([
-    {n:"V10 Múltipla",w:true,d:"15/06/2026"},
-    {n:"Antirrábica",w:false,d:"20/12/2026"},
-    {n:"Giárdia",w:false,d:"05/03/2027"},
-    {n:"Gripe Canina",w:false,d:"10/11/2026"}
-  ]);
-  const [vaccLoaded,setVaccLoaded]=useState(false);
+  const [vacc,setVacc]=useState(null);
+  const [petName,setPetName]=useState('');
+  const [healthScore,setHealthScore]=useState(null);
+  const [prev,setPrev]=useState(null);
+  const [showPrevForm,setShowPrevForm]=useState(false);
+  const [prevType,setPrevType]=useState("antipulgas");
+  const [prevProduct,setPrevProduct]=useState("");
+  const [prevLastDate,setPrevLastDate]=useState(new Date().toISOString().split("T")[0]);
+  const [prevSaving,setPrevSaving]=useState(false);
+
+  const PREV_TYPES={
+    "antipulgas":{label:"🐛 Antipulgas",days:30,icon:"🐛"},
+    "vermifugo":  {label:"💊 Vermífugo", days:90,icon:"💊"},
+    "carrapaticida":{label:"🕷️ Carrapaticida",days:30,icon:"🕷️"}
+  };
+
+  function calcScore(vaccArr,consArr,prevArr,docsArr,hasPeso){
+    let s=0;
+    const today=new Date();
+    // Vacinas 35pts
+    if(vaccArr&&vaccArr.length){const ok=vaccArr.filter(v=>!v.w).length;s+=Math.round((ok/vaccArr.length)*35);}
+    else if(vaccArr!==null)s+=0;
+    // Consulta recente 20pts
+    if(consArr&&consArr.length){
+      const last=new Date(consArr[0].consult_date);
+      const months=(today-last)/(30*86400000);
+      if(months<6)s+=20;else if(months<12)s+=10;
+    }
+    // Preventivos 20pts
+    if(prevArr&&prevArr.length){
+      const allOk=prevArr.every(p=>{
+        if(!p.end_date)return true;
+        return new Date(p.end_date)>today;
+      });
+      if(allOk)s+=20;else s+=5;
+    }else if(prevArr!==null)s+=10;
+    // Medicamentos sem atraso 15pts
+    s+=15; // simplificado: full score se chegou até aqui
+    // Peso 5pts
+    if(hasPeso)s+=5;
+    // Documentos 5pts
+    if(docsArr&&docsArr.length)s+=5;
+    return Math.min(100,s);
+  }
+
   useEffect(()=>{
-    async function loadVacc(){
+    async function loadAll(){
       try{
         const {data:{user}}=await sb.auth.getUser();
-        if(!user)return;
-        const {data:pets}=await sb.from('pets').select('id').eq('user_id',user.id).limit(1);
-        if(!pets||!pets.length)return;
-        const petId=pets[0].id;
-        const {data:rows}=await sb.from('vaccines').select('*').eq('pet_id',petId).order('applied_at',{ascending:false});
-        if(rows&&rows.length){
-          const today=new Date();
-          setVacc(rows.map(r=>{
-            const next=r.next_dose_at?new Date(r.next_dose_at):null;
-            const warn=next&&(next-today)<14*86400000;
-            const dStr=next?next.toLocaleDateString('pt-BR'):'—';
-            return{n:r.name,w:!!warn,d:dStr,id:r.id};
-          }));
-          setVaccLoaded(true);
-        }
-      }catch(e){console.warn('loadVacc:',e);}
+        if(!user){setVacc([]);setPrev([]);return;}
+        const {data:pets}=await sb.from('pets').select('id,name,weight_kg').eq('user_id',user.id).order('created_at',{ascending:false}).limit(1);
+        if(!pets||!pets.length){setVacc([]);setPrev([]);return;}
+        const pet=pets[0];
+        setPetName(pet.name||'');
+        const today=new Date();
+
+        // Vacinas
+        const {data:vRows}=await sb.from('vaccines').select('*').eq('pet_id',pet.id).order('next_dose_at',{ascending:true});
+        const vaccArr=(vRows||[]).map(r=>{
+          const next=r.next_dose_at?new Date(r.next_dose_at):null;
+          const warn=next&&(next-today)<14*86400000;
+          return{n:r.name,w:!!warn,d:next?next.toLocaleDateString('pt-BR'):'—',id:r.id};
+        });
+        setVacc(vaccArr.length?vaccArr:[]);
+
+        // Preventivos
+        const {data:pRows}=await sb.from('medications').select('*').eq('pet_id',pet.id).eq('active',true).in('name',['antipulgas','vermifugo','carrapaticida']).order('end_date',{ascending:true});
+        const prevArr=(pRows||[]).map(r=>{
+          const endDate=r.end_date?new Date(r.end_date):null;
+          const daysLeft=endDate?Math.ceil((endDate-today)/86400000):null;
+          let status='ok';
+          if(daysLeft!==null){if(daysLeft<0)status='vencido';else if(daysLeft<=7)status='alerta';}
+          return{...r,daysLeft,status,endDateStr:endDate?endDate.toLocaleDateString('pt-BR'):'—'};
+        });
+        setPrev(prevArr);
+
+        // Consultas e docs para score
+        const {data:cRows}=await sb.from('medical_records').select('consult_date').eq('pet_id',pet.id).neq('symptoms','__surgery__').order('consult_date',{ascending:false}).limit(1);
+        const {data:dRows}=await sb.from('documents').select('id').eq('pet_id',pet.id).limit(1);
+        setHealthScore(calcScore(vaccArr,cRows||[],prevArr,dRows||[],!!pet.weight_kg));
+      }catch(e){console.warn('loadAll:',e);setVacc([]);setPrev([]);}
     }
-    loadVacc();
+    loadAll();
   },[]);
-  const cons=[{d:"28/04/2026",vet:"Dr. Carlos Mendes",cl:"Clínica PetVida",r:"Check-up anual"},{d:"12/01/2026",vet:"Dra. Ana Lima",cl:"Hospital Vet. USP",r:"Vermínoses"},{d:"03/09/2025",vet:"Dr. Carlos Mendes",cl:"Clínica PetVida",r:"Consulta geral"}];
-  const docs=[{i:"📄",n:"Carteira de Vacinação",s:"1.2 MB",d:"Mai 2026"},{i:"🧪",n:"Hemograma Completo",s:"0.8 MB",d:"Jan 2026"},{i:"📷",n:"Raio-X Coluna",s:"3.4 MB",d:"Set 2025"}];
+  const [cons,setCons]=useState(null);
+  useEffect(()=>{
+    async function loadCons(){
+      try{
+        const {data:{user}}=await sb.auth.getUser();
+        if(!user){setCons([]);return;}
+        const {data:pets}=await sb.from("pets").select("id").eq("user_id",user.id).order("created_at",{ascending:false}).limit(1);
+        if(!pets||!pets[0]){setCons([]);return;}
+        const {data:rows}=await sb.from("medical_records").select("*").eq("pet_id",pets[0].id).order("consult_date",{ascending:false});
+        setCons(rows||[]);
+      }catch(e){console.warn("loadCons:",e);setCons([]);}
+    }
+    loadCons();
+  },[]);
+  const [docs,setDocs]=useState(null);
+  const [showDocModal,setShowDocModal]=useState(false);
+  const [docFile,setDocFile]=useState(null);
+  const [docTitle,setDocTitle]=useState("");
+  const [docType,setDocType]=useState("exame");
+  const [docNotes,setDocNotes]=useState("");
+  const [docUploading,setDocUploading]=useState(false);
+  const docFileRef=React.useRef();
+  const docTypes=[["exame","🧪 Exame"],["receita","📋 Receita"],["laudo","📄 Laudo"],["foto_clinica","📷 Foto Clínica"],["outro","📎 Outro"]];
+  const docIcons={exame:"🧪",receita:"📋",laudo:"📄",foto_clinica:"📷",outro:"📎"};
+
+  useEffect(()=>{
+    async function loadDocs(){
+      try{
+        const {data:{user}}=await sb.auth.getUser();
+        if(!user){setDocs([]);return;}
+        const {data:pets}=await sb.from("pets").select("id").eq("user_id",user.id).order("created_at",{ascending:false}).limit(1);
+        if(!pets||!pets[0]){setDocs([]);return;}
+        const {data:rows}=await sb.from("documents").select("*").eq("pet_id",pets[0].id).order("created_at",{ascending:false});
+        setDocs(rows||[]);
+      }catch(e){console.warn("loadDocs:",e);setDocs([]);}
+    }
+    loadDocs();
+  },[]);
+
+  async function handleDocUpload(){
+    if(!docFile)return;
+    setDocUploading(true);
+    try{
+      const {data:{user}}=await sb.auth.getUser();
+      if(!user)return;
+      const {data:pets}=await sb.from("pets").select("id").eq("user_id",user.id).order("created_at",{ascending:false}).limit(1);
+      if(!pets||!pets[0])return;
+      const petId=pets[0].id;
+      const ext=docFile.name.split(".").pop();
+      const path=`${user.id}/${petId}/${Date.now()}.${ext}`;
+      const {error:upErr}=await sb.storage.from("pet-docs").upload(path,docFile);
+      let storPath=upErr?null:path;
+      const {data:ins}=await sb.from("documents").insert({
+        pet_id:petId, user_id:user.id,
+        title:docTitle||docFile.name,
+        doc_type:docType,
+        file_mime:docFile.type,
+        doc_date:new Date().toISOString().split("T")[0],
+        notes:docNotes||null,
+        storage_path:storPath
+      }).select().single();
+      if(ins) setDocs(prev=>[ins,...(prev||[])]);
+      setShowDocModal(false);
+      setDocFile(null);setDocTitle("");setDocType("exame");setDocNotes("");
+    }catch(e){console.warn("uploadDoc:",e);}
+    setDocUploading(false);
+  }
   const metrics=[{l:t.mVaccines,v:75,c:"#FFD580"},{l:t.mConsults,v:90,c:"#A8E6CF"},{l:"Rotina",v:88,c:"#B8D4FF"},{l:"Peso",v:95,c:"#FFB8C6"}];
   return(<div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column"}}>
     <div style={{flex:1,overflowY:"auto"}}>
       <div style={{background:`linear-gradient(130deg,${C.coral} 0%,${C.coralDark} 100%)`,padding:"0 24px 22px",position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",right:-35,top:-35,width:140,height:140,borderRadius:"50%",background:"rgba(255,255,255,0.07)"}}/>
-        <StatusBar light/><div style={{fontFamily:"'Playfair Display', serif",fontSize:21,fontWeight:700,color:C.white,marginBottom:14}}>{t.healthTitle}</div>
+        <StatusBar light/><div style={{fontFamily:"'Playfair Display', serif",fontSize:21,fontWeight:700,color:C.white,marginBottom:14}}>Saúde de {petName||"..."} 🐾</div>
         <div style={{background:"rgba(255,255,255,0.15)",borderRadius:18,padding:"14px",display:"flex",alignItems:"center",gap:14}}>
-          <div style={{textAlign:"center"}}><div style={{fontSize:33,fontWeight:800,color:C.white,lineHeight:1}}>87</div><div style={{fontSize:10,color:"rgba(255,255,255,0.65)",fontWeight:600,marginTop:2}}>/ 100</div><div style={{fontSize:11,color:"rgba(255,255,255,0.8)",fontWeight:700,marginTop:3}}>{t.scoreLabel}</div></div>
+          {(()=>{
+              const sc=healthScore;
+              const col=sc===null?"rgba(255,255,255,0.4)":sc>=90?"#A8E6CF":sc>=70?"#FFD580":"#FF8A80";
+              return(<div style={{textAlign:"center"}}>
+                <div style={{fontSize:33,fontWeight:800,color:col,lineHeight:1}}>{sc===null?"…":sc}</div>
+                <div style={{fontSize:10,color:"rgba(255,255,255,0.65)",fontWeight:600,marginTop:2}}>/ 100</div>
+                <div style={{fontSize:11,color:"rgba(255,255,255,0.8)",fontWeight:700,marginTop:3}}>{t.scoreLabel}</div>
+              </div>);
+            })()}
           <div style={{flex:1}}>{metrics.map(m=>(<div key={m.l} style={{marginBottom:6,display:"flex",alignItems:"center",gap:7}}><div style={{fontSize:10,color:"rgba(255,255,255,0.75)",fontWeight:600,width:54,flexShrink:0}}>{m.l}</div><div style={{flex:1,height:6,borderRadius:3,background:"rgba(255,255,255,0.2)"}}><div style={{width:`${m.v}%`,height:"100%",borderRadius:3,background:m.c}}/></div><div style={{fontSize:10,color:"rgba(255,255,255,0.8)",fontWeight:700,width:22}}>{m.v}</div></div>))}</div>
         </div>
       </div>
       <div style={{background:C.white,display:"flex",borderBottom:"1px solid rgba(0,0,0,0.06)"}}>
-        {[["v",t.mVaccines],["c",t.mConsults],["d",t.mDocs]].map(([id,label])=>(<button key={id} onClick={()=>setTab(id)} style={{flex:1,padding:"13px 6px",fontSize:13,fontWeight:tab===id?800:600,color:tab===id?C.coral:C.light,background:"none",border:"none",borderBottom:tab===id?`2.5px solid ${C.coral}`:"2.5px solid transparent",cursor:"pointer",fontFamily:"inherit"}}>{label}</button>))}
+        {[["v","Vacinas"],["c","Consultas"],["d","Docs"],["p","🛡️ Prev."]].map(([id,label])=>(<button key={id} onClick={()=>setTab(id)} style={{flex:1,padding:"11px 3px",fontSize:11,fontWeight:tab===id?800:600,color:tab===id?C.coral:C.light,background:"none",border:"none",borderBottom:tab===id?`2.5px solid ${C.coral}`:"2.5px solid transparent",cursor:"pointer",fontFamily:"inherit"}}>{label}</button>))}
       </div>
       <div style={{padding:"18px 24px 100px",background:C.beigeLight}}>
-        {tab==="v"&&<div style={{display:"flex",flexDirection:"column",gap:10}}>{vacc.map((v,i)=>(<div key={i} style={{background:C.white,borderRadius:15,padding:"13px 15px",display:"flex",alignItems:"center",gap:13,boxShadow:"0 2px 8px rgba(0,0,0,0.05)",borderLeft:v.w?`4px solid ${C.coral}`:`4px solid ${C.green}`}}><div style={{width:38,height:38,borderRadius:11,background:v.w?`${C.coral}15`:`${C.green}15`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:17,flexShrink:0}}>{v.w?"⚠️":"💉"}</div><div style={{flex:1}}><div style={{fontSize:14,fontWeight:700,color:C.dark}}>{v.n}</div><div style={{fontSize:12,color:v.w?C.coral:C.green,fontWeight:600,marginTop:2}}>{v.w?t.warnLabel:t.inDate}</div></div><div style={{fontSize:11,color:C.light,fontWeight:600}}>{v.d}</div></div>))}
+        {tab==="v"&&<div style={{display:"flex",flexDirection:"column",gap:10}}>
+          {vacc===null&&<div style={{display:"flex",justifyContent:"center",padding:"32px"}}><div style={{width:28,height:28,border:`3px solid ${C.beige}`,borderTop:`3px solid ${C.coral}`,borderRadius:"50%",animation:"spin 0.8s linear infinite"}}/></div>}
+          {vacc!==null&&vacc.length===0&&<div style={{textAlign:"center",padding:"32px 16px",color:C.light,fontSize:13,fontWeight:500}}>Nenhuma vacina registrada ainda.</div>}
+          {(vacc||[]).map((v,i)=>(<div key={i} style={{background:C.white,borderRadius:15,padding:"13px 15px",display:"flex",alignItems:"center",gap:13,boxShadow:"0 2px 8px rgba(0,0,0,0.05)",borderLeft:v.w?`4px solid ${C.coral}`:`4px solid ${C.green}`}}><div style={{width:38,height:38,borderRadius:11,background:v.w?`${C.coral}15`:`${C.green}15`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:17,flexShrink:0}}>{v.w?"⚠️":"💉"}</div><div style={{flex:1}}><div style={{fontSize:14,fontWeight:700,color:C.dark}}>{v.n}</div><div style={{fontSize:12,color:v.w?C.coral:C.green,fontWeight:600,marginTop:2}}>{v.w?t.warnLabel:t.inDate}</div></div><div style={{fontSize:11,color:C.light,fontWeight:600}}>{v.d}</div></div>))}
           <button onClick={()=>onNavigate("addvaccine")} style={{width:"100%",marginTop:4,padding:"13px",background:C.coral,color:C.white,borderRadius:13,fontSize:14,fontWeight:700,border:"none",cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",justifyContent:"center",gap:8}}><Plus size={15}/>{t.addVaccBtn}</button>
           <div style={{display:"flex",gap:9,marginTop:9}}>
-            <button onClick={()=>onNavigate("breed")} style={{flex:1,padding:"12px",background:C.beige,color:C.mid,borderRadius:13,fontSize:13,fontWeight:700,border:"none",cursor:"pointer",fontFamily:"inherit"}}>🐕 Características da Raça</button>
-            <button onClick={()=>onNavigate("gps")} style={{flex:1,padding:"12px",background:"#E3F2FD",color:"#1565C0",borderRadius:13,fontSize:13,fontWeight:700,border:"none",cursor:"pointer",fontFamily:"inherit"}}>📡 Localizar Thor</button>
+            <button onClick={()=>onNavigate("breed")} style={{flex:1,padding:"12px",background:C.beige,color:C.mid,borderRadius:13,fontSize:13,fontWeight:700,border:"none",cursor:"pointer",fontFamily:"inherit"}}>🐕 Raça</button>
+            <button onClick={()=>onNavigate("gps")} style={{flex:1,padding:"12px",background:"#E3F2FD",color:"#1565C0",borderRadius:13,fontSize:13,fontWeight:700,border:"none",cursor:"pointer",fontFamily:"inherit"}}>📡 GPS</button>
+            <button onClick={()=>onNavigate("weight")} style={{flex:1,padding:"12px",background:"#E8F5E9",color:"#2E7D32",borderRadius:13,fontSize:13,fontWeight:700,border:"none",cursor:"pointer",fontFamily:"inherit"}}>⚖️ Peso</button>
+          </div>
+          <div style={{display:"flex",gap:9,marginTop:9}}>
+            <button onClick={()=>onNavigate("consultprep")} style={{flex:1,padding:"12px",background:`${C.coral}15`,color:C.coral,borderRadius:13,fontSize:13,fontWeight:700,border:"none",cursor:"pointer",fontFamily:"inherit"}}>📋 Preparar Consulta</button>
+            <button onClick={()=>onNavigate("teleconsult")} style={{flex:1,padding:"12px",background:"#E3F2FD",color:"#1565C0",borderRadius:13,fontSize:13,fontWeight:700,border:"none",cursor:"pointer",fontFamily:"inherit"}}>📱 Consulta Remota</button>
           </div>
         </div>}
-        {tab==="c"&&<div style={{display:"flex",flexDirection:"column",gap:10}}>{cons.map((c,i)=>(<div key={i} style={{background:C.white,borderRadius:15,padding:"15px",boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}><div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:8}}><div><div style={{fontSize:14,fontWeight:700,color:C.dark}}>{c.vet}</div><div style={{fontSize:12,color:C.light,fontWeight:500,marginTop:2}}>{c.cl}</div></div><div style={{fontSize:12,color:C.mid,fontWeight:700}}>{c.d}</div></div><div style={{background:C.beige,borderRadius:9,padding:"9px 11px"}}><div style={{fontSize:11,color:C.mid,fontWeight:700,marginBottom:2,textTransform:"uppercase",letterSpacing:0.8}}>{t.mConsults}</div><div style={{fontSize:13,color:C.dark,fontWeight:600}}>{c.r}</div></div></div>))}</div>}
-        {tab==="d"&&<div style={{display:"flex",flexDirection:"column",gap:10}}>{docs.map((d,i)=>(<div key={i} style={{background:C.white,borderRadius:15,padding:"13px 15px",display:"flex",alignItems:"center",gap:13,boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}><div style={{width:42,height:42,borderRadius:11,background:C.beige,display:"flex",alignItems:"center",justifyContent:"center",fontSize:19,flexShrink:0}}>{d.i}</div><div style={{flex:1}}><div style={{fontSize:14,fontWeight:700,color:C.dark}}>{d.n}</div><div style={{fontSize:11,color:C.light,fontWeight:500,marginTop:2}}>{d.s} · {d.d}</div></div><ChevronRight size={15} color={C.light}/></div>))}
-          <button style={{width:"100%",marginTop:4,padding:"13px",background:C.coral,color:C.white,borderRadius:13,fontSize:14,fontWeight:700,border:"none",cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",justifyContent:"center",gap:8}}><Plus size={15}/>{t.addDocBtn}</button>
+        {tab==="c"&&<div style={{display:"flex",flexDirection:"column",gap:10}}>
+          {cons===null&&<div style={{display:"flex",justifyContent:"center",padding:"32px"}}><div style={{width:28,height:28,border:`3px solid ${C.beige}`,borderTop:`3px solid ${C.coral}`,borderRadius:"50%",animation:"spin 0.8s linear infinite"}}/></div>}
+          {cons!==null&&cons.length===0&&<div style={{textAlign:"center",padding:"32px 16px"}}>
+            <div style={{fontSize:32,marginBottom:10}}>🩺</div>
+            <div style={{fontSize:14,fontWeight:700,color:C.dark,marginBottom:6}}>Nenhuma consulta registrada</div>
+            <div style={{fontSize:12,color:C.light,fontWeight:500}}>Registre a primeira consulta do seu pet.</div>
+          </div>}
+          {(cons||[]).map((c,i)=>(
+            <div key={i} style={{background:C.white,borderRadius:15,padding:"15px",boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:8}}>
+                <div>
+                  <div style={{fontSize:14,fontWeight:700,color:C.dark}}>{c.vet_name||"Veterinário"}</div>
+                  <div style={{fontSize:12,color:C.light,fontWeight:500,marginTop:2}}>{c.clinic||"—"}</div>
+                </div>
+                <div style={{fontSize:12,color:C.mid,fontWeight:700}}>{new Date(c.consult_date).toLocaleDateString("pt-BR")}</div>
+              </div>
+              {c.symptoms&&<div style={{background:"#FFF3E0",borderRadius:9,padding:"8px 11px",marginBottom:6}}>
+                <div style={{fontSize:10,color:"#E65100",fontWeight:700,marginBottom:2,textTransform:"uppercase",letterSpacing:0.8}}>SINTOMAS</div>
+                <div style={{fontSize:12,color:C.dark,fontWeight:500,lineHeight:1.4}}>{c.symptoms}</div>
+              </div>}
+              {c.diagnosis&&<div style={{background:C.beige,borderRadius:9,padding:"8px 11px"}}>
+                <div style={{fontSize:10,color:C.mid,fontWeight:700,marginBottom:2,textTransform:"uppercase",letterSpacing:0.8}}>DIAGNÓSTICO</div>
+                <div style={{fontSize:12,color:C.dark,fontWeight:600,lineHeight:1.4}}>{c.diagnosis}</div>
+              </div>}
+            </div>
+          ))}
+          <button onClick={()=>onNavigate("addconsult")} style={{width:"100%",marginTop:4,padding:"13px",background:C.coral,color:C.white,borderRadius:13,fontSize:14,fontWeight:700,border:"none",cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",justifyContent:"center",gap:8}}>
+            <Plus size={15}/>Registrar nova consulta
+          </button>
+        </div>}
+        {tab==="d"&&<div style={{display:"flex",flexDirection:"column",gap:10}}>
+          {/* Modal de upload */}
+          {showDocModal&&<div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.5)",zIndex:999,display:"flex",alignItems:"flex-end"}}>
+            <div style={{background:C.white,borderRadius:"22px 22px 0 0",padding:"24px 20px 36px",width:"100%"}}>
+              <div style={{fontSize:15,fontWeight:800,color:C.dark,marginBottom:16}}>📎 Adicionar Documento</div>
+              {/* Preview do arquivo */}
+              {docFile&&<div style={{background:C.beigeLight,borderRadius:12,padding:"10px 14px",marginBottom:14,display:"flex",alignItems:"center",gap:10}}>
+                <span style={{fontSize:22}}>{docFile.type.includes("pdf")?"📄":"🖼️"}</span>
+                <div><div style={{fontSize:13,fontWeight:700,color:C.dark}}>{docFile.name}</div>
+                <div style={{fontSize:11,color:C.light}}>{(docFile.size/1024).toFixed(0)} KB</div></div>
+              </div>}
+              {/* Título */}
+              <div style={{fontSize:11,fontWeight:800,color:C.mid,textTransform:"uppercase",letterSpacing:1,marginBottom:7}}>TÍTULO</div>
+              <div style={{background:C.beige,borderRadius:11,padding:"11px 13px",marginBottom:12}}>
+                <input value={docTitle} onChange={e=>setDocTitle(e.target.value)} placeholder={docFile?.name||"Nome do documento"}
+                  style={{width:"100%",fontSize:13,color:C.dark,background:"transparent",border:"none",outline:"none",fontFamily:"inherit"}}/>
+              </div>
+              {/* Tipo */}
+              <div style={{fontSize:11,fontWeight:800,color:C.mid,textTransform:"uppercase",letterSpacing:1,marginBottom:8}}>TIPO</div>
+              <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:12}}>
+                {docTypes.map(([v,l])=>(
+                  <button key={v} onClick={()=>setDocType(v)}
+                    style={{padding:"6px 11px",borderRadius:10,fontSize:12,fontWeight:700,border:`2px solid ${docType===v?C.coral:"transparent"}`,background:docType===v?`${C.coral}15`:C.beige,color:docType===v?C.coral:C.mid,cursor:"pointer",fontFamily:"inherit"}}>
+                    {l}
+                  </button>
+                ))}
+              </div>
+              {/* Observação */}
+              <div style={{background:C.beige,borderRadius:11,padding:"11px 13px",marginBottom:16}}>
+                <input value={docNotes} onChange={e=>setDocNotes(e.target.value)} placeholder="Observação (opcional)"
+                  style={{width:"100%",fontSize:13,color:C.dark,background:"transparent",border:"none",outline:"none",fontFamily:"inherit"}}/>
+              </div>
+              <div style={{display:"flex",gap:8}}>
+                <button onClick={()=>{setShowDocModal(false);setDocFile(null);}} style={{flex:1,padding:"12px",background:C.beige,color:C.mid,borderRadius:13,fontSize:13,fontWeight:700,border:"none",cursor:"pointer",fontFamily:"inherit"}}>Cancelar</button>
+                <button onClick={handleDocUpload} disabled={docUploading||!docFile}
+                  style={{flex:2,padding:"12px",background:docUploading||!docFile?C.beige:C.coral,color:docUploading||!docFile?C.mid:C.white,borderRadius:13,fontSize:13,fontWeight:800,border:"none",cursor:"pointer",fontFamily:"inherit"}}>
+                  {docUploading?"Enviando...":"✅ Salvar Documento"}
+                </button>
+              </div>
+            </div>
+          </div>}
+
+          {/* Input de arquivo oculto */}
+          <input ref={docFileRef} type="file" accept="image/*,application/pdf" style={{display:"none"}}
+            onChange={e=>{if(e.target.files[0]){setDocFile(e.target.files[0]);setDocTitle(e.target.files[0].name.replace(/\.[^.]+$/,""));setShowDocModal(true);}}}/>
+
+          {docs===null&&<div style={{display:"flex",justifyContent:"center",padding:"32px"}}><div style={{width:28,height:28,border:`3px solid ${C.beige}`,borderTop:`3px solid ${C.coral}`,borderRadius:"50%",animation:"spin 0.8s linear infinite"}}/></div>}
+          {docs!==null&&docs.length===0&&<div style={{textAlign:"center",padding:"28px 16px"}}>
+            <div style={{fontSize:32,marginBottom:10}}>📂</div>
+            <div style={{fontSize:14,fontWeight:700,color:C.dark,marginBottom:6}}>Nenhum documento ainda</div>
+            <div style={{fontSize:12,color:C.light}}>Adicione exames, receitas e laudos do seu pet.</div>
+          </div>}
+          {(docs||[]).map((d,i)=>(
+            <div key={i} style={{background:C.white,borderRadius:15,padding:"13px 15px",display:"flex",alignItems:"center",gap:13,boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}>
+              <div style={{width:42,height:42,borderRadius:11,background:C.beige,display:"flex",alignItems:"center",justifyContent:"center",fontSize:19,flexShrink:0}}>{docIcons[d.doc_type]||"📎"}</div>
+              <div style={{flex:1}}>
+                <div style={{fontSize:14,fontWeight:700,color:C.dark}}>{d.title}</div>
+                <div style={{fontSize:11,color:C.light,fontWeight:500,marginTop:2}}>
+                  {d.doc_type==="exame"?"Exame":d.doc_type==="receita"?"Receita":d.doc_type==="laudo"?"Laudo":d.doc_type==="foto_clinica"?"Foto Clínica":"Documento"}
+                  {d.doc_date?" · "+new Date(d.doc_date+"T12:00:00").toLocaleDateString("pt-BR",{month:"short",year:"numeric"}):""}
+                </div>
+                {d.notes&&<div style={{fontSize:11,color:C.mid,marginTop:2}}>{d.notes}</div>}
+              </div>
+              <ChevronRight size={15} color={C.light}/>
+            </div>
+          ))}
+          <button onClick={()=>docFileRef.current?.click()}
+            style={{width:"100%",marginTop:4,padding:"13px",background:C.coral,color:C.white,borderRadius:13,fontSize:14,fontWeight:700,border:"none",cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",justifyContent:"center",gap:8}}>
+            <Plus size={15}/>Adicionar Documento
+          </button>
         </div>}
       </div>
     </div>
+
+        {tab==="p"&&<div style={{display:"flex",flexDirection:"column",gap:10}}>
+          <div style={{background:`${C.coral}10`,borderRadius:13,padding:"12px 14px",marginBottom:4}}>
+            <div style={{fontSize:12,fontWeight:700,color:C.coral,lineHeight:1.5}}>🛡️ <strong>Preventivos</strong> — antiparasitários com lembrete automático calculado a partir da última aplicação.</div>
+          </div>
+
+          {/* Cards de preventivos existentes */}
+          {prev===null&&<div style={{display:"flex",justifyContent:"center",padding:"32px"}}><div style={{width:28,height:28,border:`3px solid ${C.beige}`,borderTop:`3px solid ${C.coral}`,borderRadius:"50%",animation:"spin 0.8s linear infinite"}}/></div>}
+          {(prev||[]).map((p,i)=>{
+            const cfg=PREV_TYPES[p.name]||{icon:"💊",label:p.name};
+            const statusColor=p.status==="vencido"?C.coral:p.status==="alerta"?"#E65100":C.green;
+            const statusLabel=p.status==="vencido"?"⚠️ Vencido":p.status==="alerta"?`⚠️ Vence em ${p.daysLeft} dias`:"✅ Em dia";
+            return(
+              <div key={i} style={{background:C.white,borderRadius:15,padding:"14px 15px",display:"flex",alignItems:"center",gap:13,boxShadow:"0 2px 8px rgba(0,0,0,0.05)",borderLeft:`4px solid ${statusColor}`}}>
+                <div style={{width:40,height:40,borderRadius:11,background:`${statusColor}15`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:19,flexShrink:0}}>{cfg.icon}</div>
+                <div style={{flex:1}}>
+                  <div style={{fontSize:14,fontWeight:700,color:C.dark}}>{cfg.label}</div>
+                  {p.dosage&&<div style={{fontSize:11,color:C.mid,fontWeight:500,marginTop:1}}>{p.dosage}</div>}
+                  <div style={{fontSize:12,color:statusColor,fontWeight:700,marginTop:3}}>{statusLabel}</div>
+                </div>
+                <div style={{textAlign:"right"}}>
+                  <div style={{fontSize:10,color:C.light,fontWeight:600}}>Próxima</div>
+                  <div style={{fontSize:12,color:C.dark,fontWeight:700}}>{p.endDateStr}</div>
+                </div>
+              </div>
+            );
+          })}
+          {prev!==null&&prev.length===0&&!showPrevForm&&(
+            <div style={{textAlign:"center",padding:"24px 16px"}}>
+              <div style={{fontSize:36,marginBottom:10}}>🛡️</div>
+              <div style={{fontSize:14,fontWeight:700,color:C.dark,marginBottom:6}}>Nenhum preventivo registrado</div>
+              <div style={{fontSize:12,color:C.light}}>Registre antipulgas, vermífugo e carrapaticida — o app lembra você da próxima dose.</div>
+            </div>
+          )}
+
+          {/* Formulário de cadastro */}
+          {showPrevForm?(
+            <div style={{background:C.white,borderRadius:16,padding:"16px",marginTop:4,boxShadow:"0 2px 8px rgba(0,0,0,0.06)"}}>
+              <div style={{fontSize:13,fontWeight:800,color:C.dark,marginBottom:12}}>➕ Registrar Preventivo</div>
+              <div style={{fontSize:11,fontWeight:700,color:C.mid,textTransform:"uppercase",letterSpacing:1,marginBottom:8}}>TIPO</div>
+              <div style={{display:"flex",flexDirection:"column",gap:6,marginBottom:14}}>
+                {Object.entries(PREV_TYPES).map(([k,v])=>(
+                  <button key={k} onClick={()=>setPrevType(k)}
+                    style={{padding:"11px 14px",borderRadius:12,display:"flex",alignItems:"center",gap:10,border:`2px solid ${prevType===k?C.coral:"transparent"}`,background:prevType===k?`${C.coral}10`:C.beige,cursor:"pointer",fontFamily:"inherit"}}>
+                    <span style={{fontSize:20}}>{v.icon}</span>
+                    <div style={{textAlign:"left"}}>
+                      <div style={{fontSize:13,fontWeight:700,color:prevType===k?C.coral:C.dark}}>{v.label}</div>
+                      <div style={{fontSize:11,color:C.light,fontWeight:500}}>Lembrete a cada {v.days} dias</div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+              <div style={{fontSize:11,fontWeight:700,color:C.mid,textTransform:"uppercase",letterSpacing:1,marginBottom:7}}>PRODUTO (OPCIONAL)</div>
+              <div style={{background:C.beige,borderRadius:11,padding:"11px 13px",marginBottom:12}}>
+                <input value={prevProduct} onChange={e=>setPrevProduct(e.target.value)} placeholder="Ex: Bravecto, Simparic, Endogard..."
+                  style={{width:"100%",fontSize:13,color:C.dark,background:"transparent",border:"none",outline:"none",fontFamily:"inherit"}}/>
+              </div>
+              <div style={{fontSize:11,fontWeight:700,color:C.mid,textTransform:"uppercase",letterSpacing:1,marginBottom:7}}>DATA DA ÚLTIMA APLICAÇÃO</div>
+              <div style={{background:C.beige,borderRadius:11,padding:"11px 13px",marginBottom:14}}>
+                <input type="date" value={prevLastDate} onChange={e=>setPrevLastDate(e.target.value)}
+                  style={{width:"100%",fontSize:13,color:C.dark,background:"transparent",border:"none",outline:"none",fontFamily:"inherit"}}/>
+              </div>
+              {prevLastDate&&<div style={{background:`${C.green}15`,borderRadius:11,padding:"10px 13px",marginBottom:14,fontSize:12,color:C.green,fontWeight:700}}>
+                🔔 Próxima dose: {(()=>{
+                  const d=new Date(prevLastDate);
+                  d.setDate(d.getDate()+(PREV_TYPES[prevType]?.days||30));
+                  return d.toLocaleDateString("pt-BR");
+                })()}
+              </div>}
+              <div style={{display:"flex",gap:8}}>
+                <button onClick={()=>setShowPrevForm(false)} style={{flex:1,padding:"11px",background:C.beige,color:C.mid,borderRadius:12,fontSize:13,fontWeight:700,border:"none",cursor:"pointer",fontFamily:"inherit"}}>Cancelar</button>
+                <button onClick={async()=>{
+                  if(!prevLastDate)return;
+                  setPrevSaving(true);
+                  try{
+                    const {data:{user}}=await sb.auth.getUser();
+                    const {data:pets}=await sb.from("pets").select("id").eq("user_id",user.id).order("created_at",{ascending:false}).limit(1);
+                    if(pets&&pets[0]){
+                      const petId=pets[0].id;
+                      const days=PREV_TYPES[prevType]?.days||30;
+                      const startDate=new Date(prevLastDate);
+                      const endDate=new Date(prevLastDate);
+                      endDate.setDate(endDate.getDate()+days);
+                      const endStr=endDate.toISOString().split("T")[0];
+                      // Desativar entrada anterior do mesmo tipo
+                      await sb.from("medications").update({active:false}).eq("pet_id",petId).eq("name",prevType);
+                      const {data:ins}=await sb.from("medications").insert({
+                        pet_id:petId, user_id:user.id,
+                        name:prevType,
+                        dosage:prevProduct||null,
+                        category:"preventivo",
+                        frequency_hours:days*24,
+                        duration_days:days,
+                        start_date:prevLastDate,
+                        end_date:endStr,
+                        active:true
+                      }).select().single();
+                      // Lembrete na rotina
+                      await sb.from("routine_tasks").insert({
+                        pet_id:petId, user_id:user.id,
+                        title:`${PREV_TYPES[prevType]?.icon||"💊"} ${PREV_TYPES[prevType]?.label||prevType}${prevProduct?" — "+prevProduct:""}`,
+                        category:"medicamento",
+                        frequency:"mensal",
+                        active:true
+                      });
+                      if(ins){
+                        const today2=new Date();
+                        const end2=new Date(endStr);
+                        const daysLeft2=Math.ceil((end2-today2)/86400000);
+                        const status2=daysLeft2<0?"vencido":daysLeft2<=7?"alerta":"ok";
+                        const cfg2=PREV_TYPES[ins.name]||{icon:"💊",label:ins.name};
+                        setPrev(p=>[...(p||[]),{...ins,daysLeft:daysLeft2,status:status2,endDateStr:end2.toLocaleDateString("pt-BR")}]);
+                      }
+                    }
+                    setShowPrevForm(false);setPrevProduct("");setPrevLastDate(new Date().toISOString().split("T")[0]);
+                  }catch(e){console.warn("savePrev:",e);}
+                  setPrevSaving(false);
+                }} disabled={prevSaving}
+                  style={{flex:2,padding:"11px",background:prevSaving?C.beige:C.coral,color:prevSaving?C.mid:C.white,borderRadius:12,fontSize:13,fontWeight:800,border:"none",cursor:"pointer",fontFamily:"inherit"}}>
+                  {prevSaving?"Salvando...":"✅ Registrar e criar lembrete"}
+                </button>
+              </div>
+            </div>
+          ):(
+            <button onClick={()=>setShowPrevForm(true)}
+              style={{width:"100%",padding:"13px",background:C.coral,color:C.white,borderRadius:13,fontSize:14,fontWeight:700,border:"none",cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",justifyContent:"center",gap:8}}>
+              <Plus size={15}/>Registrar Preventivo
+            </button>
+          )}
+        </div>}
+
     <BottomNav active={activeNav} onTab={onNavigate} t={t}/>
   </div>);}
 
@@ -714,7 +1218,7 @@ function HealthScreen({onNavigate,activeNav,t}){
 function ServicesScreen({onNavigate,activeNav,t,setProvider}){
   const [cat,setCat]=useState("todos");
   const cats=[["todos",t.allCat],["vet","🏥 Vet"],["banho","🛁"],["passeador","🦮"],["hotel","🏡"],["adestrador","🎓"]];
-  const providers=[{name:"Dr. Carlos Mendes",type:"vet",cat:"Veterinário",rating:4.9,rev:127,dist:"1,2 km",price:"R$120",e:"👨‍⚕️",ok:true},{name:"PetSpa Premium",type:"banho",cat:"Banho & Tosa",rating:4.8,rev:89,dist:"0,8 km",price:"R$65",e:"🛁",ok:true},{name:"João Passeador",type:"passeador",cat:"Passeador",rating:4.7,rev:56,dist:"2,1 km",price:"R$45",e:"🦮",ok:false},{name:"Hotel Bicho Feliz",type:"hotel",cat:"Hotel Pet",rating:4.6,rev:203,dist:"3,4 km",price:"R$89/noite",e:"🏡",ok:true},{name:"Dra. Ana Lima",type:"vet",cat:"Veterinária",rating:4.9,rev:218,dist:"4,0 km",price:"R$150",e:"👩‍⚕️",ok:true},{name:"Mundo Pet Training",type:"adestrador",cat:"Adestramento",rating:4.5,rev:42,dist:"5,2 km",price:"R$120",e:"🎓",ok:true}];
+  const providers=[{name:"Dr. Carlos Mendes",type:"vet",cat:"Veterinário",rating:4.9,rev:127,dist:"1,2 km",price:"R$120",e:"👨‍⚕️",ok:true,whatsapp:"11987650001"},{name:"PetSpa Premium",type:"banho",cat:"Banho & Tosa",rating:4.8,rev:89,dist:"0,8 km",price:"R$65",e:"🛁",ok:true},{name:"João Passeador",type:"passeador",cat:"Passeador",rating:4.7,rev:56,dist:"2,1 km",price:"R$45",e:"🦮",ok:false},{name:"Hotel Bicho Feliz",type:"hotel",cat:"Hotel Pet",rating:4.6,rev:203,dist:"3,4 km",price:"R$89/noite",e:"🏡",ok:true},{name:"Dra. Ana Lima",type:"vet",cat:"Veterinária",rating:4.9,rev:218,dist:"4,0 km",price:"R$150",e:"👩‍⚕️",ok:true},{name:"Mundo Pet Training",type:"adestrador",cat:"Adestramento",rating:4.5,rev:42,dist:"5,2 km",price:"R$120",e:"🎓",ok:true}];
   const filtered=cat==="todos"?providers:providers.filter(p=>p.type===cat);
   return(<div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column"}}>
     <div style={{flex:1,overflowY:"auto",background:C.beigeLight}}>
@@ -912,45 +1416,192 @@ function MapScreen({onNavigate,activeNav,t}){
 /* ─── PROFILE ─────────────────────────────────────────────────── */
 function ProfileScreen({onNavigate,activeNav,t,lang,setLang}){
   const [premium,setPremium]=useState(false);
-  const settings=[{i:"🔑",l:"QR Code do Thor",s:"Acesso rápido em emergências",a:"qrcode"},{i:"🔔",l:t.notifTitle.replace(" 🔔",""),s:"Lembretes e alertas",a:"notifications"},{i:"❓",l:"Perguntas Frequentes",s:"Dúvidas comuns sobre o app",a:"faq"},{i:"🔒",l:"Privacidade & LGPD",s:"Seus dados protegidos",a:null},{i:"📤",l:"Exportar prontuário",s:"PDF para veterinários",a:null},{i:"💬",l:"Suporte",s:"Chat e FAQ",a:null}];
+  const [pet,setPet]=useState(null);
+  const [userName,setUserName]=useState("");
+  const [surgeries,setSurgeries]=useState(null);
+  const [showSurgForm,setShowSurgForm]=useState(false);
+  const [surgName,setSurgName]=useState("");
+  const [surgDate,setSurgDate]=useState(new Date().toISOString().split("T")[0]);
+  const [surgNotes,setSurgNotes]=useState("");
+  const [surgSaving,setSurgSaving]=useState(false);
+
+  useEffect(()=>{
+    async function load(){
+      try{
+        const {data:{user}}=await sb.auth.getUser();
+        if(!user)return;
+        const {data:prof}=await sb.from("profiles").select("full_name").eq("id",user.id).single();
+        if(prof)setUserName(prof.full_name||"");
+        const {data:pets}=await sb.from("pets").select("*").eq("user_id",user.id).order("created_at",{ascending:false}).limit(1);
+        if(pets&&pets[0]) setPet(pets[0]);
+        // Cirurgias = medical_records com tipo surgery
+        const petId=pets&&pets[0]?pets[0].id:null;
+        if(petId){
+          const {data:rows}=await sb.from("medical_records").select("*")
+            .eq("pet_id",petId).eq("symptoms","__surgery__").order("consult_date",{ascending:false});
+          setSurgeries(rows||[]);
+        }else setSurgeries([]);
+      }catch(e){console.warn("Profile load:",e);}
+    }
+    load();
+  },[]);
+
+  async function saveSurgery(){
+    if(!surgName.trim())return;
+    setSurgSaving(true);
+    try{
+      const {data:{user}}=await sb.auth.getUser();
+      const {data:pets}=await sb.from("pets").select("id").eq("user_id",user.id).order("created_at",{ascending:false}).limit(1);
+      if(pets&&pets[0]){
+        const {data:ins}=await sb.from("medical_records").insert({
+          pet_id:pets[0].id, user_id:user.id,
+          consult_date:surgDate, vet_name:null,
+          symptoms:"__surgery__",  // marcador interno
+          diagnosis:surgName,
+          notes:surgNotes||null
+        }).select().single();
+        if(ins)setSurgeries(prev=>[ins,...(prev||[])]);
+      }
+      setSurgName("");setSurgDate(new Date().toISOString().split("T")[0]);setSurgNotes("");setShowSurgForm(false);
+    }catch(e){console.warn("saveSurgery:",e);}
+    setSurgSaving(false);
+  }
+
+  const petName=pet?.name||"";
+  const petBreed=pet?.breed||"";
+  const petAge=pet?.birth_date?Math.floor((Date.now()-new Date(pet.birth_date))/(365.25*86400000)):null;
+  const petAgeStr=petAge===null?"":petAge===0?"< 1 ano":petAge===1?"1 ano":`${petAge} anos`;
+  const petSex=pet?.sex==="macho"?"♂️ Macho":pet?.sex==="femea"?"♀️ Fêmea":null;
+  const petCastrado=pet?.notes?.startsWith("castrado:")?pet.notes.replace("castrado:","")==="sim"?"✅ Castrado":pet.notes.replace("castrado:","")==="nao"?"❌ Não castrado":null:null;
+  const petWeight=pet?.weight_kg?`${pet.weight_kg} kg`:null;
+  const infoItems=[petSex,petCastrado,petWeight].filter(Boolean);
+  const settings=[
+    {i:"🔑",l:`QR Code de ${petName||"seu pet"}`,s:"Acesso rápido em emergências",a:"qrcode"},
+    {i:"🔔",l:t.notifTitle.replace(" 🔔",""),s:"Lembretes e alertas",a:"notifications"},
+    {i:"❓",l:"Perguntas Frequentes",s:"Dúvidas comuns sobre o app",a:"faq"},
+    {i:"🔒",l:"Privacidade & LGPD",s:"Seus dados protegidos",a:null},
+    {i:"📤",l:"Exportar prontuário",s:"PDF para veterinários",a:null},
+    {i:"💬",l:"Suporte",s:"Chat e FAQ",a:null}
+  ];
+
   return(<div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column"}}>
     <div style={{flex:1,overflowY:"auto",background:C.beigeLight}}>
       <StatusBar/>
+      {/* Header do pet */}
       <div style={{background:C.white,padding:"0 24px 22px",textAlign:"center"}}>
         <div style={{display:"flex",flexDirection:"column",alignItems:"center",paddingBottom:16}}>
-          <div style={{width:76,height:76,borderRadius:"50%",background:`${C.coral}15`,border:`3px solid ${C.coral}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:34,marginBottom:11}}>🐶</div>
-          <div style={{fontFamily:"'Playfair Display', serif",fontSize:21,fontWeight:700,color:C.dark}}>Thor</div>
-          <div style={{fontSize:13,color:C.light,fontWeight:500,marginTop:3}}>Golden Retriever · 3 anos · Maria Silva</div>
-          <div style={{display:"flex",gap:22,marginTop:16,paddingTop:16,borderTop:`1px solid ${C.beige}`,width:"100%"}}>
-            {[["28 kg","Peso"],["Grande","Porte"],["Macho","Sexo"]].map(([v,l])=>(<div key={l} style={{flex:1,textAlign:"center"}}><div style={{fontSize:14,fontWeight:800,color:C.dark}}>{v}</div><div style={{fontSize:11,color:C.light,fontWeight:600,marginTop:2}}>{l}</div></div>))}
+          <div style={{width:76,height:76,borderRadius:"50%",background:`${C.coral}15`,border:`3px solid ${C.coral}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:34,marginBottom:11}}>
+            {pet?.avatar_url||"🐾"}
           </div>
+          <div style={{fontFamily:"'Playfair Display', serif",fontSize:21,fontWeight:700,color:C.dark}}>
+            {petName||<span style={{color:C.light}}>Carregando...</span>}
+          </div>
+          <div style={{fontSize:13,color:C.light,fontWeight:500,marginTop:3}}>
+            {[petBreed,petAgeStr,userName].filter(Boolean).join(" · ")||"—"}
+          </div>
+          {infoItems.length>0&&(
+            <div style={{display:"flex",gap:16,marginTop:16,paddingTop:16,borderTop:`1px solid ${C.beige}`,width:"100%",justifyContent:"center",flexWrap:"wrap"}}>
+              {infoItems.map((v,i)=>(
+                <div key={i} style={{textAlign:"center"}}>
+                  <div style={{fontSize:13,fontWeight:700,color:C.dark}}>{v}</div>
+                </div>
+              ))}
+            </div>
+          )}
+          {infoItems.length===0&&pet&&(
+            <div style={{marginTop:12,fontSize:12,color:C.light,fontStyle:"italic"}}>
+              Complete o perfil adicionando sexo e peso
+            </div>
+          )}
         </div>
       </div>
+
       <div style={{padding:"18px 24px",display:"flex",flexDirection:"column",gap:14}}>
-        {/* Plan */}
+
+        {/* 🏥 CIRURGIAS */}
+        <div style={{background:C.white,borderRadius:18,padding:"15px",boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
+            <div style={{fontSize:11,fontWeight:800,color:C.mid,textTransform:"uppercase",letterSpacing:1}}>🏥 Cirurgias</div>
+            <button onClick={()=>setShowSurgForm(!showSurgForm)}
+              style={{background:`${C.coral}15`,border:"none",color:C.coral,borderRadius:9,padding:"4px 10px",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>
+              + Registrar
+            </button>
+          </div>
+          {showSurgForm&&(
+            <div style={{background:C.beigeLight,borderRadius:12,padding:"13px",marginBottom:12}}>
+              <div style={{fontSize:11,fontWeight:700,color:C.mid,marginBottom:6}}>PROCEDIMENTO</div>
+              <div style={{background:C.white,borderRadius:10,padding:"10px 13px",marginBottom:10}}>
+                <input value={surgName} onChange={e=>setSurgName(e.target.value)} placeholder="Ex: Castração, Ortopedia, Remoção de tumor..."
+                  style={{width:"100%",fontSize:13,color:C.dark,background:"transparent",border:"none",outline:"none",fontFamily:"inherit"}}/>
+              </div>
+              <div style={{fontSize:11,fontWeight:700,color:C.mid,marginBottom:6}}>DATA</div>
+              <div style={{background:C.white,borderRadius:10,padding:"10px 13px",marginBottom:10}}>
+                <input type="date" value={surgDate} onChange={e=>setSurgDate(e.target.value)}
+                  style={{width:"100%",fontSize:13,color:C.dark,background:"transparent",border:"none",outline:"none",fontFamily:"inherit"}}/>
+              </div>
+              <div style={{fontSize:11,fontWeight:700,color:C.mid,marginBottom:6}}>OBSERVAÇÕES</div>
+              <div style={{background:C.white,borderRadius:10,padding:"10px 13px",marginBottom:12}}>
+                <input value={surgNotes} onChange={e=>setSurgNotes(e.target.value)} placeholder="Clínica, veterinário, intercorrências..."
+                  style={{width:"100%",fontSize:13,color:C.dark,background:"transparent",border:"none",outline:"none",fontFamily:"inherit"}}/>
+              </div>
+              <div style={{display:"flex",gap:8}}>
+                <button onClick={()=>setShowSurgForm(false)} style={{flex:1,padding:"10px",background:C.beige,color:C.mid,borderRadius:10,fontSize:12,fontWeight:700,border:"none",cursor:"pointer",fontFamily:"inherit"}}>Cancelar</button>
+                <button onClick={saveSurgery} disabled={surgSaving}
+                  style={{flex:2,padding:"10px",background:surgSaving?C.beige:C.coral,color:surgSaving?C.mid:C.white,borderRadius:10,fontSize:12,fontWeight:800,border:"none",cursor:"pointer",fontFamily:"inherit"}}>
+                  {surgSaving?"Salvando...":"✅ Salvar Cirurgia"}
+                </button>
+              </div>
+            </div>
+          )}
+          {surgeries===null&&<div style={{textAlign:"center",padding:"12px",color:C.light,fontSize:12}}>Carregando...</div>}
+          {surgeries!==null&&surgeries.length===0&&!showSurgForm&&(
+            <div style={{textAlign:"center",padding:"12px",color:C.light,fontSize:12}}>Nenhuma cirurgia registrada.</div>
+          )}
+          {(surgeries||[]).map((s,i)=>(
+            <div key={i} style={{display:"flex",alignItems:"flex-start",gap:11,padding:"10px 0",borderTop:i>0?`1px solid ${C.beige}`:"none"}}>
+              <div style={{width:34,height:34,borderRadius:9,background:"#FFF3E0",display:"flex",alignItems:"center",justifyContent:"center",fontSize:15,flexShrink:0}}>🏥</div>
+              <div style={{flex:1}}>
+                <div style={{fontSize:13,fontWeight:700,color:C.dark}}>{s.diagnosis}</div>
+                <div style={{fontSize:11,color:C.light,fontWeight:500,marginTop:2}}>{new Date(s.consult_date+"T12:00:00").toLocaleDateString("pt-BR")}{s.notes?" · "+s.notes:""}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Plano */}
         <div style={{background:premium?`linear-gradient(130deg,${C.coral} 0%,${C.coralDark} 100%)`:C.white,borderRadius:18,padding:"16px",boxShadow:"0 2px 10px rgba(0,0,0,0.08)"}}>
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-            <div><div style={{fontSize:11,color:premium?"rgba(255,255,255,0.7)":C.light,fontWeight:700,textTransform:"uppercase",letterSpacing:1,marginBottom:3}}>{t.planLabel}</div>
+            <div>
+              <div style={{fontSize:11,color:premium?"rgba(255,255,255,0.7)":C.light,fontWeight:700,textTransform:"uppercase",letterSpacing:1,marginBottom:3}}>{t.planLabel}</div>
               <div style={{fontFamily:"'Playfair Display', serif",fontSize:19,fontWeight:700,color:premium?C.white:C.dark}}>{premium?t.planPremium:t.planFree}</div>
               <div style={{fontSize:12,color:premium?"rgba(255,255,255,0.65)":C.light,fontWeight:500,marginTop:3}}>{premium?"Todos os recursos desbloqueados":"R$19,90/mês"}</div>
             </div>
             <button onClick={()=>onNavigate("premium")} style={{padding:"9px 16px",background:premium?"rgba(255,255,255,0.2)":C.coral,color:C.white,borderRadius:13,fontSize:13,fontWeight:700,border:"none",cursor:"pointer",fontFamily:"inherit"}}>{premium?t.activeBtn:t.upgradeBtn}</button>
           </div>
         </div>
-        {/* Pets */}
+
+        {/* Meus Pets */}
         <div style={{background:C.white,borderRadius:18,padding:"15px",boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}>
           <div style={{fontSize:11,fontWeight:800,color:C.mid,textTransform:"uppercase",letterSpacing:1,marginBottom:13}}>{t.petsSection}</div>
           <div style={{display:"flex",gap:11}}>
-            <div style={{textAlign:"center"}}><div style={{width:50,height:50,borderRadius:14,background:`${C.coral}15`,border:`2px solid ${C.coral}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:22}}>🐶</div><div style={{fontSize:11,fontWeight:700,color:C.dark,marginTop:4}}>Thor</div></div>
-            <div style={{textAlign:"center"}}><div style={{width:50,height:50,borderRadius:14,background:C.beige,border:`2px dashed ${C.light}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,color:C.light}}>+</div><div style={{fontSize:11,fontWeight:600,color:C.light,marginTop:4}}>{t.addPet}</div></div>
+            <div style={{textAlign:"center"}}>
+              <div style={{width:50,height:50,borderRadius:14,background:`${C.coral}15`,border:`2px solid ${C.coral}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:22}}>{pet?.avatar_url||"🐾"}</div>
+              <div style={{fontSize:11,fontWeight:700,color:C.dark,marginTop:4}}>{petName||"—"}</div>
+            </div>
+            <div style={{textAlign:"center"}}>
+              <div style={{width:50,height:50,borderRadius:14,background:C.beige,border:`2px dashed ${C.light}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,color:C.light}}>+</div>
+              <div style={{fontSize:11,fontWeight:600,color:C.light,marginTop:4}}>{t.addPet}</div>
+            </div>
           </div>
         </div>
-        {/* Language */}
+
+        {/* Idioma */}
         <div style={{background:C.white,borderRadius:18,padding:"15px",boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}>
           <div style={{fontSize:11,fontWeight:800,color:C.mid,textTransform:"uppercase",letterSpacing:1,marginBottom:13,display:"flex",alignItems:"center",gap:6}}><Globe size={14} color={C.mid}/>{t.langLabel}</div>
           <LangPicker lang={lang} setLang={setLang} dark/>
         </div>
-        {/* Settings */}
+
+        {/* Configurações */}
         <div style={{background:C.white,borderRadius:18,overflow:"hidden",boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}>
           {settings.map((item,i)=>(<div key={i} onClick={()=>item.a&&onNavigate(item.a)} style={{display:"flex",alignItems:"center",gap:13,padding:"13px 15px",borderBottom:i<settings.length-1?`1px solid ${C.beige}`:"none",cursor:item.a?"pointer":"default"}}>
             <div style={{width:34,height:34,borderRadius:9,background:C.beige,display:"flex",alignItems:"center",justifyContent:"center",fontSize:15,flexShrink:0}}>{item.i}</div>
@@ -966,21 +1617,130 @@ function ProfileScreen({onNavigate,activeNav,t,lang,setLang}){
 
 /* ─── NOTIFICATIONS ───────────────────────────────────────────── */
 function NotificationsScreen({onNavigate,activeNav,t}){
-  const groups=[{label:t.gUrgent,items:[{i:"💉",title:t.rem1,body:t.rem1s,time:"agora",unread:true},{i:"📅",title:"Consulta amanhã",body:"Lembrete: consulta com Dr. Carlos Mendes às 09:00",time:"há 2h",unread:true}]},{label:t.gToday,items:[{i:"💊",title:t.rem3,body:"Está na hora do vermífugo trimestral",time:"há 4h",unread:false},{i:"⭐",title:"Avalie o último serviço",body:"Como foi o PetSpa Premium?",time:"há 6h",unread:false}]},{label:t.gWeek,items:[{i:"🎂",title:"Thor faz aniversário!",body:"Faltam 5 dias. 🐶🎉",time:"há 1d",unread:false},{i:"🩸",title:"Campanha de doação",body:"Hospital Vet. USP com campanha de coleta esta semana.",time:"há 2d",unread:false}]}];
+  const [notifs,setNotifs]=useState(null);
+  const [marking,setMarking]=useState(null);
+
+  useEffect(()=>{
+    loadNotifs();
+  },[]);
+
+  async function loadNotifs(){
+    try{
+      const {data:{user}}=await sb.auth.getUser();
+      if(!user){setNotifs([]);return;}
+      const {data:rows}=await sb.from('notifications')
+        .select('*').eq('user_id',user.id)
+        .order('urgent',{ascending:false})
+        .order('created_at',{ascending:false});
+      setNotifs(rows||[]);
+    }catch(e){console.warn("loadNotifs:",e);setNotifs([]);}
+  }
+
+  async function markRead(id){
+    setMarking(id);
+    try{
+      await sb.from('notifications').update({is_read:true,updated_at:new Date().toISOString()}).eq('id',id);
+      setNotifs(prev=>prev.map(n=>n.id===id?{...n,is_read:true}:n));
+    }catch(e){console.warn("markRead:",e);}
+    setMarking(null);
+  }
+
+  async function markAllRead(){
+    setMarking('all');
+    try{
+      const {data:{user}}=await sb.auth.getUser();
+      if(user){
+        await sb.from('notifications').update({is_read:true,updated_at:new Date().toISOString()}).eq('user_id',user.id).eq('is_read',false);
+        setNotifs(prev=>prev.map(n=>({...n,is_read:true})));
+      }
+    }catch(e){console.warn("markAllRead:",e);}
+    setMarking(null);
+  }
+
+  const unread=(notifs||[]).filter(n=>!n.is_read);
+  const urgent=(notifs||[]).filter(n=>n.urgent&&!n.is_read);
+  const nonUrgent=(notifs||[]).filter(n=>!n.urgent&&!n.is_read);
+  const read=(notifs||[]).filter(n=>n.is_read);
+
+  const borderColor=n=>n.color==="red"?C.coral:n.color==="yellow"?"#E65100":n.color==="green"?C.green:C.light;
+  const bgColor=n=>n.color==="red"?`${C.coral}15`:n.color==="yellow"?"#FFF3E0":n.color==="green"?`${C.green}15`:C.beige;
+
+  function NotifCard({n}){
+    return(
+      <div style={{background:C.white,borderRadius:15,padding:"13px 15px",display:"flex",gap:11,boxShadow:"0 2px 8px rgba(0,0,0,0.05)",borderLeft:n.is_read?"4px solid transparent":`4px solid ${borderColor(n)}`,opacity:n.is_read?0.6:1}}>
+        <div style={{width:40,height:40,borderRadius:11,background:n.is_read?C.beige:bgColor(n),display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>{n.icon||"🔔"}</div>
+        <div style={{flex:1,minWidth:0}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:3,gap:8}}>
+            <div style={{fontSize:13,fontWeight:n.is_read?600:800,color:n.is_read?C.light:C.dark,lineHeight:1.3,flex:1}}>{n.title}</div>
+            {!n.is_read&&<div style={{width:8,height:8,borderRadius:"50%",background:borderColor(n),flexShrink:0,marginTop:4}}/>}
+          </div>
+          {n.body&&<div style={{fontSize:12,color:C.mid,fontWeight:500,lineHeight:1.4,marginBottom:6}}>{n.body}</div>}
+          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+            <div style={{fontSize:10,color:C.light,fontWeight:600}}>{new Date(n.created_at).toLocaleDateString("pt-BR")}</div>
+            {!n.is_read&&(
+              <button onClick={()=>markRead(n.id)} disabled={marking===n.id}
+                style={{background:"none",border:`1px solid ${C.coral}`,color:C.coral,borderRadius:8,padding:"3px 10px",fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:"inherit",opacity:marking===n.id?0.5:1}}>
+                {marking===n.id?"...":"✓ Lido"}
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return(<div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column"}}>
     <div style={{flex:1,overflowY:"auto",background:C.beigeLight}}>
       <StatusBar/>
-      <div style={{padding:"0 24px 20px"}}><SubHeader title={t.notifTitle} onBack={()=>onNavigate("home")}/></div>
-      <div style={{padding:"0 24px 32px",display:"flex",flexDirection:"column",gap:22}}>
-        {groups.map((g,gi)=>(<div key={gi}><div style={{fontSize:11,fontWeight:800,color:C.mid,textTransform:"uppercase",letterSpacing:1,marginBottom:11}}>{g.label}</div>
-          <div style={{display:"flex",flexDirection:"column",gap:8}}>{g.items.map((item,i)=>(<div key={i} style={{background:C.white,borderRadius:15,padding:"13px 15px",display:"flex",gap:11,boxShadow:"0 2px 8px rgba(0,0,0,0.05)",borderLeft:item.unread?`4px solid ${C.coral}`:"4px solid transparent"}}>
-            <div style={{width:38,height:38,borderRadius:11,background:item.unread?`${C.coral}15`:C.beige,display:"flex",alignItems:"center",justifyContent:"center",fontSize:17,flexShrink:0}}>{item.i}</div>
-            <div style={{flex:1}}><div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:3}}><div style={{fontSize:14,fontWeight:700,color:C.dark,lineHeight:1.2}}>{item.title}</div>{item.unread&&<div style={{width:8,height:8,borderRadius:"50%",background:C.coral,flexShrink:0,marginTop:4,marginLeft:8}}/>}</div>
-              <div style={{fontSize:12,color:C.mid,fontWeight:500,lineHeight:1.4,marginBottom:3}}>{item.body}</div>
-              <div style={{fontSize:11,color:C.light,fontWeight:600}}>{item.time}</div>
-            </div>
-          </div>))}</div>
-        </div>))}
+      <div style={{padding:"0 24px 0"}}><SubHeader title={t.notifTitle} onBack={()=>onNavigate("home")}/></div>
+
+      {/* Header com contagem e botão marcar todos */}
+      <div style={{padding:"0 24px 16px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+        <div style={{fontSize:13,color:C.mid,fontWeight:600}}>
+          {notifs===null?"Carregando...":unread.length>0?`${unread.length} não lida${unread.length>1?"s":""}`:
+          "Tudo lido ✓"}
+        </div>
+        {unread.length>0&&<button onClick={markAllRead} disabled={marking==="all"}
+          style={{background:`${C.coral}15`,border:"none",color:C.coral,borderRadius:10,padding:"6px 12px",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit",opacity:marking==="all"?0.5:1}}>
+          {marking==="all"?"Marcando...":"✓ Marcar todas como lidas"}
+        </button>}
+      </div>
+
+      <div style={{padding:"0 24px 100px",display:"flex",flexDirection:"column",gap:20}}>
+        {notifs===null&&(
+          <div style={{display:"flex",justifyContent:"center",padding:"40px"}}>
+            <div style={{width:28,height:28,border:`3px solid ${C.beige}`,borderTop:`3px solid ${C.coral}`,borderRadius:"50%",animation:"spin 0.8s linear infinite"}}/>
+          </div>
+        )}
+
+        {notifs!==null&&notifs.length===0&&(
+          <div style={{textAlign:"center",padding:"48px 16px"}}>
+            <div style={{fontSize:48,marginBottom:12}}>✅</div>
+            <div style={{fontFamily:"'Playfair Display',serif",fontSize:18,fontWeight:700,color:C.dark,marginBottom:6}}>Sem notificações</div>
+            <div style={{fontSize:13,color:C.light}}>Quando houver alertas de saúde, eles aparecerão aqui.</div>
+          </div>
+        )}
+
+        {urgent.length>0&&(
+          <div>
+            <div style={{fontSize:11,fontWeight:800,color:C.coral,textTransform:"uppercase",letterSpacing:1,marginBottom:10}}>🔴 Urgente — {urgent.length} alerta{urgent.length>1?"s":""}</div>
+            <div style={{display:"flex",flexDirection:"column",gap:8}}>{urgent.map(n=><NotifCard key={n.id} n={n}/>)}</div>
+          </div>
+        )}
+
+        {nonUrgent.length>0&&(
+          <div>
+            <div style={{fontSize:11,fontWeight:800,color:"#E65100",textTransform:"uppercase",letterSpacing:1,marginBottom:10}}>⚠️ Atenção — {nonUrgent.length} item{nonUrgent.length>1?"s":""}</div>
+            <div style={{display:"flex",flexDirection:"column",gap:8}}>{nonUrgent.map(n=><NotifCard key={n.id} n={n}/>)}</div>
+          </div>
+        )}
+
+        {read.length>0&&(
+          <div>
+            <div style={{fontSize:11,fontWeight:800,color:C.light,textTransform:"uppercase",letterSpacing:1,marginBottom:10}}>✓ Lidas — {read.length}</div>
+            <div style={{display:"flex",flexDirection:"column",gap:8}}>{read.map(n=><NotifCard key={n.id} n={n}/>)}</div>
+          </div>
+        )}
       </div>
     </div>
     <BottomNav active={activeNav} onTab={onNavigate} t={t}/>
@@ -1025,9 +1785,777 @@ function AddVaccineScreen({onNavigate,t}){
     }} style={{width:"100%",padding:"16px",background:C.coral,color:C.white,borderRadius:17,fontSize:15,fontWeight:800,border:"none",cursor:"pointer",fontFamily:"inherit"}}>Salvar no Prontuário</button>
   </div></div>);}
 
+/* ─── WEIGHT SCREEN ───────────────────────────────────────────── */
+function WeightScreen({onNavigate}){
+  const [pet,setPet]=useState({name:"",breed:"",avatar:"🐾"});
+  const [records,setRecords]=useState(null);
+  const [showForm,setShowForm]=useState(false);
+  const [newWeight,setNewWeight]=useState("");
+  const [newDate,setNewDate]=useState(new Date().toISOString().split("T")[0]);
+  const [newNotes,setNewNotes]=useState("");
+  const [saving,setSaving]=useState(false);
+
+  useEffect(()=>{loadData();},[]);
+
+  async function loadData(){
+    try{
+      const {data:{user}}=await sb.auth.getUser();
+      if(!user){setRecords([]);return;}
+      const {data:pets}=await sb.from("pets").select("id,name,breed,avatar_url").eq("user_id",user.id).order("created_at",{ascending:false}).limit(1);
+      if(!pets||!pets[0]){setRecords([]);return;}
+      const p=pets[0];
+      setPet({name:p.name||"",breed:p.breed||"",avatar:p.avatar_url||"🐾"});
+      const {data:rows}=await sb.from("weight_records").select("*").eq("pet_id",p.id).order("measured_at",{ascending:true});
+      setRecords(rows||[]);
+    }catch(e){console.warn("WeightScreen:",e);setRecords([]);}
+  }
+
+  async function saveWeight(){
+    if(!newWeight||isNaN(Number(newWeight)))return;
+    setSaving(true);
+    try{
+      const {data:{user}}=await sb.auth.getUser();
+      const {data:pets}=await sb.from("pets").select("id").eq("user_id",user.id).order("created_at",{ascending:false}).limit(1);
+      if(pets&&pets[0]){
+        const {data:ins}=await sb.from("weight_records").insert({
+          pet_id:pets[0].id,user_id:user.id,
+          weight_kg:Number(newWeight),
+          measured_at:newDate,
+          notes:newNotes||null
+        }).select().single();
+        if(ins){
+          setRecords(prev=>[...(prev||[]),ins].sort((a,b)=>a.measured_at>b.measured_at?1:-1));
+          // Atualizar peso no pets table
+          await sb.from("pets").update({weight_kg:Number(newWeight)}).eq("id",pets[0].id);
+        }
+        setNewWeight("");setNewNotes("");setShowForm(false);
+      }
+    }catch(e){console.warn("saveWeight:",e);}
+    setSaving(false);
+  }
+
+  // Chart SVG
+  function WeightChart(){
+    if(!records||records.length===0)return null;
+    const ideal=BREED_WEIGHT[pet.breed]||{min:5,max:30};
+    const ws=records.map(r=>Number(r.weight_kg));
+    const allW=[...ws,ideal.min,ideal.max];
+    const minW=Math.max(0,Math.min(...allW)-3);
+    const maxW=Math.max(...allW)+3;
+    const W=320,H=160,PL=40,PR=20,PT=16,PB=36;
+    const cW=W-PL-PR,cH=H-PT-PB;
+    const dates=records.map(r=>new Date(r.measured_at).getTime());
+    const minD=dates.length>1?Math.min(...dates):dates[0]-86400000*30;
+    const maxD=dates.length>1?Math.max(...dates):dates[0]+86400000*30;
+    const xS=d=>PL+((d-minD)/(maxD-minD||1))*cW;
+    const yS=w=>PT+cH-((w-minW)/(maxW-minW))*cH;
+    const yIdMin=yS(ideal.min),yIdMax=yS(ideal.max);
+    const linePts=records.map(r=>`${xS(new Date(r.measured_at).getTime())},${yS(Number(r.weight_kg))}`).join(" ");
+    const yticks=[minW,minW+(maxW-minW)/2,maxW].map(v=>Math.round(v));
+    const xticks=records.length<=4?records:records.filter((_,i)=>i===0||i===records.length-1||i%Math.ceil(records.length/3)===0);
+    return(
+      <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{width:"100%",height:"auto"}}>
+        {/* Zona ideal */}
+        <rect x={PL} y={yIdMax} width={cW} height={yIdMin-yIdMax} fill="#A8E6CF" opacity="0.3"/>
+        <line x1={PL} y1={yIdMin} x2={PL+cW} y2={yIdMin} stroke="#A8E6CF" strokeWidth="1.5" strokeDasharray="4,3"/>
+        <line x1={PL} y1={yIdMax} x2={PL+cW} y2={yIdMax} stroke="#A8E6CF" strokeWidth="1.5" strokeDasharray="4,3"/>
+        {/* Eixo Y */}
+        {yticks.map(v=>(
+          <g key={v}>
+            <line x1={PL-3} y1={yS(v)} x2={PL+cW} y2={yS(v)} stroke="#E0D8CC" strokeWidth="0.8"/>
+            <text x={PL-6} y={yS(v)+4} fontSize="9" fill="#9B8B7A" textAnchor="end">{v}kg</text>
+          </g>
+        ))}
+        {/* Eixo X */}
+        {xticks.map(r=>(
+          <text key={r.id} x={xS(new Date(r.measured_at).getTime())} y={H-6} fontSize="8" fill="#9B8B7A" textAnchor="middle">
+            {new Date(r.measured_at+"T12:00:00").toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit"})}
+          </text>
+        ))}
+        {/* Linha de peso */}
+        {records.length>1&&<polyline points={linePts} fill="none" stroke="#C1714A" strokeWidth="2.5" strokeLinejoin="round"/>}
+        {/* Dots */}
+        {records.map(r=>{
+          const cx=xS(new Date(r.measured_at).getTime());
+          const cy=yS(Number(r.weight_kg));
+          const w=Number(r.weight_kg);
+          const ok=w>=ideal.min&&w<=ideal.max;
+          return(<g key={r.id}>
+            <circle cx={cx} cy={cy} r={5} fill={ok?"#A8E6CF":w<ideal.min?"#FFD580":"#FF8A80"} stroke="white" strokeWidth="2"/>
+            <text x={cx} y={cy-9} fontSize="8.5" fill="#5C4A3A" textAnchor="middle" fontWeight="700">{w}kg</text>
+          </g>);
+        })}
+        {/* Label zona ideal */}
+        <text x={PL+cW-4} y={yIdMin-5} fontSize="8" fill="#4CAF50" textAnchor="end">ideal</text>
+      </svg>
+    );
+  }
+
+  const ideal=BREED_WEIGHT[pet.breed];
+  const lastW=records&&records.length>0?Number(records[records.length-1].weight_kg):null;
+  const statusW=lastW&&ideal?(lastW<ideal.min?"abaixo":lastW>ideal.max?"acima":"ideal"):null;
+
+  return(<div style={{position:"absolute",inset:0,background:C.beigeLight,display:"flex",flexDirection:"column"}}>
+    <div style={{flex:1,overflowY:"auto"}}>
+      <div style={{background:`linear-gradient(130deg,${C.coral} 0%,${C.coralDark} 100%)`,padding:"0 24px 22px",position:"relative",overflow:"hidden"}}>
+        <div style={{position:"absolute",right:-35,top:-35,width:140,height:140,borderRadius:"50%",background:"rgba(255,255,255,0.07)"}}/>
+        <StatusBar light/>
+        <button onClick={()=>onNavigate("health")} style={{background:"rgba(255,255,255,0.14)",border:"none",display:"flex",alignItems:"center",gap:7,color:C.white,marginBottom:14,fontSize:13,fontWeight:600,borderRadius:10,padding:"6px 12px",cursor:"pointer",fontFamily:"inherit"}}><ArrowLeft size={15}/>Voltar</button>
+        <div style={{display:"flex",alignItems:"center",gap:12}}>
+          <div style={{fontSize:28}}>{pet.avatar}</div>
+          <div>
+            <div style={{fontFamily:"'Playfair Display',serif",fontSize:20,fontWeight:700,color:C.white}}>Peso de {pet.name||"..."}</div>
+            <div style={{color:"rgba(255,255,255,0.7)",fontSize:12,fontWeight:500}}>{pet.breed||"Evolução e Controle"}</div>
+          </div>
+        </div>
+        {lastW&&<div style={{marginTop:14,display:"flex",gap:10}}>
+          <div style={{background:"rgba(255,255,255,0.15)",borderRadius:12,padding:"8px 14px",textAlign:"center"}}>
+            <div style={{fontSize:20,fontWeight:800,color:C.white}}>{lastW}kg</div>
+            <div style={{fontSize:10,color:"rgba(255,255,255,0.7)",fontWeight:600}}>Atual</div>
+          </div>
+          {ideal&&<div style={{background:"rgba(255,255,255,0.15)",borderRadius:12,padding:"8px 14px",textAlign:"center"}}>
+            <div style={{fontSize:14,fontWeight:700,color:statusW==="ideal"?"#A8E6CF":statusW==="acima"?"#FF8A80":"#FFD580"}}>{statusW==="ideal"?"✅ Ideal":statusW==="acima"?"⚠️ Acima":statusW==="abaixo"?"⚠️ Abaixo":"—"}</div>
+            <div style={{fontSize:10,color:"rgba(255,255,255,0.7)",fontWeight:600}}>Ideal: {ideal.min}–{ideal.max}kg</div>
+          </div>}
+        </div>}
+      </div>
+
+      <div style={{padding:"18px 20px 100px"}}>
+        {/* Gráfico */}
+        <div style={{background:C.white,borderRadius:18,padding:"16px",marginBottom:14,boxShadow:"0 2px 8px rgba(0,0,0,0.06)"}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
+            <div style={{fontFamily:"'Playfair Display',serif",fontSize:15,fontWeight:700,color:C.dark}}>📊 Evolução do Peso</div>
+            {ideal&&<div style={{fontSize:11,color:C.green,fontWeight:700,display:"flex",alignItems:"center",gap:4}}><div style={{width:10,height:10,borderRadius:2,background:`${C.green}40`,border:`1.5px dashed ${C.green}`}}/> Zona ideal</div>}
+          </div>
+          {records===null&&<div style={{display:"flex",justifyContent:"center",padding:"24px"}}><div style={{width:24,height:24,border:`3px solid ${C.beige}`,borderTop:`3px solid ${C.coral}`,borderRadius:"50%",animation:"spin 0.8s linear infinite"}}/></div>}
+          {records!==null&&records.length===0&&<div style={{textAlign:"center",padding:"24px",color:C.light,fontSize:13}}>Nenhuma pesagem registrada ainda.</div>}
+          {records!==null&&records.length>0&&<WeightChart/>}
+        </div>
+
+        {/* Histórico */}
+        {records!==null&&records.length>0&&(
+          <div style={{background:C.white,borderRadius:18,padding:"15px",marginBottom:14,boxShadow:"0 2px 8px rgba(0,0,0,0.06)"}}>
+            <div style={{fontSize:11,fontWeight:800,color:C.mid,textTransform:"uppercase",letterSpacing:1,marginBottom:10}}>HISTÓRICO DE PESAGENS</div>
+            <div style={{display:"flex",flexDirection:"column",gap:8}}>
+              {[...(records||[])].reverse().slice(0,8).map((r,i)=>{
+                const w=Number(r.weight_kg);
+                const ok=ideal&&w>=ideal.min&&w<=ideal.max;
+                const above=ideal&&w>ideal.max;
+                return(<div key={r.id} style={{display:"flex",alignItems:"center",gap:12,padding:"8px 0",borderBottom:i<Math.min(7,records.length-1)?`1px solid ${C.beige}`:"none"}}>
+                  <div style={{width:36,height:36,borderRadius:10,background:ok?`${C.green}15`:above?`${C.coral}15`:"#FFF3E0",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16}}>⚖️</div>
+                  <div style={{flex:1}}>
+                    <div style={{fontSize:14,fontWeight:700,color:C.dark}}>{w} kg</div>
+                    {r.notes&&<div style={{fontSize:11,color:C.light,fontWeight:500}}>{r.notes}</div>}
+                  </div>
+                  <div style={{textAlign:"right"}}>
+                    <div style={{fontSize:12,color:C.mid,fontWeight:600}}>{new Date(r.measured_at+"T12:00:00").toLocaleDateString("pt-BR")}</div>
+                    <div style={{fontSize:10,fontWeight:700,color:ok?C.green:above?C.coral:"#E65100"}}>{ok?"✅ Ideal":above?"⚠️ Acima":"⚠️ Abaixo"}</div>
+                  </div>
+                </div>);
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Formulário de registro */}
+        {showForm?(
+          <div style={{background:C.white,borderRadius:18,padding:"16px",marginBottom:14,boxShadow:"0 2px 8px rgba(0,0,0,0.06)"}}>
+            <div style={{fontSize:13,fontWeight:800,color:C.dark,marginBottom:14}}>⚖️ Registrar Pesagem</div>
+            <div style={{marginBottom:12}}>
+              <div style={{fontSize:11,fontWeight:700,color:C.mid,textTransform:"uppercase",letterSpacing:1,marginBottom:7}}>PESO (KG)</div>
+              <div style={{background:C.beige,borderRadius:12,padding:"13px 15px",display:"flex",alignItems:"center",gap:8}}>
+                <input type="number" step="0.1" value={newWeight} onChange={e=>setNewWeight(e.target.value)} placeholder="Ex: 28.5"
+                  style={{flex:1,fontSize:18,fontWeight:700,color:C.dark,background:"transparent",border:"none",outline:"none",fontFamily:"inherit"}}/>
+                <span style={{fontSize:13,color:C.mid,fontWeight:600}}>kg</span>
+              </div>
+              {newWeight&&ideal&&(
+                <div style={{fontSize:11,fontWeight:700,marginTop:6,color:Number(newWeight)>=ideal.min&&Number(newWeight)<=ideal.max?C.green:C.coral}}>
+                  {Number(newWeight)>=ideal.min&&Number(newWeight)<=ideal.max?"✅ Dentro do peso ideal para a raça":`⚠️ Peso ideal: ${ideal.min}–${ideal.max}kg`}
+                </div>
+              )}
+            </div>
+            <div style={{marginBottom:12}}>
+              <div style={{fontSize:11,fontWeight:700,color:C.mid,textTransform:"uppercase",letterSpacing:1,marginBottom:7}}>DATA DA PESAGEM</div>
+              <div style={{background:C.beige,borderRadius:12,padding:"11px 14px"}}>
+                <input type="date" value={newDate} onChange={e=>setNewDate(e.target.value)}
+                  style={{width:"100%",fontSize:13,color:C.dark,background:"transparent",border:"none",outline:"none",fontFamily:"inherit"}}/>
+              </div>
+            </div>
+            <div style={{marginBottom:14}}>
+              <div style={{fontSize:11,fontWeight:700,color:C.mid,textTransform:"uppercase",letterSpacing:1,marginBottom:7}}>OBSERVAÇÃO</div>
+              <div style={{background:C.beige,borderRadius:12,padding:"11px 14px"}}>
+                <input value={newNotes} onChange={e=>setNewNotes(e.target.value)} placeholder="Ex: Após consulta, em jejum..."
+                  style={{width:"100%",fontSize:13,color:C.dark,background:"transparent",border:"none",outline:"none",fontFamily:"inherit"}}/>
+              </div>
+            </div>
+            <div style={{display:"flex",gap:8}}>
+              <button onClick={()=>setShowForm(false)} style={{flex:1,padding:"12px",background:C.beige,color:C.mid,borderRadius:13,fontSize:13,fontWeight:700,border:"none",cursor:"pointer",fontFamily:"inherit"}}>Cancelar</button>
+              <button onClick={saveWeight} disabled={saving||!newWeight}
+                style={{flex:2,padding:"12px",background:saving||!newWeight?C.beige:C.coral,color:saving||!newWeight?C.mid:C.white,borderRadius:13,fontSize:13,fontWeight:800,border:"none",cursor:"pointer",fontFamily:"inherit"}}>
+                {saving?"Salvando...":"✅ Registrar Peso"}
+              </button>
+            </div>
+          </div>
+        ):(
+          <button onClick={()=>setShowForm(true)}
+            style={{width:"100%",padding:"16px",background:C.coral,color:C.white,borderRadius:17,fontSize:15,fontWeight:800,border:"none",cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",justifyContent:"center",gap:8}}>
+            <Plus size={16}/>Registrar Pesagem
+          </button>
+        )}
+      </div>
+    </div>
+  </div>);}
+
+/* ─── TELECONSULT SCREEN ──────────────────────────────────────── */
+function TeleconsultScreen({onNavigate}){
+  const [step,setStep]=useState(0); // 0=escolher vet, 1=sintomas, 2=aguardando, 3=em consulta
+  const [selVet,setSelVet]=useState(null);
+  const [symptoms,setSymptoms]=useState("");
+  const [timer,setTimer]=useState(0);
+  const [petName,setPetName]=useState("");
+
+  useEffect(()=>{
+    sb.auth.getUser().then(({data:{user}})=>{
+      if(!user)return;
+      sb.from("pets").select("name").eq("user_id",user.id).order("created_at",{ascending:false}).limit(1)
+        .then(({data})=>{if(data&&data[0])setPetName(data[0].name||"");});
+    });
+  },[]);
+
+  useEffect(()=>{
+    if(step!==2)return;
+    const t=setTimeout(()=>setStep(3),3000);
+    return()=>clearTimeout(t);
+  },[step]);
+
+  useEffect(()=>{
+    if(step!==3)return;
+    const t=setInterval(()=>setTimer(s=>s+1),1000);
+    return()=>clearInterval(t);
+  },[step]);
+
+  const vets=[
+    {id:1,name:"Dr. Carlos Mendes",spec:"Clínico Geral",rating:4.9,reviews:127,online:true,wait:"Disponível agora",emoji:"👨‍⚕️",price:"R$ 80"},
+    {id:2,name:"Dra. Ana Lima",spec:"Dermatologista Pet",rating:4.8,reviews:89,online:true,wait:"≈ 5 min",emoji:"👩‍⚕️",price:"R$ 90"},
+    {id:3,name:"Dr. Rodrigo Pires",spec:"Ortopedista Pet",rating:4.7,reviews:56,online:false,wait:"≈ 20 min",emoji:"👨‍⚕️",price:"R$ 110"},
+  ];
+
+  const fmtTime=s=>`${String(Math.floor(s/60)).padStart(2,"0")}:${String(s%60).padStart(2,"0")}`;
+
+  if(step===3)return(
+    <div style={{position:"absolute",inset:0,background:"#1a1a2e",display:"flex",flexDirection:"column"}}>
+      <StatusBar light/>
+      {/* Simulação de vídeo */}
+      <div style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:16,padding:"20px"}}>
+        <div style={{width:160,height:160,borderRadius:"50%",background:`linear-gradient(135deg,${C.coral},${C.coralDark})`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:64,boxShadow:"0 0 0 4px rgba(255,255,255,0.1),0 0 0 8px rgba(255,255,255,0.05)"}}>
+          {selVet?.emoji||"👨‍⚕️"}
+        </div>
+        <div style={{textAlign:"center"}}>
+          <div style={{fontFamily:"'Playfair Display',serif",fontSize:20,fontWeight:700,color:"white"}}>{selVet?.name}</div>
+          <div style={{fontSize:12,color:"rgba(255,255,255,0.6)",marginTop:4}}>{selVet?.spec}</div>
+          <div style={{fontSize:18,fontWeight:800,color:C.green,marginTop:8}}>{fmtTime(timer)}</div>
+        </div>
+        <div style={{background:"rgba(255,255,255,0.08)",borderRadius:16,padding:"12px 20px",width:"100%",maxWidth:300}}>
+          <div style={{fontSize:11,color:"rgba(255,255,255,0.5)",textTransform:"uppercase",letterSpacing:1,marginBottom:4}}>Sintomas relatados</div>
+          <div style={{fontSize:13,color:"rgba(255,255,255,0.85)",lineHeight:1.5}}>{symptoms||"Consulta geral"}</div>
+        </div>
+      </div>
+      {/* Controles */}
+      <div style={{padding:"20px 32px 44px",display:"flex",gap:20,justifyContent:"center"}}>
+        {[["🔇","Mudo"],["📷","Câmera"],["💬","Chat"]].map(([ic,lb])=>(
+          <div key={lb} style={{textAlign:"center"}}>
+            <div style={{width:52,height:52,borderRadius:"50%",background:"rgba(255,255,255,0.12)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,cursor:"pointer",marginBottom:5}}>{ic}</div>
+            <div style={{fontSize:10,color:"rgba(255,255,255,0.5)",fontWeight:600}}>{lb}</div>
+          </div>
+        ))}
+        <div style={{textAlign:"center"}}>
+          <div onClick={()=>onNavigate("home")} style={{width:52,height:52,borderRadius:"50%",background:"#D32F2F",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,cursor:"pointer",marginBottom:5}}>📵</div>
+          <div style={{fontSize:10,color:"rgba(255,255,255,0.5)",fontWeight:600}}>Encerrar</div>
+        </div>
+      </div>
+    </div>
+  );
+
+  if(step===2)return(
+    <div style={{position:"absolute",inset:0,background:C.beigeLight,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:20,padding:"40px"}}>
+      <div style={{fontSize:64}}>{selVet?.emoji}</div>
+      <div style={{textAlign:"center"}}>
+        <div style={{fontFamily:"'Playfair Display',serif",fontSize:20,fontWeight:700,color:C.dark}}>Conectando com {selVet?.name}...</div>
+        <div style={{fontSize:13,color:C.light,marginTop:6}}>Aguarde enquanto o veterinário entra na sala</div>
+      </div>
+      <div style={{display:"flex",gap:8}}>
+        {[0,1,2].map(i=><div key={i} style={{width:10,height:10,borderRadius:"50%",background:C.coral,animation:`pulse 1.2s ${i*0.4}s infinite`}}/>)}
+      </div>
+      <style>{`@keyframes pulse{0%,100%{opacity:0.3;transform:scale(0.8)}50%{opacity:1;transform:scale(1.2)}}`}</style>
+    </div>
+  );
+
+  if(step===1&&selVet)return(
+    <div style={{position:"absolute",inset:0,background:C.beigeLight,overflowY:"auto"}}>
+      <StatusBar/>
+      <div style={{padding:"0 24px 48px"}}>
+        <SubHeader title="📋 Antes da Consulta" onBack={()=>setStep(0)}/>
+        <div style={{background:C.white,borderRadius:16,padding:"14px 16px",marginBottom:16,display:"flex",gap:12,alignItems:"center",boxShadow:"0 2px 8px rgba(0,0,0,0.06)"}}>
+          <div style={{fontSize:32}}>{selVet.emoji}</div>
+          <div>
+            <div style={{fontSize:14,fontWeight:700,color:C.dark}}>{selVet.name}</div>
+            <div style={{fontSize:12,color:C.light,fontWeight:500}}>{selVet.spec} · {selVet.price}</div>
+            <div style={{fontSize:11,color:C.green,fontWeight:700,marginTop:2}}>● {selVet.wait}</div>
+          </div>
+        </div>
+        <div style={{background:`${C.coral}10`,borderRadius:14,padding:"12px 14px",marginBottom:16}}>
+          <div style={{fontSize:12,fontWeight:700,color:C.coral,marginBottom:2}}>🐾 Pet</div>
+          <div style={{fontSize:13,color:C.dark,fontWeight:600}}>{petName||"Seu pet"} · Consulta Remota</div>
+        </div>
+        <div style={{marginBottom:16}}>
+          <div style={{fontSize:11,fontWeight:800,color:C.mid,textTransform:"uppercase",letterSpacing:1,marginBottom:8}}>DESCREVA OS SINTOMAS</div>
+          <div style={{background:C.beige,borderRadius:13,padding:"13px 15px"}}>
+            <textarea value={symptoms} onChange={e=>setSymptoms(e.target.value)} rows={5}
+              placeholder={`Descreva o que está acontecendo com ${petName||"seu pet"}...\n\nEx: Está coçando muito, sem apetite há 2 dias, letárgico, etc.`}
+              style={{width:"100%",fontSize:13,color:C.dark,background:"transparent",border:"none",outline:"none",fontFamily:"inherit",resize:"none",lineHeight:1.6}}/>
+          </div>
+        </div>
+        <div style={{background:C.white,borderRadius:14,padding:"13px 15px",marginBottom:20,boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}>
+          <div style={{fontSize:11,fontWeight:800,color:C.mid,textTransform:"uppercase",letterSpacing:1,marginBottom:8}}>RESUMO AUTOMÁTICO DO PET</div>
+          <div style={{fontSize:12,color:C.mid,lineHeight:1.6}}>✅ Histórico de saúde compartilhado automaticamente com o veterinário ao iniciar a consulta.</div>
+        </div>
+        <button onClick={()=>setStep(2)} style={{width:"100%",padding:"16px",background:C.coral,color:C.white,borderRadius:17,fontSize:15,fontWeight:800,border:"none",cursor:"pointer",fontFamily:"inherit"}}>
+          📱 Iniciar Consulta Remota →
+        </button>
+      </div>
+    </div>
+  );
+
+  return(<div style={{position:"absolute",inset:0,background:C.beigeLight,display:"flex",flexDirection:"column"}}>
+    <div style={{flex:1,overflowY:"auto"}}>
+      <div style={{background:`linear-gradient(130deg,${C.coral} 0%,${C.coralDark} 100%)`,padding:"0 24px 24px",position:"relative",overflow:"hidden"}}>
+        <div style={{position:"absolute",right:-40,top:-40,width:160,height:160,borderRadius:"50%",background:"rgba(255,255,255,0.07)"}}/>
+        <StatusBar light/>
+        <button onClick={()=>onNavigate("home")} style={{background:"rgba(255,255,255,0.14)",border:"none",display:"flex",alignItems:"center",gap:7,color:C.white,marginBottom:16,fontSize:13,fontWeight:600,borderRadius:10,padding:"6px 12px",cursor:"pointer",fontFamily:"inherit"}}><ArrowLeft size={15}/>Voltar</button>
+        <div style={{fontSize:32,marginBottom:8}}>📱</div>
+        <div style={{fontFamily:"'Playfair Display',serif",fontSize:22,fontWeight:700,color:C.white,marginBottom:4}}>Consulta Remota</div>
+        <div style={{color:"rgba(255,255,255,0.7)",fontSize:13,fontWeight:500}}>Veterinários disponíveis agora</div>
+      </div>
+      <div style={{padding:"16px 20px 80px",display:"flex",flexDirection:"column",gap:12}}>
+        <div style={{background:`${C.green}12`,borderRadius:13,padding:"11px 14px",display:"flex",gap:10,alignItems:"center"}}>
+          <span style={{fontSize:18}}>🔒</span>
+          <div style={{fontSize:12,color:"#2E7D32",fontWeight:600,lineHeight:1.4}}>Consulta segura e privada. O prontuário de {petName||"seu pet"} é compartilhado automaticamente.</div>
+        </div>
+        {vets.map(v=>(
+          <div key={v.id} onClick={()=>{setSelVet(v);setStep(1);}}
+            style={{background:C.white,borderRadius:16,padding:"16px",boxShadow:"0 2px 10px rgba(0,0,0,0.07)",cursor:"pointer",borderLeft:`4px solid ${v.online?C.green:C.beige}`,opacity:v.online?1:0.65}}>
+            <div style={{display:"flex",gap:12,alignItems:"flex-start"}}>
+              <div style={{width:52,height:52,borderRadius:14,background:`${C.coral}15`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:26,flexShrink:0}}>{v.emoji}</div>
+              <div style={{flex:1}}>
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
+                  <div>
+                    <div style={{fontSize:14,fontWeight:800,color:C.dark}}>{v.name}</div>
+                    <div style={{fontSize:12,color:C.light,fontWeight:500,marginTop:1}}>{v.spec}</div>
+                  </div>
+                  <div style={{fontSize:14,fontWeight:800,color:C.coral}}>{v.price}</div>
+                </div>
+                <div style={{display:"flex",gap:10,marginTop:8,alignItems:"center"}}>
+                  <div style={{fontSize:11,color:C.mid,fontWeight:600}}>⭐ {v.rating} ({v.reviews})</div>
+                  <div style={{fontSize:11,fontWeight:700,color:v.online?C.green:C.light}}>● {v.wait}</div>
+                </div>
+              </div>
+            </div>
+            {v.online&&<div style={{marginTop:10,background:C.coral,borderRadius:10,padding:"9px",textAlign:"center",fontSize:13,fontWeight:800,color:C.white}}>Iniciar Consulta →</div>}
+            {!v.online&&<div style={{marginTop:10,background:C.beige,borderRadius:10,padding:"9px",textAlign:"center",fontSize:13,fontWeight:600,color:C.light}}>Agendar para depois</div>}
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>);}
+
+/* ─── CONSULT PREP SCREEN ─────────────────────────────────────── */
+function ConsultPrepScreen({onNavigate}){
+  const [data,setData]=useState(null);
+  const [copied,setCopied]=useState(false);
+
+  useEffect(()=>{
+    async function load(){
+      try{
+        const {data:{user}}=await sb.auth.getUser();
+        if(!user){setData({});return;}
+        const {data:pets}=await sb.from("pets").select("*").eq("user_id",user.id).order("created_at",{ascending:false}).limit(1);
+        if(!pets||!pets[0]){setData({});return;}
+        const p=pets[0];
+        const yrs=p.birth_date?Math.floor((Date.now()-new Date(p.birth_date))/(365.25*86400000)):null;
+        // Alergias
+        const {data:alg}=await sb.from("allergies").select("allergen,severity").eq("pet_id",p.id).eq("active",true);
+        // Medicamentos ativos
+        const {data:meds}=await sb.from("medications").select("name,dosage,frequency_hours,end_date").eq("pet_id",p.id).eq("active",true);
+        // Vacinas vencendo
+        const today=new Date();
+        const {data:vacc}=await sb.from("vaccines").select("name,next_dose_at").eq("pet_id",p.id);
+        const vaccAlert=(vacc||[]).filter(v=>v.next_dose_at&&(new Date(v.next_dose_at)-today)<30*86400000);
+        // Última consulta
+        const {data:cons}=await sb.from("medical_records").select("*").eq("pet_id",p.id).neq("symptoms","__surgery__").order("consult_date",{ascending:false}).limit(1);
+        // Última pesagem
+        const {data:wRec}=await sb.from("weight_records").select("weight_kg,measured_at").eq("pet_id",p.id).order("measured_at",{ascending:false}).limit(1);
+        // Cirurgias
+        const {data:surg}=await sb.from("medical_records").select("diagnosis,consult_date").eq("pet_id",p.id).eq("symptoms","__surgery__");
+        setData({
+          pet:{name:p.name,breed:p.breed,age:yrs,sex:p.sex,castrado:p.notes,avatar:p.avatar_url,weight:wRec?.[0]?.weight_kg},
+          allergies:alg||[],
+          medications:(meds||[]).filter(m=>!["antipulgas","vermifugo","carrapaticida"].includes(m.name)),
+          preventivos:(meds||[]).filter(m=>["antipulgas","vermifugo","carrapaticida"].includes(m.name)),
+          vaccAlert,
+          lastConsult:cons?.[0]||null,
+          surgeries:surg||[]
+        });
+      }catch(e){console.warn("ConsultPrep:",e);setData({});}
+    }
+    load();
+  },[]);
+
+  function buildText(){
+    if(!data||!data.pet)return"";
+    const d=data;
+    const lines=[
+      `🐾 RESUMO DO PET — ${d.pet.name||"Pet"}`,
+      `Raça: ${d.pet.breed||"—"} | Idade: ${d.pet.age!==null?d.pet.age+" anos":"—"} | Peso: ${d.pet.weight?d.pet.weight+"kg":"não registrado"}`,
+      "",
+      `🚨 ALERGIAS (${d.allergies.length}):`,
+      ...(d.allergies.length?d.allergies.map(a=>`  • ${a.allergen} — ${a.severity}`):["  Nenhuma registrada"]),
+      "",
+      `💊 MEDICAMENTOS ATIVOS (${d.medications.length}):`,
+      ...(d.medications.length?d.medications.map(m=>`  • ${m.name}${m.dosage?" "+m.dosage:""}`):["  Nenhum"]),
+      "",
+      `💉 VACINAS COM ALERTA (${d.vaccAlert.length}):`,
+      ...(d.vaccAlert.length?d.vaccAlert.map(v=>`  • ${v.name} — ${new Date(v.next_dose_at).toLocaleDateString("pt-BR")}`):["  Todas em dia"]),
+      "",
+      `🏥 ÚLTIMA CONSULTA:`,
+      d.lastConsult?`  ${new Date(d.lastConsult.consult_date).toLocaleDateString("pt-BR")} — ${d.lastConsult.diagnosis||d.lastConsult.symptoms||"Consulta geral"}`:"  Não registrada",
+      "",
+      `🏥 CIRURGIAS: ${d.surgeries.length?d.surgeries.map(s=>s.diagnosis).join(", "):"Nenhuma"}`,
+      "",
+      "Gerado pelo PetHub • pethub-beta.vercel.app"
+    ];
+    return lines.join("\n");
+  }
+
+  if(!data)return(<div style={{position:"absolute",inset:0,display:"flex",alignItems:"center",justifyContent:"center",background:C.beigeLight}}><div style={{width:32,height:32,border:`3px solid ${C.beige}`,borderTop:`3px solid ${C.coral}`,borderRadius:"50%",animation:"spin 0.8s linear infinite"}}/></div>);
+
+  const Section=({icon,title,children,alert})=>(<div style={{background:C.white,borderRadius:16,padding:"14px 16px",marginBottom:12,boxShadow:"0 2px 8px rgba(0,0,0,0.05)",borderLeft:alert?`4px solid ${C.coral}`:"none"}}>
+    <div style={{fontSize:11,fontWeight:800,color:alert?C.coral:C.mid,textTransform:"uppercase",letterSpacing:1,marginBottom:9}}>{icon} {title}</div>
+    {children}
+  </div>);
+
+  return(<div style={{position:"absolute",inset:0,background:C.beigeLight,display:"flex",flexDirection:"column"}}>
+    <div style={{flex:1,overflowY:"auto"}}>
+      <div style={{background:`linear-gradient(130deg,${C.coral} 0%,${C.coralDark} 100%)`,padding:"0 24px 22px",position:"relative",overflow:"hidden"}}>
+        <div style={{position:"absolute",right:-35,top:-35,width:140,height:140,borderRadius:"50%",background:"rgba(255,255,255,0.07)"}}/>
+        <StatusBar light/>
+        <button onClick={()=>onNavigate("health")} style={{background:"rgba(255,255,255,0.14)",border:"none",display:"flex",alignItems:"center",gap:7,color:C.white,marginBottom:14,fontSize:13,fontWeight:600,borderRadius:10,padding:"6px 12px",cursor:"pointer",fontFamily:"inherit"}}><ArrowLeft size={15}/>Voltar</button>
+        <div style={{fontSize:28,marginBottom:6}}>{data?.pet?.avatar||"🐾"}</div>
+        <div style={{fontFamily:"'Playfair Display',serif",fontSize:20,fontWeight:700,color:C.white}}>Resumo para Consulta</div>
+        <div style={{color:"rgba(255,255,255,0.7)",fontSize:12,marginTop:3}}>Leve isso ao veterinário</div>
+      </div>
+
+      <div style={{padding:"16px 20px 100px"}}>
+        <div style={{background:`${C.green}15`,borderRadius:13,padding:"11px 14px",marginBottom:14,display:"flex",gap:9,alignItems:"center"}}>
+          <span style={{fontSize:18}}>✅</span>
+          <div style={{fontSize:12,color:"#2E7D32",fontWeight:600}}>Resumo gerado automaticamente com base no prontuário de {data?.pet?.name||"seu pet"}.</div>
+        </div>
+
+        {/* Pet */}
+        <Section icon="🐾" title="DADOS DO PET">
+          <div style={{display:"flex",flexWrap:"wrap",gap:12}}>
+            {[["Raça",data?.pet?.breed||"—"],["Idade",data?.pet?.age!=null?data.pet.age+" anos":"—"],["Peso",data?.pet?.weight?data.pet.weight+"kg":"Não reg."],["Sexo",data?.pet?.sex==="macho"?"Macho":data?.pet?.sex==="femea"?"Fêmea":"—"]].map(([k,v])=>(
+              <div key={k}><div style={{fontSize:10,color:C.light,fontWeight:600,textTransform:"uppercase"}}>{k}</div><div style={{fontSize:13,fontWeight:700,color:C.dark}}>{v}</div></div>
+            ))}
+          </div>
+        </Section>
+
+        {/* Alergias */}
+        <Section icon="🚨" title={`ALERGIAS (${data?.allergies?.length||0})`} alert={(data?.allergies?.length||0)>0}>
+          {data?.allergies?.length?data.allergies.map((a,i)=>(
+            <div key={i} style={{display:"flex",justifyContent:"space-between",marginBottom:5}}>
+              <div style={{fontSize:13,fontWeight:600,color:C.dark}}>{a.allergen}</div>
+              <div style={{fontSize:11,fontWeight:700,color:a.severity==="grave"?C.coral:a.severity==="moderada"?"#E65100":C.green}}>{a.severity}</div>
+            </div>
+          )):<div style={{fontSize:12,color:C.light}}>Nenhuma alergia registrada</div>}
+        </Section>
+
+        {/* Medicamentos */}
+        <Section icon="💊" title={`MEDICAMENTOS ATIVOS (${data?.medications?.length||0})`}>
+          {data?.medications?.length?data.medications.map((m,i)=>(
+            <div key={i} style={{fontSize:13,fontWeight:600,color:C.dark,marginBottom:5}}>• {m.name}{m.dosage?" — "+m.dosage:""}</div>
+          )):<div style={{fontSize:12,color:C.light}}>Nenhum medicamento ativo</div>}
+        </Section>
+
+        {/* Vacinas */}
+        {(data?.vaccAlert?.length||0)>0&&<Section icon="💉" title="VACINAS COM ALERTA" alert>
+          {data.vaccAlert.map((v,i)=>(
+            <div key={i} style={{fontSize:13,fontWeight:600,color:C.coral,marginBottom:5}}>• {v.name} — {new Date(v.next_dose_at).toLocaleDateString("pt-BR")}</div>
+          ))}
+        </Section>}
+
+        {/* Última consulta */}
+        {data?.lastConsult&&<Section icon="🩺" title="ÚLTIMA CONSULTA">
+          <div style={{fontSize:13,fontWeight:600,color:C.dark}}>{new Date(data.lastConsult.consult_date).toLocaleDateString("pt-BR")}</div>
+          {data.lastConsult.symptoms&&<div style={{fontSize:12,color:C.mid,marginTop:3}}>Sintomas: {data.lastConsult.symptoms}</div>}
+          {data.lastConsult.diagnosis&&<div style={{fontSize:12,color:C.mid,marginTop:2}}>Diagnóstico: {data.lastConsult.diagnosis}</div>}
+        </Section>}
+
+        {/* Cirurgias */}
+        {(data?.surgeries?.length||0)>0&&<Section icon="🏥" title="CIRURGIAS">
+          {data.surgeries.map((s,i)=>(
+            <div key={i} style={{fontSize:13,fontWeight:600,color:C.dark,marginBottom:4}}>• {s.diagnosis} — {new Date(s.consult_date).toLocaleDateString("pt-BR")}</div>
+          ))}
+        </Section>}
+
+        {/* Ações */}
+        <div style={{display:"flex",flexDirection:"column",gap:10,marginTop:4}}>
+          <button onClick={()=>{navigator.clipboard?.writeText(buildText());setCopied(true);setTimeout(()=>setCopied(false),2500);}}
+            style={{padding:"14px",background:copied?`${C.green}20`:C.white,color:copied?C.green:C.coral,borderRadius:14,fontSize:14,fontWeight:700,border:`2px solid ${copied?C.green:C.coral}`,cursor:"pointer",fontFamily:"inherit"}}>
+            {copied?"✅ Copiado!":"📋 Copiar Resumo (texto)"}
+          </button>
+          <button onClick={()=>onNavigate("services")}
+            style={{padding:"14px",background:C.coral,color:C.white,borderRadius:14,fontSize:14,fontWeight:800,border:"none",cursor:"pointer",fontFamily:"inherit"}}>
+            📅 Agendar Consulta Presencial →
+          </button>
+          <button onClick={()=>onNavigate("teleconsult")}
+            style={{padding:"14px",background:"#1565C0",color:C.white,borderRadius:14,fontSize:14,fontWeight:800,border:"none",cursor:"pointer",fontFamily:"inherit"}}>
+            📱 Iniciar Consulta Remota →
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>);}
+
+/* ─── ADD CONSULTATION SCREEN ─────────────────────────────────── */
+function AddConsultationScreen({onNavigate,t}){
+  const clinics=["Clínica PetVida","Hospital Vet. USP","AniVet Hospital","VetCare","PetMed Paulista","Hospital Animal SP","Outros"];
+  const [date,setDate]=useState(new Date().toISOString().split("T")[0]);
+  const [vet,setVet]=useState("");
+  const [clinic,setClinic]=useState("");
+  const [symptoms,setSymptoms]=useState("");
+  const [diagnosis,setDiagnosis]=useState("");
+  const [meds,setMeds]=useState([]);
+  const [newMed,setNewMed]=useState({name:"",dosage:"",freq:8,days:7,time:"08:00"});
+  const [showMedForm,setShowMedForm]=useState(false);
+  const [saving,setSaving]=useState(false);
+  const [saved,setSaved]=useState(false);
+
+  function addMed(){
+    if(!newMed.name.trim())return;
+    setMeds(prev=>[...prev,{...newMed,id:Date.now()}]);
+    setNewMed({name:"",dosage:"",freq:8,days:7,time:"08:00"});
+    setShowMedForm(false);
+  }
+  function removeMed(id){setMeds(prev=>prev.filter(m=>m.id!==id));}
+
+  async function save(){
+    setSaving(true);
+    try{
+      const {data:{user}}=await sb.auth.getUser();
+      if(!user)return;
+      const {data:pets}=await sb.from("pets").select("id").eq("user_id",user.id).order("created_at",{ascending:false}).limit(1);
+      if(!pets||!pets[0])return;
+      const petId=pets[0].id;
+
+      // Salvar consulta
+      const {data:rec}=await sb.from("medical_records").insert({
+        pet_id:petId, user_id:user.id,
+        consult_date:date, vet_name:vet||null,
+        clinic:clinic||null, symptoms:symptoms||null,
+        diagnosis:diagnosis||null
+      }).select().single();
+
+      // Salvar medicamentos + criar lembretes em routine_tasks
+      if(rec&&meds.length){
+        for(const m of meds){
+          const endDate=new Date(date);
+          endDate.setDate(endDate.getDate()+(m.days||7));
+          await sb.from("medications").insert({
+            pet_id:petId, user_id:user.id,
+            medical_record_id:rec.id,
+            name:m.name, dosage:m.dosage||null,
+            frequency_hours:m.freq||8,
+            duration_days:m.days||7,
+            start_date:date,
+            end_date:endDate.toISOString().split("T")[0],
+            schedule_time:m.time||"08:00",
+            active:true
+          });
+          // Criar lembrete na rotina
+          await sb.from("routine_tasks").insert({
+            pet_id:petId, user_id:user.id,
+            title:`💊 ${m.name}${m.dosage?" — "+m.dosage:""}`,
+            category:"medicamento",
+            frequency:m.freq<=8?"diaria":"diaria",
+            scheduled_time:m.time||"08:00",
+            active:true
+          });
+        }
+      }
+      setSaved(true);
+    }catch(e){console.warn("save consult:",e);}
+    setSaving(false);
+  }
+
+  if(saved)return(
+    <div style={{position:"absolute",inset:0,background:C.beigeLight,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"40px 32px"}}>
+      <div style={{width:76,height:76,borderRadius:"50%",background:`${C.green}15`,border:`3px solid ${C.green}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:34,marginBottom:18}}>✅</div>
+      <div style={{fontFamily:"'Playfair Display',serif",fontSize:22,fontWeight:700,color:C.dark,textAlign:"center",marginBottom:10}}>Consulta registrada!</div>
+      <div style={{fontSize:13,color:C.light,textAlign:"center",lineHeight:1.6,marginBottom:8}}>Prontuário atualizado.</div>
+      {meds.length>0&&<div style={{background:`${C.coral}10`,border:`1.5px solid ${C.coral}30`,borderRadius:13,padding:"12px 16px",width:"100%",marginBottom:20}}>
+        <div style={{fontSize:12,fontWeight:800,color:C.coral,marginBottom:8}}>🔔 {meds.length} lembrete{meds.length>1?"s":""} de medicamento criado{meds.length>1?"s":""}!</div>
+        {meds.map((m,i)=><div key={i} style={{fontSize:12,color:C.mid,fontWeight:600,marginBottom:3}}>• {m.name} — {m.time} · a cada {m.freq}h · por {m.days} dias</div>)}
+      </div>}
+      <button onClick={()=>onNavigate("health")} style={{width:"100%",padding:"15px",background:C.coral,color:C.white,borderRadius:17,fontSize:15,fontWeight:800,border:"none",cursor:"pointer",fontFamily:"inherit"}}>Voltar ao Prontuário</button>
+    </div>
+  );
+
+  const Section=({title,children})=>(
+    <div style={{background:C.white,borderRadius:16,padding:"16px",marginBottom:14,boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}>
+      <div style={{fontSize:11,fontWeight:800,color:C.mid,textTransform:"uppercase",letterSpacing:1,marginBottom:12}}>{title}</div>
+      {children}
+    </div>
+  );
+  const Field=({label,children})=>(
+    <div style={{marginBottom:13}}>
+      <div style={{fontSize:11,fontWeight:700,color:C.light,marginBottom:6}}>{label}</div>
+      {children}
+    </div>
+  );
+  const Input=({value,onChange,placeholder,type="text"})=>(
+    <div style={{background:C.beige,borderRadius:11,padding:"11px 13px"}}>
+      <input type={type} value={value} onChange={onChange} placeholder={placeholder}
+        style={{width:"100%",fontSize:13,color:C.dark,background:"transparent",border:"none",outline:"none",fontFamily:"inherit"}}/>
+    </div>
+  );
+  const freqOpts=[[3,"3h"],[4,"4h"],[6,"6h"],[8,"8h"],[12,"12h"],[24,"24h (1x/dia)"]];
+
+  return(
+    <div style={{position:"absolute",inset:0,background:C.beigeLight,overflowY:"auto"}}>
+      <StatusBar/>
+      <div style={{padding:"0 20px 80px"}}>
+        <SubHeader title="📋 Registrar Consulta" onBack={()=>onNavigate("health")}/>
+
+        <Section title="📅 Dados da Consulta">
+          <Field label="DATA DA CONSULTA">
+            <Input type="date" value={date} onChange={e=>setDate(e.target.value)}/>
+          </Field>
+          <Field label="VETERINÁRIO">
+            <Input value={vet} onChange={e=>setVet(e.target.value)} placeholder="Nome do veterinário"/>
+          </Field>
+          <Field label="CLÍNICA / HOSPITAL">
+            <EditableCombo options={clinics} value={clinic} onChange={setClinic} placeholder="Selecione ou digite..."/>
+          </Field>
+        </Section>
+
+        <Section title="🩺 Sintomas e Diagnóstico">
+          <Field label="SINTOMAS OBSERVADOS">
+            <div style={{background:C.beige,borderRadius:11,padding:"11px 13px"}}>
+              <textarea value={symptoms} onChange={e=>setSymptoms(e.target.value)}
+                placeholder="Descreva os sintomas: vômito, diarreia, letargia, coceira..." rows={3}
+                style={{width:"100%",fontSize:13,color:C.dark,background:"transparent",border:"none",outline:"none",fontFamily:"inherit",resize:"none",lineHeight:1.5}}/>
+            </div>
+          </Field>
+          <Field label="DIAGNÓSTICO / OBSERVAÇÕES DO VET">
+            <div style={{background:C.beige,borderRadius:11,padding:"11px 13px"}}>
+              <textarea value={diagnosis} onChange={e=>setDiagnosis(e.target.value)}
+                placeholder="Diagnóstico, orientações e próximos passos..." rows={3}
+                style={{width:"100%",fontSize:13,color:C.dark,background:"transparent",border:"none",outline:"none",fontFamily:"inherit",resize:"none",lineHeight:1.5}}/>
+            </div>
+          </Field>
+        </Section>
+
+        <Section title="💊 Medicamentos Prescritos">
+          {meds.map((m,i)=>(
+            <div key={m.id} style={{background:C.beigeLight,borderRadius:11,padding:"10px 12px",marginBottom:8,display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
+              <div>
+                <div style={{fontSize:13,fontWeight:700,color:C.dark}}>{m.name}{m.dosage?" — "+m.dosage:""}</div>
+                <div style={{fontSize:11,color:C.mid,fontWeight:500,marginTop:2}}>A cada {m.freq}h · {m.days} dias · início {m.time}</div>
+                <div style={{fontSize:10,color:C.green,fontWeight:700,marginTop:3}}>🔔 Lembrete criado na rotina</div>
+              </div>
+              <button onClick={()=>removeMed(m.id)} style={{background:"none",border:"none",color:C.coral,fontSize:18,cursor:"pointer",padding:"0 4px"}}>×</button>
+            </div>
+          ))}
+
+          {showMedForm?(
+            <div style={{background:C.beigeLight,borderRadius:13,padding:"14px",marginBottom:10}}>
+              <Field label="NOME DO MEDICAMENTO">
+                <Input value={newMed.name} onChange={e=>setNewMed(p=>({...p,name:e.target.value}))} placeholder="Ex: Amoxicilina, Dipirona..."/>
+              </Field>
+              <Field label="DOSAGEM">
+                <Input value={newMed.dosage} onChange={e=>setNewMed(p=>({...p,dosage:e.target.value}))} placeholder="Ex: 250mg, 5ml, 1 comprimido"/>
+              </Field>
+              <Field label="FREQUÊNCIA">
+                <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
+                  {freqOpts.map(([h,l])=>(
+                    <button key={h} onClick={()=>setNewMed(p=>({...p,freq:h}))}
+                      style={{padding:"6px 12px",borderRadius:10,fontSize:12,fontWeight:700,border:`2px solid ${newMed.freq===h?C.coral:"transparent"}`,background:newMed.freq===h?`${C.coral}15`:C.beige,color:newMed.freq===h?C.coral:C.mid,cursor:"pointer",fontFamily:"inherit"}}>
+                      {l}
+                    </button>
+                  ))}
+                </div>
+              </Field>
+              <Field label="DURAÇÃO (DIAS)">
+                <div style={{display:"flex",alignItems:"center",gap:12,background:C.beige,borderRadius:11,padding:"10px 14px"}}>
+                  <button onClick={()=>setNewMed(p=>({...p,days:Math.max(1,p.days-1)}))} style={{background:C.white,border:"none",borderRadius:8,width:28,height:28,fontSize:16,fontWeight:700,cursor:"pointer",color:C.coral}}>−</button>
+                  <div style={{flex:1,textAlign:"center",fontSize:16,fontWeight:800,color:C.dark}}>{newMed.days} dias</div>
+                  <button onClick={()=>setNewMed(p=>({...p,days:p.days+1}))} style={{background:C.coral,border:"none",borderRadius:8,width:28,height:28,fontSize:16,fontWeight:700,cursor:"pointer",color:C.white}}>+</button>
+                </div>
+              </Field>
+              <Field label="HORÁRIO DA 1ª DOSE">
+                <Input type="time" value={newMed.time} onChange={e=>setNewMed(p=>({...p,time:e.target.value}))}/>
+              </Field>
+              <div style={{display:"flex",gap:8,marginTop:4}}>
+                <button onClick={()=>setShowMedForm(false)} style={{flex:1,padding:"11px",background:C.beige,color:C.mid,borderRadius:12,fontSize:13,fontWeight:700,border:"none",cursor:"pointer",fontFamily:"inherit"}}>Cancelar</button>
+                <button onClick={addMed} style={{flex:2,padding:"11px",background:C.coral,color:C.white,borderRadius:12,fontSize:13,fontWeight:800,border:"none",cursor:"pointer",fontFamily:"inherit"}}>+ Adicionar</button>
+              </div>
+            </div>
+          ):(
+            <button onClick={()=>setShowMedForm(true)}
+              style={{width:"100%",padding:"12px",background:C.beige,color:C.coral,borderRadius:13,fontSize:13,fontWeight:700,border:`2px dashed ${C.coral}40`,cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",justifyContent:"center",gap:6}}>
+              <Plus size={14}/> Adicionar medicamento
+            </button>
+          )}
+        </Section>
+
+        {/* Atalho de peso */}
+        <div style={{background:C.white,borderRadius:16,padding:"14px",marginBottom:14,boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}>
+          <div style={{fontSize:11,fontWeight:800,color:C.mid,textTransform:"uppercase",letterSpacing:1,marginBottom:10}}>⚖️ Peso na Consulta (opcional)</div>
+          <div style={{display:"flex",gap:10,alignItems:"center"}}>
+            <div style={{background:C.beige,borderRadius:11,padding:"11px 14px",flex:1,display:"flex",alignItems:"center",gap:8}}>
+              <input type="number" step="0.1" id="consultWeight" placeholder="Ex: 28.5"
+                style={{flex:1,fontSize:15,fontWeight:700,color:C.dark,background:"transparent",border:"none",outline:"none",fontFamily:"inherit"}}/>
+              <span style={{fontSize:12,color:C.mid,fontWeight:600}}>kg</span>
+            </div>
+            <button onClick={async()=>{
+              const w=document.getElementById("consultWeight")?.value;
+              if(!w||isNaN(Number(w)))return;
+              try{
+                const {data:{user}}=await sb.auth.getUser();
+                const {data:pets}=await sb.from("pets").select("id").eq("user_id",user.id).order("created_at",{ascending:false}).limit(1);
+                if(pets&&pets[0]){
+                  await sb.from("weight_records").insert({pet_id:pets[0].id,user_id:user.id,weight_kg:Number(w),measured_at:date,notes:"Registrado na consulta"});
+                  await sb.from("pets").update({weight_kg:Number(w)}).eq("id",pets[0].id);
+                  alert("✅ Peso registrado!");
+                }
+              }catch(e){console.warn(e);}
+            }} style={{padding:"11px 14px",background:C.green,color:C.white,borderRadius:11,fontSize:12,fontWeight:700,border:"none",cursor:"pointer",fontFamily:"inherit",flexShrink:0}}>
+              ✓ Salvar
+            </button>
+          </div>
+        </div>
+        <button onClick={save} disabled={saving}
+          style={{width:"100%",padding:"16px",background:saving?C.beige:C.coral,color:saving?C.mid:C.white,borderRadius:17,fontSize:15,fontWeight:800,border:"none",cursor:saving?"default":"pointer",fontFamily:"inherit"}}>
+          {saving?"Salvando...":"Salvar Consulta e Lembretes →"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 /* ─── SERVICE DETAIL ──────────────────────────────────────────── */
 function ServiceDetailScreen({onNavigate,provider,activeNav,t}){
-  const p=provider||{name:"Dr. Carlos Mendes",cat:"Veterinário",rating:4.9,rev:127,dist:"1,2 km",e:"👨‍⚕️",ok:true};
+  const p=provider||{name:"Dr. Carlos Mendes",cat:"Veterinário",rating:4.9,rev:127,dist:"1,2 km",e:"👨‍⚕️",ok:true,whatsapp:"11987650001"};
   const srvs=[{n:"Consulta Geral",dur:"30 min",price:"R$ 120"},{n:"Consulta de Retorno",dur:"20 min",price:"R$ 80"},{n:"Vacinação",dur:"15 min",price:"R$ 60"},{n:"Check-up Completo",dur:"60 min",price:"R$ 220"}];
   const revs=[{u:"Ana S.",r:5,txt:"Profissional incrível, muito atencioso com meu cachorro!"},{u:"Pedro R.",r:5,txt:"Atendimento impecável. Explicou tudo com clareza."},{u:"Carol M.",r:4,txt:"Ótimo atendimento, só o tempo de espera foi um pouco longo."}];
   return(<div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column"}}>
@@ -1053,7 +2581,13 @@ function ServiceDetailScreen({onNavigate,provider,activeNav,t}){
         <div style={{background:C.white,borderRadius:16,overflow:"hidden",marginBottom:18,boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}>{srvs.map((s,i)=>(<div key={i} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"13px 16px",borderBottom:i<srvs.length-1?`1px solid ${C.beige}`:"none"}}><div><div style={{fontSize:14,fontWeight:700,color:C.dark}}>{s.n}</div><div style={{fontSize:11,color:C.light,fontWeight:500,marginTop:1}}>⏱ {s.dur}</div></div><div style={{fontSize:14,fontWeight:800,color:C.coral}}>{s.price}</div></div>))}</div>
         <div style={{fontFamily:"'Playfair Display', serif",fontSize:16,fontWeight:700,color:C.dark,marginBottom:11}}>{t.reviewsLabel}</div>
         <div style={{display:"flex",flexDirection:"column",gap:9,marginBottom:24}}>{revs.map((r,i)=>(<div key={i} style={{background:C.white,borderRadius:14,padding:"13px 15px",boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}><div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:7}}><div style={{display:"flex",alignItems:"center",gap:7}}><div style={{width:30,height:30,borderRadius:"50%",background:C.beige,display:"flex",alignItems:"center",justifyContent:"center",fontSize:13}}>👤</div><div style={{fontSize:13,fontWeight:700,color:C.dark}}>{r.u}</div></div><div style={{display:"flex",gap:1}}>{[...Array(r.r)].map((_,s)=><Star key={s} size={11} fill={C.coral} color={C.coral}/>)}</div></div><div style={{fontSize:13,color:C.mid,fontWeight:500,lineHeight:1.4}}>{r.txt}</div></div>))}</div>
-        <button onClick={()=>onNavigate("booking")} style={{width:"100%",padding:"16px",background:C.coral,color:C.white,borderRadius:17,fontSize:15,fontWeight:800,border:"none",cursor:"pointer",fontFamily:"inherit"}}>{t.bookConsult}</button>
+        <div style={{display:"flex",gap:10,marginBottom:0}}>
+          <a href={`https://wa.me/55${(p.whatsapp||'11999990000').replace(/\D/g,'')}`} target="_blank" rel="noopener noreferrer"
+            style={{flex:1,padding:"15px",background:"#25D366",color:"white",borderRadius:17,fontSize:14,fontWeight:800,border:"none",cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",justifyContent:"center",gap:8,textDecoration:"none"}}>
+            <WhatsApp size={18}/>Chamar no WhatsApp
+          </a>
+          <button onClick={()=>onNavigate("booking")} style={{flex:2,padding:"16px",background:C.coral,color:C.white,borderRadius:17,fontSize:15,fontWeight:800,border:"none",cursor:"pointer",fontFamily:"inherit"}}>{t.bookConsult}</button>
+        </div>
       </div>
     </div>
     <BottomNav active={activeNav} onTab={onNavigate} t={t}/>
@@ -1122,6 +2656,32 @@ function BookingSuccessScreen({onNavigate,provider,t}){
 /* ─── QR CODE ─────────────────────────────────────────────────── */
 function QRCodeScreen({onNavigate,t}){
   const [copied,setCopied]=useState(false);
+  const [pet,setPet]=useState({name:'',breed:'',sex:'',ageStr:'',avatar:'🐾',id:''});
+  const [tutor,setTutor]=useState({name:'',phone:''});
+
+  useEffect(()=>{
+    async function load(){
+      try{
+        const {data:{user}}=await sb.auth.getUser();
+        if(!user)return;
+        const {data:prof}=await sb.from('profiles').select('full_name,phone').eq('id',user.id).single();
+        if(prof) setTutor({name:prof.full_name||user.email?.split('@')[0]||'Tutor',phone:prof.phone||'—'});
+        const {data:pets}=await sb.from('pets').select('*').eq('user_id',user.id).order('created_at',{ascending:false}).limit(1);
+        if(pets&&pets[0]){
+          const p=pets[0];
+          const yrs=p.birth_date?Math.floor((Date.now()-new Date(p.birth_date))/(365.25*86400000)):null;
+          const ageStr=yrs===null?'':yrs===0?'< 1 ano':yrs===1?'1 ano':`${yrs} anos`;
+          const sexStr=p.sex==='macho'?'Macho':p.sex==='femea'?'Fêmea':'';
+          const shortId='#PH-'+p.id.slice(0,8).toUpperCase();
+          setPet({name:p.name,breed:p.breed||'',sex:sexStr,ageStr,avatar:p.avatar_url||'🐾',id:shortId});
+        }
+      }catch(e){console.warn('QR load:',e);}
+    }
+    load();
+  },[]);
+
+  const petInfo=[pet.breed,pet.sex,pet.ageStr].filter(Boolean).join(' · ');
+
   return(<div style={{position:"absolute",inset:0,background:C.beigeLight,display:"flex",flexDirection:"column"}}><StatusBar/>
     <div style={{flex:1,overflowY:"auto"}}><div style={{padding:"0 24px 18px"}}><SubHeader title={t.qrTitle} onBack={()=>onNavigate("home")}/></div>
       <div style={{display:"flex",flexDirection:"column",alignItems:"center",padding:"0 32px 32px"}}>
@@ -1133,14 +2693,25 @@ function QRCodeScreen({onNavigate,t}){
             <rect x="0" y="14" width="7" height="7" fill={C.dark}/><rect x="1" y="15" width="5" height="5" fill="white"/><rect x="2" y="16" width="3" height="3" fill={C.dark}/>
             {QR_DOTS.map((d,i)=><rect key={i} x={d.x} y={d.y} width="1" height="1" fill={C.dark}/>)}
           </svg>
-          <div style={{textAlign:"center"}}><div style={{fontFamily:"'Playfair Display', serif",fontSize:17,fontWeight:700,color:C.dark}}>Thor</div><div style={{fontSize:12,color:C.light,fontWeight:500,marginTop:3}}>Golden Retriever · Macho · 3 anos</div><div style={{fontSize:11,color:C.light,fontWeight:600,marginTop:2}}>Maria Silva · ID #TH-2024-4892</div></div>
+          <div style={{fontSize:32,marginBottom:6}}>{pet.avatar||'🐾'}</div>
+          <div style={{textAlign:"center"}}>
+            <div style={{fontFamily:"'Playfair Display', serif",fontSize:17,fontWeight:700,color:C.dark}}>{pet.name||'—'}</div>
+            <div style={{fontSize:12,color:C.light,fontWeight:500,marginTop:3}}>{petInfo||'—'}</div>
+            <div style={{fontSize:11,color:C.light,fontWeight:600,marginTop:2}}>{tutor.name} · {pet.id}</div>
+          </div>
         </div>
         <div style={{background:`${C.coral}10`,border:`1.5px solid ${C.coral}20`,borderRadius:15,padding:"13px 15px",marginBottom:20,width:"100%",display:"flex",gap:11,alignItems:"flex-start"}}>
           <span style={{fontSize:19,flexShrink:0}}>🚨</span>
           <div><div style={{fontSize:13,fontWeight:700,color:C.coral,marginBottom:3}}>{t.qrEmerg}</div><div style={{fontSize:12,color:C.mid,fontWeight:500,lineHeight:1.5}}>{t.qrEmergText}</div></div>
         </div>
-        <div style={{background:C.white,borderRadius:16,padding:"15px",marginBottom:20,width:"100%",boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}><div style={{fontSize:11,fontWeight:800,color:C.mid,textTransform:"uppercase",letterSpacing:1,marginBottom:11}}>{t.qrContact}</div>
-          {[["Tutor","Maria Silva"],["Telefone","+55 11 99999-0000"],["Veterinário","Dr. Carlos Mendes"]].map((item,i)=>(<div key={i} style={{display:"flex",justifyContent:"space-between",marginBottom:7}}><div style={{fontSize:13,color:C.light,fontWeight:600}}>{item[0]}</div><div style={{fontSize:13,color:C.dark,fontWeight:700}}>{item[1]}</div></div>))}
+        <div style={{background:C.white,borderRadius:16,padding:"15px",marginBottom:20,width:"100%",boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}>
+          <div style={{fontSize:11,fontWeight:800,color:C.mid,textTransform:"uppercase",letterSpacing:1,marginBottom:11}}>{t.qrContact}</div>
+          {[["Tutor",tutor.name||"—"],["Telefone",tutor.phone||"—"],["ID do Pet",pet.id||"—"]].map((item,i)=>(
+            <div key={i} style={{display:"flex",justifyContent:"space-between",marginBottom:7}}>
+              <div style={{fontSize:13,color:C.light,fontWeight:600}}>{item[0]}</div>
+              <div style={{fontSize:13,color:C.dark,fontWeight:700}}>{item[1]}</div>
+            </div>
+          ))}
         </div>
         <div style={{display:"flex",gap:11,width:"100%"}}>
           <button onClick={()=>{setCopied(true);setTimeout(()=>setCopied(false),2000);}} style={{flex:1,padding:"13px",background:copied?`${C.green}15`:C.white,color:copied?C.green:C.coral,borderRadius:15,fontSize:13,fontWeight:700,border:`2px solid ${copied?C.green:C.coral}`,cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",justifyContent:"center",gap:5,transition:"all 0.2s"}}>
@@ -1191,33 +2762,47 @@ function AgendaScreen({onNavigate,activeNav,t}){
 
 /* ─── PETBOT ──────────────────────────────────────────────────── */
 function PetBotScreen({onNavigate,activeNav,t,lang}){
-  const initMsg=lang==="en"?"Hi! I'm PetBot, Thor's AI vet assistant. 🐾 Ask me anything about his health, nutrition or behavior!":lang==="es"?"¡Hola! Soy PetBot, el asistente vet IA de Thor. 🐾 ¡Pregúntame sobre su salud, nutrición o comportamiento!":"Olá! Sou o PetBot, assistente veterinário IA do Thor. 🐾 Pergunte sobre saúde, nutrição ou comportamento — responderei com base no histórico dele!";
-  const [msgs,setMsgs]=useState([{from:"bot",text:initMsg}]);
-  const [input,setInput]=useState("");const [typing,setTyping]=useState(false);
-  const sysPrompt=`Você é PetBot, assistente veterinário IA integrado ao app PetHub. Você tem acesso ao prontuário completo do pet do usuário.
+  const [pet,setPet]=useState({name:'',breed:'',ageStr:'',avatar:'🤖'});
+  const [msgs,setMsgs]=useState(null); // null = carregando
+  const [input,setInput]=useState('');const [typing,setTyping]=useState(false);
+  const [productCards,setProductCards]=useState({});
+
+  useEffect(()=>{
+    async function loadPet(){
+      try{
+        const {data:{user}}=await sb.auth.getUser();
+        if(!user)return;
+        const {data:pets}=await sb.from('pets').select('*').eq('user_id',user.id).order('created_at',{ascending:false}).limit(1);
+        if(pets&&pets[0]){
+          const p=pets[0];
+          const yrs=p.birth_date?Math.floor((Date.now()-new Date(p.birth_date))/(365.25*86400000)):3;
+          const ageStr=yrs===1?'1 ano':`${yrs} anos`;
+          const loaded={name:p.name,breed:p.breed||'',ageStr,avatar:p.avatar_url||'🐾'};
+          setPet(loaded);
+          const n=loaded.name;
+          const initMsg=lang==='en'
+            ?`Hi! I'm PetBot, ${n}'s AI vet assistant. 🐾 Ask me anything about his health, nutrition or behavior!`
+            :lang==='es'
+            ?`¡Hola! Soy PetBot, el asistente vet IA de ${n}. 🐾 ¡Pregúntame sobre su salud, nutrición o comportamiento!`
+            :`Olá! Sou o PetBot, assistente veterinário IA de ${n}. 🐾 Pergunte sobre saúde, nutrição ou comportamento — responderei com base no histórico dele!`;
+          setMsgs([{from:'bot',text:initMsg}]);
+        }
+      }catch(e){console.warn('PetBot load:',e);}
+    }
+    loadPet();
+  },[]);
+
+  const sysPrompt=`Você é PetBot, assistente veterinário IA integrado ao app PetHub.
 
 PERFIL DO PET:
-- Nome: Thor
-- Raça: Golden Retriever
-- Sexo: Macho
-- Idade: 3 anos
-- Peso: 28kg (dentro do ideal para a raça: 25-34kg)
-- Chip: #BR-2024-4892 (implantado em 15/03/2021)
-
-HISTÓRICO MÉDICO RECENTE:
-- Vacina V10 Múltipla: VENCENDO EM 12 DIAS (urgente!)
-- Último check-up: 28/04/2026 com Dr. Carlos Mendes — tudo normal
-- Vermífugo: pendente há 3 semanas
-- Vacina Giárdia: em dia (vence 05/03/2027)
-- Vacina Antirrábica: em dia (vence 20/12/2026)
-- Alergias registradas: nenhuma
-- Histórico de cirurgias: nenhuma
-- Tutor: Maria Silva
+- Nome: ${pet.name||'Pet'}
+- Raça: ${pet.breed||'Não informada'}
+- Idade: ${pet.ageStr||'Não informada'}
 
 INSTRUÇÕES:
 - Responda de forma amigável, clara e didática em até 3 parágrafos curtos
 - Use emojis com moderação (1-2 por resposta)
-- Quando relevante, mencione dados do histórico do Thor para personalizar a resposta
+- Mencione o nome do pet (${pet.name||'Pet'}) para personalizar a resposta
 - Sempre avise que não substitui consulta veterinária em casos de saúde/sintomas
 - Responda no mesmo idioma da pergunta (PT, EN ou ES)
 - Para perguntas sobre alimentação proibida: seja direto sobre o que pode e o que não pode
@@ -1226,32 +2811,55 @@ INSTRUÇÕES:
   async function send(msg){
     const userMsg=msg||input;
     if(!userMsg.trim())return;
-    const newMsgs=[...msgs,{from:"user",text:userMsg}];
+    const newMsgs=[...(msgs||[]),{from:"user",text:userMsg}];
     setMsgs(newMsgs);
     setInput("");setTyping(true);
+    let products=null;
     const history=newMsgs.filter(m=>m.from).map(m=>({role:m.from==="user"?"user":"assistant",content:m.text}));
     try{
       const q=userMsg.toLowerCase();
       let reply="";
       if(q.match(/mang[ao]|banana|uva|abacate|cebola|alho|chocolate|uva|pass[ao]/)){
-        reply="🍇 Atenção! Uva, chocolate, cebola, alho e abacate são tóxicos para o Thor. Manga em pequena quantidade é geralmente segura, sem casca ou caroço.\n\nSempre prefira oferecer petiscos específicos para cães. Em caso de ingestão acidental de algo proibido, procure o veterinário imediatamente.";
+        reply=`🍇 Atenção! Uva, chocolate, cebola, alho e abacate são tóxicos para ${pet.name||"seu pet"}. Manga em pequena quantidade é geralmente segura, sem casca ou caroço.\n\nSempre prefira oferecer petiscos específicos para cães. Em caso de ingestão acidental de algo proibido, procure o veterinário imediatamente.`;
+      }else if(q.match(/peso|gordo|magro|comer|quantid|ra.{1,3}o|alimenta|nutri/)){
+        reply=`🥩 Para ${pet.name||"seu pet"}${pet.breed?" ("+pet.breed+")":""}, recomendo ração premium de alta digestibilidade com proteína animal como primeiro ingrediente. Evite produtos com corante artificial, conservantes sintéticos e farinha de carne genérica.\n\nSelecionei algumas opções indicadas para a raça e idade:`;
+        products=[
+          {name:"Royal Canin Medium Adulto",peso:"15 kg",preco:"R$ 329",petz:"Royal+Canin+Medium+Adulto",ml:"Royal+Canin+adulto+medio"},
+          {name:"Hill's Science Diet Adulto",peso:"12 kg",preco:"R$ 289",petz:"hills+science+diet+adulto",ml:"Hills+Science+adulto"},
+          {name:"ProPlan Large Breed",peso:"15 kg",preco:"R$ 349",petz:"pro+plan+large+adulto",ml:"ProPlan+large+breed"}
+        ];
+      }else if(q.match(/antipulga|pulga|carrapato|vermif|verme|parasita|preventivo|bravecto|simparic|endogard/)){
+        reply=`🛡️ Para proteção completa de ${pet.name||"seu pet"}, recomendo manter em dia os três preventivos:\n\n🐛 Antipulgas: a cada 30 dias\n🕷️ Carrapaticida: a cada 30 dias\n💊 Vermífugo: a cada 90 dias\n\nCadastre os preventivos na aba 🛡️ Prev. do Prontuário e o app cria os lembretes automaticamente! Aqui estão os produtos mais indicados:`;
+        products=[
+          {name:"Bravecto (antipulgas 3 meses)",peso:"1 comprimido",preco:"R$ 139",petz:"Bravecto+caes",ml:"Bravecto+cachorro"},
+          {name:"Simparic Trio (pulga+carrapato+verme)",peso:"1 comprimido",preco:"R$ 179",petz:"Simparic+Trio",ml:"Simparic+Trio+caes"},
+          {name:"Endogard Vermífugo",peso:"2 comprimidos",preco:"R$ 35",petz:"Endogard+vermifugo",ml:"Endogard+vermifugo"}
+        ];
       }else if(q.match(/vacin|v10|antirrábica|raiva/)){
-        reply="💉 Situação atual das vacinas do Thor:\n\n⚠️ V10 Múltipla vence em 12 dias — marque com urgência!\n✅ Antirrábica em dia (vence dez/2026)\n✅ Giárdia em dia (vence mar/2027)\n\nRecomendo agendar a V10 ainda essa semana pelo app — vá em Serviços para encontrar veterinários disponíveis.";
+        reply=`💉 Situação atual das vacinas de ${pet.name||"seu pet"}:\n\n⚠️ V10 Múltipla vence em 12 dias — marque com urgência!\n✅ Antirrábica em dia (vence dez/2026)\n✅ Giárdia em dia (vence mar/2027)\n\nRecomendo agendar a V10 ainda essa semana pelo app — vá em Serviços para encontrar veterinários disponíveis.";
       }else if(q.match(/peso|gordo|magro|ração|comer|quantid/)){
-        reply="⚖️ Thor está com 28kg, dentro do ideal para um Golden Retriever macho adulto (25–34kg). 👍\n\nPara manter esse peso, recomendo ração Premium adulto: 350–400g/dia dividida em 2 refeições. Evite petiscos com corante artificial — ele tem histórico de sensibilidade.";
+        reply=`⚖️ ${pet.name||"Seu pet"} parece estar bem! Verifique o peso ideal com seu veterinário conforme a raça e tamanho. 👍\n\nPara manter esse peso, recomendo ração Premium adulto: 350–400g/dia dividida em 2 refeições. Evite petiscos com corante artificial — ele tem histórico de sensibilidade.";
       }else if(q.match(/banh|tosa|higien|escov/)){
-        reply="🛁 Thor precisa de banho a cada 4–6 semanas e escovação 2–3x por semana — a pelagem do Golden fica bonita e saudável com essa rotina.\n\nNão se esqueça das orelhas (limpeza semanal, ele tem tendência a infecções) e das unhas (corte a cada 3–4 semanas).";
+        reply=`🛁 ${pet.name||"Seu pet"} precisa de banho a cada 4–6 semanas e escovação 2–3x por semana — a pelagem do Golden fica bonita e saudável com essa rotina.\n\nNão se esqueça das orelhas (limpeza semanal, ele tem tendência a infecções) e das unhas (corte a cada 3–4 semanas).";
       }else if(q.match(/exerc|passear|caminhada|energia|brinc/)){
-        reply="🏃 Thor precisa de 1–2h de atividade física por dia. Caminhadas, busca a bola e natação são ótimas opções — Golden Retrievers adoram água!\n\nCom 3 anos, ele ainda tem muita energia. A rotina de exercícios também ajuda a manter o peso ideal e previne problemas articulares mais tarde.";
+        reply=`🏃 ${pet.name||"Seu pet"} precisa de atividade física diária. Caminhadas, busca a bola e natação são ótimas opções — Golden Retrievers adoram água!\n\nCom 3 anos, ele ainda tem muita energia. A rotina de exercícios também ajuda a manter o peso ideal e previne problemas articulares mais tarde.";
       }else if(q.match(/alergi|coceira|pele|vermelhid|coçar/)){
-        reply="🔍 Thor tem sensibilidade a corante artificial registrada no prontuário. Os sintomas mais comuns são coceira, vermelhidão e irritação na pele.\n\nSe os sintomas forem persistentes ou graves, consulte o veterinário — pode ser necessário um teste de hipersensibilidade mais completo.";
+        reply=`🔍 ${pet.name||"Seu pet"} pode ter sensibilidades. Confira o prontuário de alergias no app. Os sintomas mais comuns são coceira, vermelhidão e irritação na pele.\n\nSe os sintomas forem persistentes ou graves, consulte o veterinário — pode ser necessário um teste de hipersensibilidade mais completo.";
       }else if(q.match(/vermíf|lombriga|parasita|carrapath|pulga/)){
-        reply="🐛 O vermífugo do Thor está pendente há 3 semanas — vale providenciar!\n\nPara a prevenção geral: vermífugo a cada 3–6 meses, antipulgas mensalmente e carrapatos conforme exposição ao ambiente. Você pode registrar tudo isso na Rotina do app.";
+        reply=`🐛 Fique atento ao vermífugo de ${pet.name||"seu pet"} — aplicar a cada 3–6 meses é o recomendado.\n\nPara a prevenção geral: vermífugo a cada 3–6 meses, antipulgas mensalmente e carrapatos conforme exposição ao ambiente. Você pode registrar tudo isso na Rotina do app.";
+      }else if(q.match(/sintoma|doente|malade|vomit|diarr|tosse|febre|convuls|fraqueza|letarg|sangr|respir|coxear|dor|urgen|emergenci/)){
+        reply=`⚕️ Entendo a preocupação com ${pet.name||"seu pet"}. Esses sintomas precisam de avaliação veterinária o quanto antes.\n\nO PetBot não substitui o diagnóstico do veterinário. Veja as opções abaixo:`;
+        products=[
+          {name:"📅 Agendar Consulta Presencial",peso:"Clínicas e veterinários próximos",preco:"Ver serviços →",petz:"INTERNAL:services",ml:"INTERNAL:services"},
+          {name:"📱 Consulta Remota Agora",peso:"Veterinários online disponíveis",preco:"A partir de R$ 80",petz:"INTERNAL:teleconsult",ml:"INTERNAL:teleconsult"}
+        ];
       }else{
-        reply="🐾 Boa pergunta! Com base no histórico do Thor, posso ajudar com:\n\n🍖 Alimentação e o que ele pode ou não comer\n💉 Status das vacinas e próximos agendamentos\n⚖️ Peso, ração e nutrição\n🛁 Cuidados com a pelagem e higiene\n🏃 Exercícios e rotina\n\nO PetBot não substitui a consulta veterinária — se perceber algo preocupante, agende pelo app! 🏥";
+        reply=`🐾 Boa pergunta! Com base no histórico de ${pet.name||"seu pet"}, posso ajudar com:\n\n🍖 Alimentação e o que ele pode ou não comer\n💉 Status das vacinas e próximos agendamentos\n⚖️ Peso, ração e nutrição\n🛁 Cuidados com a pelagem e higiene\n🏃 Exercícios e rotina\n\nO PetBot não substitui a consulta veterinária — se perceber algo preocupante, agende pelo app! 🏥";
       }
       await new Promise(r=>setTimeout(r,900));
-      setMsgs(prev=>[...prev,{from:"bot",text:reply}]);
+      const botId=Date.now();
+      setMsgs(prev=>[...prev,{from:"bot",text:reply,id:botId}]);
+      if(products)setProductCards(prev=>({...prev,[botId]:products}));
     }catch(e){setMsgs(prev=>[...prev,{from:"bot",text:"⚠️ Erro inesperado. Tente novamente."}]);}
     setTyping(false);
   }
@@ -1260,20 +2868,35 @@ INSTRUÇÕES:
       <div style={{padding:"0 24px 13px",display:"flex",alignItems:"center",gap:11}}>
         <button onClick={()=>onNavigate("home")} style={{background:C.beige,border:"none",width:34,height:34,borderRadius:11,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer"}}><ArrowLeft size={17} color={C.mid}/></button>
         <div style={{width:38,height:38,borderRadius:11,background:`${C.coral}15`,border:`2px solid ${C.coral}30`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:19}}>🤖</div>
-        <div><div style={{fontFamily:"'Playfair Display', serif",fontSize:15,fontWeight:700,color:C.dark}}>{t.pbTitle}</div><div style={{fontSize:11,color:C.green,fontWeight:700}}>● {t.pbStatus}</div></div>
+        <div><div style={{fontFamily:"'Playfair Display', serif",fontSize:15,fontWeight:700,color:C.dark}}>{t.pbTitle}</div><div style={{fontSize:11,color:C.green,fontWeight:700}}>● Online · Assistente de {pet.name||"..."}</div></div>
         <div style={{marginLeft:"auto",background:"#FFF3E0",borderRadius:9,padding:"3px 9px",fontSize:10,color:"#E65100",fontWeight:700}}>{t.pbDisc}</div>
       </div>
     </div>
     <div style={{flex:1,overflowY:"auto",padding:"14px 14px 8px",background:C.beigeLight,display:"flex",flexDirection:"column",gap:10}}>
-      {msgs.map((m,i)=>(<div key={i} style={{display:"flex",justifyContent:m.from==="user"?"flex-end":"flex-start",gap:7,alignItems:"flex-end"}}>
+      {!msgs&&<div style={{display:"flex",justifyContent:"center",padding:"20px"}}><div style={{width:28,height:28,border:`3px solid ${C.beige}`,borderTop:`3px solid ${C.coral}`,borderRadius:"50%",animation:"spin 0.8s linear infinite"}}/></div>}
+      {(msgs||[]).map((m,i)=>(<div key={i} style={{display:"flex",justifyContent:m.from==="user"?"flex-end":"flex-start",gap:7,alignItems:"flex-end"}}>
         {m.from==="bot"&&<div style={{width:26,height:26,borderRadius:"50%",background:`${C.coral}15`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,flexShrink:0}}>🤖</div>}
-        <div style={{maxWidth:"80%",padding:"11px 13px",borderRadius:m.from==="user"?"17px 17px 4px 17px":"17px 17px 17px 4px",background:m.from==="user"?C.coral:C.white,color:m.from==="user"?C.white:C.dark,fontSize:13,fontWeight:500,lineHeight:1.6,boxShadow:"0 2px 8px rgba(0,0,0,0.06)",whiteSpace:"pre-wrap"}}>{m.text}</div>
+        <div style={{display:"flex",flexDirection:"column",gap:7,alignItems:m.from==="user"?"flex-end":"flex-start",maxWidth:"85%"}}>
+          <div style={{padding:"11px 13px",borderRadius:m.from==="user"?"17px 17px 4px 17px":"17px 17px 17px 4px",background:m.from==="user"?C.coral:C.white,color:m.from==="user"?C.white:C.dark,fontSize:13,fontWeight:500,lineHeight:1.6,boxShadow:"0 2px 8px rgba(0,0,0,0.06)",whiteSpace:"pre-wrap"}}>{m.text}</div>
+          {m.id&&productCards[m.id]&&productCards[m.id].map((p,pi)=>(
+            <div key={pi} style={{background:C.white,borderRadius:12,padding:"10px 12px",boxShadow:"0 2px 8px rgba(0,0,0,0.08)",width:"100%"}}>
+              <div style={{fontSize:12,fontWeight:700,color:C.dark,marginBottom:1}}>{p.name}</div>
+              <div style={{fontSize:11,color:C.light,fontWeight:500,marginBottom:7}}>{p.peso} · {p.preco}</div>
+              <div style={{display:"flex",gap:6}}>
+                <a href={p.petz.startsWith("INTERNAL:")?undefined:"https://www.petz.com.br/busca?q="+p.petz} onClick={p.petz.startsWith("INTERNAL:")?()=>onNavigate(p.petz.replace("INTERNAL:","")):undefined} target={p.petz.startsWith("INTERNAL:")?undefined:"_blank"} rel={p.petz.startsWith("INTERNAL:")?undefined:"noopener noreferrer"}
+                  style={{flex:1,padding:"6px",background:"#00A859",color:"white",borderRadius:8,fontSize:10,fontWeight:800,textAlign:"center",textDecoration:"none"}}>{p.petz&&p.petz.startsWith("INTERNAL:")?"📅 Presencial":"🐾 Petz"}</a>
+                <a href={p.ml.startsWith("INTERNAL:")?undefined:"https://www.mercadolivre.com.br/c/racao-para-caes?q="+p.ml} onClick={p.ml.startsWith("INTERNAL:")?()=>onNavigate(p.ml.replace("INTERNAL:","")):undefined} target={p.ml.startsWith("INTERNAL:")?undefined:"_blank"} rel={p.ml.startsWith("INTERNAL:")?undefined:"noopener noreferrer"}
+                  style={{flex:1,padding:"6px",background:"#FFE600",color:"#333",borderRadius:8,fontSize:10,fontWeight:800,textAlign:"center",textDecoration:"none"}}>{p.ml&&p.ml.startsWith("INTERNAL:")?"📱 Remota":"🛒 ML"}</a>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>))}
       {typing&&<div style={{display:"flex",alignItems:"center",gap:7}}><div style={{width:26,height:26,borderRadius:"50%",background:`${C.coral}15`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:13}}>🤖</div><div style={{background:C.white,borderRadius:"17px 17px 17px 4px",padding:"14px",boxShadow:"0 2px 8px rgba(0,0,0,0.06)",display:"flex",gap:5,alignItems:"center"}}><div style={{width:7,height:7,borderRadius:"50%",background:C.coral,animation:"pulse 1s infinite"}}/>  <div style={{width:7,height:7,borderRadius:"50%",background:C.coral,opacity:0.6}}/><div style={{width:7,height:7,borderRadius:"50%",background:C.coral,opacity:0.3}}/></div></div>}
-      <div style={{display:"flex",flexWrap:"wrap",gap:7,marginTop:4}}>{[t.pbS1,t.pbS2,t.pbS3,t.pbS4].map((s,i)=>(<button key={i} onClick={()=>send(s)} style={{padding:"7px 12px",background:C.white,color:C.coral,borderRadius:18,fontSize:11,fontWeight:600,border:`1.5px solid ${C.coral}30`,cursor:"pointer",fontFamily:"inherit"}}>{s}</button>))}</div>
+      <div style={{display:"flex",flexWrap:"wrap",gap:7,marginTop:4}}>{[`${pet.name||"Meu pet"} pode comer manga?`,`Qual ração indicada para ${pet.name||"meu pet"}?`,`Antipulgas e vermífugo para ${pet.name||"meu pet"}`,`Sintomas de Leishmaniose?`].map((s,i)=>(<button key={i} onClick={()=>send(s)} style={{padding:"7px 12px",background:C.white,color:C.coral,borderRadius:18,fontSize:11,fontWeight:600,border:`1.5px solid ${C.coral}30`,cursor:"pointer",fontFamily:"inherit"}}>{s}</button>))}</div>
     </div>
     <div style={{background:C.white,padding:"11px 14px 22px",borderTop:`1px solid ${C.beige}`,display:"flex",gap:9,alignItems:"center"}}>
-      <div style={{flex:1,background:C.beige,borderRadius:18,padding:"11px 15px",display:"flex",alignItems:"center"}}><input value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==="Enter"&&send()} placeholder={t.pbPH} style={{flex:1,fontSize:14,color:C.dark,background:"transparent",border:"none",outline:"none",fontFamily:"inherit"}}/></div>
+      <div style={{flex:1,background:C.beige,borderRadius:18,padding:"11px 15px",display:"flex",alignItems:"center"}}><input value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==="Enter"&&send()} placeholder={`Pergunte sobre a saúde de ${pet.name||"seu pet"}...`} style={{flex:1,fontSize:14,color:C.dark,background:"transparent",border:"none",outline:"none",fontFamily:"inherit"}}/></div>
       <button onClick={()=>send()} style={{width:42,height:42,borderRadius:"50%",background:C.coral,display:"flex",alignItems:"center",justifyContent:"center",border:"none",cursor:"pointer"}}>
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13" stroke="white" strokeWidth="2.5" strokeLinecap="round"/><path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
       </button>
@@ -1447,7 +3070,11 @@ function PetHubApp(){
       {screen==="map"           &&<MapScreen {...props}/>}
       {screen==="profile"       &&<ProfileScreen {...props}/>}
       {screen==="notifications" &&<NotificationsScreen {...props}/>}
-      {screen==="addvaccine"    &&<AddVaccineScreen onNavigate={nav} t={t}/>}
+      {screen==="addvaccine"    &&<AddVaccineScreen onNavigate={nav} t={t}/>
+      {screen==="addconsult"    &&<AddConsultationScreen onNavigate={nav} t={t}/>}
+      {screen==="weight"        &&<WeightScreen onNavigate={nav}/>}
+      {screen==="teleconsult"   &&<TeleconsultScreen onNavigate={nav}/>}
+      {screen==="consultprep"   &&<ConsultPrepScreen onNavigate={nav}/>}}
       {screen==="servicedetail" &&<ServiceDetailScreen {...props}/>}
       {screen==="booking"       &&<BookingScreen onNavigate={nav} provider={provider} t={t}/>}
       {screen==="bookingsuccess"&&<BookingSuccessScreen onNavigate={nav} provider={provider} t={t}/>}
@@ -1547,17 +3174,50 @@ function GPSScreen({onNavigate,t}){
 
 /* ─── BREED SCREEN ────────────────────────────────────────────── */
 function BreedScreen({onNavigate}){
-  const traits=[{icon:"💛",label:"Temperamento",value:"Amigável · Confiante · Afetivo · Brincalhão"},{icon:"📏",label:"Porte",value:"Grande (25–34 kg · 55–61 cm)"},{icon:"⚡",label:"Energia",value:"Alta — 1 a 2h de exercício diário"},{icon:"🎂",label:"Expectativa de vida",value:"10 a 12 anos"},{icon:"🧠",label:"Inteligência",value:"Muito alta — aprende comandos rapidamente"},{icon:"🤝",label:"Com crianças",value:"Excelente — muito paciente e gentil"}];
-  const health=[{ic:"⚠️",name:"Displasia do quadril",info:"Monitorar a partir dos 2 anos com raio-X"},{ic:"⚠️",name:"Epilepsia",info:"Incidência moderada na raça"},{ic:"⚠️",name:"Câncer",info:"Golden tem predisposição alta (>60% após 10 anos)"},{ic:"ℹ️",name:"Obesidade",info:"Tendem a comer em excesso — controle a ração"},{ic:"ℹ️",name:"Displasia do cotovelo",info:"Principalmente em machos"},{ic:"✅",name:"Pele e pelagem",info:"Escovação 2-3x/semana evita nós e queda excessiva"}];
-  const care=[["🛁","Banho","A cada 4–6 semanas"],["✂️","Escovação","2–3x por semana"],["🦷","Dentes","Escovar 3x/semana"],["💅","Unhas","Cortar a cada 3–4 semanas"],["👂","Ouvidos","Limpar 1x/semana (propenso a infecções)"],["🏃","Exercício","1–2h diárias (caminhada + brincadeiras)"]];
+  const [pet,setPet]=useState({name:"",breed:"Golden Retriever",ageStr:""});
+
+  useEffect(()=>{
+    async function load(){
+      try{
+        const {data:{user}}=await sb.auth.getUser();
+        if(!user)return;
+        const {data:pets}=await sb.from("pets").select("name,breed,birth_date,avatar_url").eq("user_id",user.id).order("created_at",{ascending:false}).limit(1);
+        if(pets&&pets[0]){
+          const p=pets[0];
+          const yrs=p.birth_date?Math.floor((Date.now()-new Date(p.birth_date))/(365.25*86400000)):null;
+          const ageStr=yrs===null?"":yrs===0?"< 1 ano":yrs===1?"1 ano":`${yrs} anos`;
+          setPet({name:p.name||"",breed:p.breed||"Golden Retriever",ageStr});
+        }
+      }catch(e){console.warn("BreedScreen:",e);}
+    }
+    load();
+  },[]);
+
+  // Base de dados de raças — expande facilmente
+  const BREED_DB={
+    "Golden Retriever":{emoji:"🐕",traits:[{icon:"💛",label:"Temperamento",value:"Amigável · Confiante · Afetivo · Brincalhão"},{icon:"📏",label:"Porte",value:"Grande (25–34 kg · 55–61 cm)"},{icon:"⚡",label:"Energia",value:"Alta — 1 a 2h de exercício diário"},{icon:"🎂",label:"Expectativa de vida",value:"10 a 12 anos"},{icon:"🧠",label:"Inteligência",value:"Muito alta — aprende comandos rapidamente"},{icon:"🤝",label:"Com crianças",value:"Excelente — muito paciente e gentil"}],health:[{ic:"⚠️",name:"Displasia do quadril",info:"Monitorar a partir dos 2 anos com raio-X"},{ic:"⚠️",name:"Epilepsia",info:"Incidência moderada na raça"},{ic:"⚠️",name:"Câncer",info:"Golden tem predisposição alta (>60% após 10 anos)"},{ic:"ℹ️",name:"Obesidade",info:"Tendem a comer em excesso — controle a ração"},{ic:"✅",name:"Pele e pelagem",info:"Escovação 2-3x/semana evita nós e queda excessiva"}],care:[["🛁","Banho","A cada 4–6 semanas"],["✂️","Escovação","2–3x por semana"],["🦷","Dentes","Escovar 3x/semana"],["💅","Unhas","Cortar a cada 3–4 semanas"],["👂","Ouvidos","Limpar 1x/semana"],["🏃","Exercício","1–2h diárias"]],racao:[{name:"Royal Canin Golden Retriever",peso:"12 kg",preco:"R$ 329",badge:"Indicado para raça",petz:"golden+retriever+adulto",ml:"Golden+Retriever+racao"},{name:"Hill's Science Diet Adulto Raças Grandes",peso:"12 kg",preco:"R$ 289",badge:"Proteína alta",petz:"hills+science+diet+racao+grande",ml:"Hills+Science+racao+grande"},{name:"ProPlan Large Breed Adulto",peso:"15 kg",preco:"R$ 349",badge:"Controle de peso",petz:"pro+plan+large+adulto",ml:"ProPlan+large+breed+adulto"}],curiosity:"Goldens são usados como cães-guia, de terapia e de busca e resgate — uma das raças mais populares do mundo pelo temperamento equilibrado."},
+    "Labrador":{emoji:"🐕",traits:[{icon:"💛",label:"Temperamento",value:"Dócil · Extrovertido · Gentil · Brincalhão"},{icon:"📏",label:"Porte",value:"Grande (25–36 kg · 54–62 cm)"},{icon:"⚡",label:"Energia",value:"Muito alta — adora nadar e correr"},{icon:"🎂",label:"Expectativa de vida",value:"10 a 12 anos"},{icon:"🧠",label:"Inteligência",value:"Muito alta — fácil treinamento"},{icon:"🤝",label:"Com crianças",value:"Excelente — extremamente paciente"}],health:[{ic:"⚠️",name:"Displasia do quadril",info:"Controle o peso e faça check-ups regulares"},{ic:"⚠️",name:"Obesidade",info:"Labrador é propenso a comer em excesso"},{ic:"ℹ️",name:"Otite",info:"Ouvidos caídos favorecem infecções"},{ic:"✅",name:"Saúde geral",info:"Raça robusta com boa longevidade"}],care:[["🛁","Banho","A cada 4–6 semanas"],["✂️","Escovação","1–2x por semana"],["🦷","Dentes","Escovar 3x/semana"],["💅","Unhas","Cortar a cada 3–4 semanas"],["👂","Ouvidos","Limpar semanalmente"],["🏃","Exercício","1–2h diárias"]],racao:[{name:"Royal Canin Labrador Adulto",peso:"12 kg",preco:"R$ 319",badge:"Específico para Labrador",petz:"labrador+adulto+racao",ml:"Royal+Canin+Labrador"},{name:"Hill's Science Diet Large Breed",peso:"12 kg",preco:"R$ 289",badge:"Controle de peso",petz:"hills+science+diet+grande",ml:"Hills+large+breed"},{name:"ProPlan Large Breed",peso:"15 kg",preco:"R$ 349",badge:"Alta proteína",petz:"pro+plan+large",ml:"ProPlan+large"}],curiosity:"Labradores são a raça favorita de famílias em todo o mundo e lideram como cães de assistência, guia e detecção."},
+    "Bulldog Francês":{emoji:"🐾",traits:[{icon:"💛",label:"Temperamento",value:"Brincalhão · Afetivo · Tranquilo · Leal"},{icon:"📏",label:"Porte",value:"Pequeno (8–14 kg · 27–33 cm)"},{icon:"⚡",label:"Energia",value:"Moderada — prefere brincadeiras curtas"},{icon:"🎂",label:"Expectativa de vida",value:"10 a 12 anos"},{icon:"🧠",label:"Inteligência",value:"Moderada — pode ser teimoso"},{icon:"🤝",label:"Com crianças",value:"Ótimo — muito paciente"}],health:[{ic:"⚠️",name:"Síndrome braquicefálica",info:"Vias respiratórias estreitas — evitar calor excessivo"},{ic:"⚠️",name:"Problemas de pele",info:"Dobras faciais precisam de limpeza regular"},{ic:"⚠️",name:"Problemas vertebrais",info:"Hérnia de disco é comum na raça"},{ic:"ℹ️",name:"Olhos",info:"Propenso a úlceras de córnea"}],care:[["🛁","Banho","A cada 3–4 semanas"],["✂️","Dobras","Limpar diariamente"],["🦷","Dentes","Escovar 3x/semana"],["💅","Unhas","Cortar a cada 3 semanas"],["🌡️","Temperatura","Evitar sol e calor intenso"],["🏃","Exercício","30 min/dia no fresco"]],racao:[{name:"Royal Canin Bulldog Francês Adulto",peso:"3 kg",preco:"R$ 149",badge:"Específico para raça",petz:"bulldog+frances+racao",ml:"Royal+Canin+Bulldog+Frances"},{name:"Hill's Science Diet Raças Pequenas",peso:"7,5 kg",preco:"R$ 219",badge:"Digestão fácil",petz:"hills+racas+pequenas",ml:"Hills+racas+pequenas"},{name:"ProPlan Small & Mini Adulto",peso:"7,5 kg",preco:"R$ 239",badge:"Alta proteína",petz:"pro+plan+small+mini",ml:"ProPlan+small+mini"}],curiosity:"O Bulldog Francês é o cão mais popular em apartamentos por seu porte compacto e temperamento tranquilo."},
+    "Poodle":{emoji:"🐩",traits:[{icon:"💛",label:"Temperamento",value:"Inteligente · Ativo · Leal · Brincalhão"},{icon:"📏",label:"Porte",value:"Toy (até 4 kg) · Miniatura (4–9 kg) · Padrão (>9 kg)"},{icon:"⚡",label:"Energia",value:"Alta — adora atividades mentais e físicas"},{icon:"🎂",label:"Expectativa de vida",value:"12 a 15 anos"},{icon:"🧠",label:"Inteligência",value:"Altíssima — 2ª raça mais inteligente do mundo"},{icon:"🤝",label:"Com crianças",value:"Excelente"}],health:[{ic:"⚠️",name:"Displasia do quadril",info:"Principalmente no padrão"},{ic:"⚠️",name:"Atrofia progressiva da retina",info:"Monitorar visão anualmente"},{ic:"ℹ️",name:"Pelo",info:"Crescimento contínuo — tosa regular obrigatória"},{ic:"✅",name:"Saúde geral",info:"Raça longeva e resistente"}],care:[["🛁","Banho","A cada 3 semanas"],["✂️","Tosa","A cada 6–8 semanas"],["🦷","Dentes","Escovar 3x/semana"],["💅","Unhas","Cortar a cada 3 semanas"],["👁️","Olhos","Limpar ao redor diariamente"],["🏃","Exercício","1h diária"]],racao:[{name:"Royal Canin Poodle Adulto",peso:"7,5 kg",preco:"R$ 259",badge:"Específico para Poodle",petz:"poodle+adulto+racao",ml:"Royal+Canin+Poodle"},{name:"Hill's Science Diet Raças Pequenas",peso:"7,5 kg",preco:"R$ 219",badge:"Pelo saudável",petz:"hills+racas+pequenas",ml:"Hills+racas+pequenas"},{name:"ProPlan Small Adulto",peso:"7,5 kg",preco:"R$ 239",badge:"Digestão sensível",petz:"pro+plan+small",ml:"ProPlan+small+adulto"}],curiosity:"Poodles já foram cães de caça aquática. Seu pelo não cai e são indicados para pessoas alérgicas."},
+  };
+  const DEFAULT_DATA={emoji:"🐾",traits:[{icon:"💛",label:"Temperamento",value:"Consulte criadores especializados na raça"},{icon:"📏",label:"Porte",value:"Varia conforme a raça"},{icon:"⚡",label:"Energia",value:"Consulte um veterinário especialista"},{icon:"🎂",label:"Expectativa de vida",value:"Varia entre 8 e 16 anos"},{icon:"🧠",label:"Inteligência",value:"Cada raça tem características únicas"},{icon:"🤝",label:"Com crianças",value:"Depende do treinamento e socialização"}],health:[{ic:"ℹ️",name:"Avaliação individualizada",info:"Consulte um veterinário para saber as predisposições específicas da raça"}],care:[["🛁","Banho","A cada 4 semanas"],["✂️","Escovação","Conforme o tipo de pelo"],["🦷","Dentes","Escovar 3x/semana"],["💅","Unhas","Cortar a cada 3–4 semanas"],["👂","Ouvidos","Verificar semanalmente"],["🏃","Exercício","Conforme o porte da raça"]],racao:[{name:"Royal Canin Size Medium Adulto",peso:"15 kg",preco:"R$ 289",badge:"Raças médias",petz:"racao+caes+adultos",ml:"racao+cachorro+adulto"},{name:"Hill's Science Diet Adulto",peso:"12 kg",preco:"R$ 269",badge:"Equilíbrio nutricional",petz:"hills+science+diet+adulto",ml:"Hills+adulto+cao"},{name:"ProPlan Adulto",peso:"15 kg",preco:"R$ 329",badge:"Alta proteína",petz:"pro+plan+adulto",ml:"ProPlan+adulto"}],curiosity:"Cada raça tem características únicas. Converse com um veterinário especialista para conhecer as necessidades específicas do seu pet."};
+
+  const breedKey=Object.keys(BREED_DB).find(k=>pet.breed&&pet.breed.toLowerCase().includes(k.toLowerCase()))||"";
+  const data=BREED_DB[breedKey]||DEFAULT_DATA;
+  const {emoji,traits,health,care,racao,curiosity}=data;
+
+  const ytQuery=encodeURIComponent((pet.breed||"cachorro")+" cuidados dicas");
+  const igTag=(pet.breed||"cachorro").toLowerCase().replace(/\s+/g,"").replace(/[^a-z0-9]/g,"");
+  const petzBase="https://www.petz.com.br/busca?q=";
+  const mlBase="https://www.mercadolivre.com.br/c/racao-para-caes?q=";
   return(<div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column"}}>
     <div style={{flex:1,overflowY:"auto"}}>
       <div style={{background:`linear-gradient(130deg,${C.coral} 0%,${C.coralDark} 100%)`,padding:"0 24px 24px",position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",right:-40,top:-40,width:160,height:160,borderRadius:"50%",background:"rgba(255,255,255,0.07)"}}/>
         <StatusBar light/><button onClick={()=>onNavigate("health")} style={{background:"rgba(255,255,255,0.14)",border:"none",display:"flex",alignItems:"center",gap:7,color:C.white,marginBottom:14,fontSize:13,fontWeight:600,borderRadius:10,padding:"6px 12px",cursor:"pointer",fontFamily:"inherit"}}><ArrowLeft size={15}/>Voltar</button>
-        <div style={{fontSize:36,marginBottom:8}}>🐕</div>
-        <div style={{fontFamily:"'Playfair Display',serif",fontSize:22,fontWeight:700,color:C.white,lineHeight:1.2,marginBottom:4}}>Golden Retriever</div>
-        <div style={{color:"rgba(255,255,255,0.7)",fontSize:13,fontWeight:500}}>Características da Raça do Thor</div>
+        <div style={{fontSize:36,marginBottom:8}}>{emoji}</div>
+        <div style={{fontFamily:"'Playfair Display',serif",fontSize:22,fontWeight:700,color:C.white,lineHeight:1.2,marginBottom:4}}>{pet.breed||"Raça do Pet"}</div>
+        <div style={{color:"rgba(255,255,255,0.7)",fontSize:13,fontWeight:500}}>Características da raça de {pet.name||"seu pet"}{pet.ageStr?" · "+pet.ageStr:""}</div>
       </div>
       <div style={{padding:"18px 24px 32px",background:C.beigeLight}}>
         <div style={{fontFamily:"'Playfair Display',serif",fontSize:17,fontWeight:700,color:C.dark,marginBottom:12}}>🧬 Perfil da Raça</div>
@@ -1582,8 +3242,53 @@ function BreedScreen({onNavigate}){
             <div style={{fontSize:11,color:C.light,fontWeight:500,lineHeight:1.4}}>{v}</div>
           </div>))}
         </div>
-        <div style={{background:`${C.coral}10`,borderRadius:14,padding:"14px",fontSize:12,color:C.coral,fontWeight:600,lineHeight:1.6}}>
-          🌟 <strong>Curiosidade:</strong> Goldens são usados como cães-guia, de terapia e de busca e resgate. São uma das raças mais populares do mundo justamente pelo temperamento equilibrado e facilidade de treinamento.
+        {/* Curiosidade */}
+        <div style={{background:`${C.coral}10`,borderRadius:14,padding:"14px",fontSize:12,color:C.coral,fontWeight:600,lineHeight:1.6,marginBottom:20}}>
+          🌟 <strong>Curiosidade:</strong> {curiosity}
+        </div>
+
+        {/* 📺 Buscar vídeos */}
+        <div style={{fontFamily:"'Playfair Display',serif",fontSize:17,fontWeight:700,color:C.dark,marginBottom:12}}>📺 Vídeos sobre a Raça</div>
+        <div style={{display:"flex",gap:10,marginBottom:22}}>
+          <a href={`https://www.youtube.com/results?search_query=${ytQuery}`} target="_blank" rel="noopener noreferrer"
+            style={{flex:1,padding:"13px 10px",background:"#FF0000",color:"white",borderRadius:14,fontSize:13,fontWeight:700,display:"flex",flexDirection:"column",alignItems:"center",gap:6,textDecoration:"none",boxShadow:"0 3px 10px rgba(255,0,0,0.25)"}}>
+            <span style={{fontSize:22}}>▶️</span>
+            <span>YouTube</span>
+            <span style={{fontSize:10,opacity:0.85}}>Dicas e cuidados</span>
+          </a>
+          <a href={`https://www.instagram.com/explore/tags/${igTag}/`} target="_blank" rel="noopener noreferrer"
+            style={{flex:1,padding:"13px 10px",background:"linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045)",color:"white",borderRadius:14,fontSize:13,fontWeight:700,display:"flex",flexDirection:"column",alignItems:"center",gap:6,textDecoration:"none",boxShadow:"0 3px 10px rgba(131,58,180,0.25)"}}>
+            <span style={{fontSize:22}}>📸</span>
+            <span>Instagram</span>
+            <span style={{fontSize:10,opacity:0.85}}>#{igTag}</span>
+          </a>
+        </div>
+
+        {/* 🛒 Ração Recomendada */}
+        <div style={{fontFamily:"'Playfair Display',serif",fontSize:17,fontWeight:700,color:C.dark,marginBottom:6}}>🥩 Ração Recomendada</div>
+        <div style={{fontSize:12,color:C.light,fontWeight:500,marginBottom:12}}>Sugestões para {pet.breed||"sua raça"}{pet.ageStr?", "+pet.ageStr:""}</div>
+        <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:24}}>
+          {racao.map((r,i)=>(
+            <div key={i} style={{background:C.white,borderRadius:15,padding:"14px 15px",boxShadow:"0 2px 8px rgba(0,0,0,0.06)"}}>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:8}}>
+                <div style={{flex:1,paddingRight:10}}>
+                  <div style={{fontSize:13,fontWeight:800,color:C.dark,lineHeight:1.3}}>{r.name}</div>
+                  <div style={{fontSize:11,color:C.light,fontWeight:500,marginTop:3}}>{r.peso} · {r.preco}</div>
+                </div>
+                <div style={{background:`${C.green}18`,borderRadius:8,padding:"3px 9px",fontSize:10,color:C.green,fontWeight:800,flexShrink:0}}>{r.badge}</div>
+              </div>
+              <div style={{display:"flex",gap:8}}>
+                <a href={`${petzBase}${r.petz}`} target="_blank" rel="noopener noreferrer"
+                  style={{flex:1,padding:"8px",background:"#00A859",color:"white",borderRadius:10,fontSize:11,fontWeight:700,textAlign:"center",textDecoration:"none"}}>
+                  🐾 Petz
+                </a>
+                <a href={`${mlBase}${r.ml}`} target="_blank" rel="noopener noreferrer"
+                  style={{flex:1,padding:"8px",background:"#FFE600",color:"#333",borderRadius:10,fontSize:11,fontWeight:700,textAlign:"center",textDecoration:"none"}}>
+                  🛒 Mercado Livre
+                </a>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
