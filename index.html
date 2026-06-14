@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -2836,17 +2837,17 @@ INSTRUÇÕES:
           {name:"Endogard Vermífugo",peso:"2 comprimidos",preco:"R$ 35",petz:"Endogard+vermifugo",ml:"Endogard+vermifugo"}
         ];
       }else if(q.match(/vacin|v10|antirrábica|raiva/)){
-        reply=`💉 Situação atual das vacinas de ${pet.name||"seu pet"}:\n\n⚠️ V10 Múltipla vence em 12 dias — marque com urgência!\n✅ Antirrábica em dia (vence dez/2026)\n✅ Giárdia em dia (vence mar/2027)\n\nRecomendo agendar a V10 ainda essa semana pelo app — vá em Serviços para encontrar veterinários disponíveis.";
+        reply=`💉 Situação atual das vacinas de ${pet.name||"seu pet"}:\n\n⚠️ V10 Múltipla vence em 12 dias — marque com urgência!\n✅ Antirrábica em dia (vence dez/2026)\n✅ Giárdia em dia (vence mar/2027)\n\nRecomendo agendar a V10 ainda essa semana pelo app — vá em Serviços para encontrar veterinários disponíveis.`;
       }else if(q.match(/peso|gordo|magro|ração|comer|quantid/)){
-        reply=`⚖️ ${pet.name||"Seu pet"} parece estar bem! Verifique o peso ideal com seu veterinário conforme a raça e tamanho. 👍\n\nPara manter esse peso, recomendo ração Premium adulto: 350–400g/dia dividida em 2 refeições. Evite petiscos com corante artificial — ele tem histórico de sensibilidade.";
+        reply=`⚖️ ${pet.name||"Seu pet"} parece estar bem! Verifique o peso ideal com seu veterinário conforme a raça e tamanho. 👍\n\nPara manter esse peso, recomendo ração Premium adulto: 350–400g/dia dividida em 2 refeições. Evite petiscos com corante artificial — ele tem histórico de sensibilidade.`;
       }else if(q.match(/banh|tosa|higien|escov/)){
-        reply=`🛁 ${pet.name||"Seu pet"} precisa de banho a cada 4–6 semanas e escovação 2–3x por semana — a pelagem do Golden fica bonita e saudável com essa rotina.\n\nNão se esqueça das orelhas (limpeza semanal, ele tem tendência a infecções) e das unhas (corte a cada 3–4 semanas).";
+        reply=`🛁 ${pet.name||"Seu pet"} precisa de banho a cada 4–6 semanas e escovação 2–3x por semana — a pelagem do Golden fica bonita e saudável com essa rotina.\n\nNão se esqueça das orelhas (limpeza semanal, ele tem tendência a infecções) e das unhas (corte a cada 3–4 semanas).`;
       }else if(q.match(/exerc|passear|caminhada|energia|brinc/)){
-        reply=`🏃 ${pet.name||"Seu pet"} precisa de atividade física diária. Caminhadas, busca a bola e natação são ótimas opções — Golden Retrievers adoram água!\n\nCom 3 anos, ele ainda tem muita energia. A rotina de exercícios também ajuda a manter o peso ideal e previne problemas articulares mais tarde.";
+        reply=`🏃 ${pet.name||"Seu pet"} precisa de atividade física diária. Caminhadas, busca a bola e natação são ótimas opções — Golden Retrievers adoram água!\n\nCom 3 anos, ele ainda tem muita energia. A rotina de exercícios também ajuda a manter o peso ideal e previne problemas articulares mais tarde.`;
       }else if(q.match(/alergi|coceira|pele|vermelhid|coçar/)){
-        reply=`🔍 ${pet.name||"Seu pet"} pode ter sensibilidades. Confira o prontuário de alergias no app. Os sintomas mais comuns são coceira, vermelhidão e irritação na pele.\n\nSe os sintomas forem persistentes ou graves, consulte o veterinário — pode ser necessário um teste de hipersensibilidade mais completo.";
+        reply=`🔍 ${pet.name||"Seu pet"} pode ter sensibilidades. Confira o prontuário de alergias no app. Os sintomas mais comuns são coceira, vermelhidão e irritação na pele.\n\nSe os sintomas forem persistentes ou graves, consulte o veterinário — pode ser necessário um teste de hipersensibilidade mais completo.`;
       }else if(q.match(/vermíf|lombriga|parasita|carrapath|pulga/)){
-        reply=`🐛 Fique atento ao vermífugo de ${pet.name||"seu pet"} — aplicar a cada 3–6 meses é o recomendado.\n\nPara a prevenção geral: vermífugo a cada 3–6 meses, antipulgas mensalmente e carrapatos conforme exposição ao ambiente. Você pode registrar tudo isso na Rotina do app.";
+        reply=`🐛 Fique atento ao vermífugo de ${pet.name||"seu pet"} — aplicar a cada 3–6 meses é o recomendado.\n\nPara a prevenção geral: vermífugo a cada 3–6 meses, antipulgas mensalmente e carrapatos conforme exposição ao ambiente. Você pode registrar tudo isso na Rotina do app.`;
       }else if(q.match(/sintoma|doente|malade|vomit|diarr|tosse|febre|convuls|fraqueza|letarg|sangr|respir|coxear|dor|urgen|emergenci/)){
         reply=`⚕️ Entendo a preocupação com ${pet.name||"seu pet"}. Esses sintomas precisam de avaliação veterinária o quanto antes.\n\nO PetBot não substitui o diagnóstico do veterinário. Veja as opções abaixo:`;
         products=[
@@ -2854,7 +2855,7 @@ INSTRUÇÕES:
           {name:"📱 Consulta Remota Agora",peso:"Veterinários online disponíveis",preco:"A partir de R$ 80",petz:"INTERNAL:teleconsult",ml:"INTERNAL:teleconsult"}
         ];
       }else{
-        reply=`🐾 Boa pergunta! Com base no histórico de ${pet.name||"seu pet"}, posso ajudar com:\n\n🍖 Alimentação e o que ele pode ou não comer\n💉 Status das vacinas e próximos agendamentos\n⚖️ Peso, ração e nutrição\n🛁 Cuidados com a pelagem e higiene\n🏃 Exercícios e rotina\n\nO PetBot não substitui a consulta veterinária — se perceber algo preocupante, agende pelo app! 🏥";
+        reply=`🐾 Boa pergunta! Com base no histórico de ${pet.name||"seu pet"}, posso ajudar com:\n\n🍖 Alimentação e o que ele pode ou não comer\n💉 Status das vacinas e próximos agendamentos\n⚖️ Peso, ração e nutrição\n🛁 Cuidados com a pelagem e higiene\n🏃 Exercícios e rotina\n\nO PetBot não substitui a consulta veterinária — se perceber algo preocupante, agende pelo app! 🏥`;
       }
       await new Promise(r=>setTimeout(r,900));
       const botId=Date.now();
