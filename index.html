@@ -1390,6 +1390,42 @@ function HealthScreen({onNavigate,activeNav,t}){
       </button>
      )}
     </div>}
+    {tab==="e"&&<div style={{display:"flex",flexDirection:"column",gap:10}}>
+     <input id="eventFileInput" type="file" accept="image/*" capture="environment" style={{display:"none"}} onChange={async e=>{
+      const file=e.target.files?.[0];if(!file)return;
+      try{
+       const {data:{user}}=await sb.auth.getUser();
+       const {data:pets}=await sb.from("pets").select("id").eq("user_id",user.id).order("created_at",{ascending:false}).limit(1);
+       if(user&&pets?.[0]){
+        const petId=pets[0].id;const path=`${user.id}/${petId}/eventos/${Date.now()}.jpg`;
+        await sb.storage.from("pet-photos").upload(path,file);
+        const {data:url}=sb.storage.from("pet-photos").getPublicUrl(path);
+        await sb.from("symptom_photos").insert({pet_id:petId,user_id:user.id,storage_path:path,photo_url:url.publicUrl,notes:"Evento registrado",captured_at:new Date().toISOString()});
+        alert("Foto registrada com sucesso!");
+       }
+      }catch(err){console.warn("event upload:",err);}
+     }}/>
+     <div style={{background:`${C.coral}10`,borderRadius:13,padding:"12px 14px",marginBottom:4}}>
+      <div style={{fontSize:12,fontWeight:700,color:C.coral,lineHeight:1.5}}>📸 <strong>Eventos</strong> — registre fotos de sintomas, alergias ou ocorrências para mostrar ao veterinário.</div>
+     </div>
+     <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:9}}>
+      {[{icon:"🤢",label:"Vômito"},{icon:"🔴",label:"Alergia"},{icon:"🩹",label:"Lesão/Ferida"},{icon:"😴",label:"Letargia"},{icon:"🍽️",label:"Sem Apetite"},{icon:"💧",label:"Coceira"}].map((ev,i)=>(
+       <button key={i} onClick={()=>document.getElementById("eventFileInput")?.click()}
+        style={{background:C.white,borderRadius:15,padding:"16px 12px",display:"flex",flexDirection:"column",alignItems:"center",gap:8,boxShadow:"0 2px 8px rgba(0,0,0,0.06)",border:"none",cursor:"pointer",fontFamily:"inherit"}}>
+        <div style={{fontSize:28}}>{ev.icon}</div>
+        <div style={{fontSize:12,fontWeight:700,color:C.dark}}>{ev.label}</div>
+        <div style={{fontSize:10,color:C.light,fontWeight:500}}>Tirar foto</div>
+       </button>
+      ))}
+     </div>
+     <button onClick={()=>document.getElementById("eventFileInput")?.click()}
+      style={{width:"100%",padding:"14px",background:C.coral,color:C.white,borderRadius:14,fontSize:14,fontWeight:700,border:"none",cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",justifyContent:"center",gap:8}}>
+      <Plus size={15}/>Registrar Outro Evento
+     </button>
+     <div style={{background:C.beige,borderRadius:13,padding:"13px 15px",fontSize:12,color:C.mid,lineHeight:1.6}}>
+      Fotos salvas no prontuário para compartilhar com o veterinário.
+     </div>
+    </div>}
 
   <BottomNav active={activeNav} onTab={onNavigate} t={t}/>
  </div>);}
