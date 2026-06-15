@@ -1,6 +1,7 @@
 
 
 
+
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -362,13 +363,15 @@ const ShoppingCartIcon=({size=20})=><svg width={size} height={size} viewBox="0 0
 const HeartSolid=({size=20})=><svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>;
 
 function BottomNav({active,onTab,t}){
+ const BotNavIcon=({size=16})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="15" x2="8" y2="15.01"/><line x1="12" y1="15" x2="12" y2="15.01"/><line x1="16" y1="15" x2="16" y2="15.01"/></svg>;
  const tabs=[
-  {id:"home",     icon:<Home size={18}/>,      label:"Início"},
-  {id:"health",   icon:<Activity size={18}/>,  label:"Saúde"},
-  {id:"services", icon:<ShoppingBag size={18}/>,label:"Serviços"},
-  {id:"shopping", icon:<ShoppingCartIcon size={18}/>,label:"Compras"},
-  {id:"ong",      icon:<HeartSolid size={18}/>,label:"ONG"},
-  {id:"profile",  icon:<User size={18}/>,      label:"Perfil"},
+  {id:"home",     icon:<Home size={16}/>,        label:"Início"},
+  {id:"health",   icon:<Activity size={16}/>,    label:"Saúde"},
+  {id:"services", icon:<ShoppingBag size={16}/>, label:"Serviços"},
+  {id:"petbot",   icon:<BotNavIcon size={16}/>,  label:"IA"},
+  {id:"shopping", icon:<ShoppingCartIcon size={16}/>,label:"Compras"},
+  {id:"ong",      icon:<HeartSolid size={16}/>,  label:"ONG"},
+  {id:"profile",  icon:<User size={16}/>,        label:"Perfil"},
  ];
  return(<div style={{position:"absolute",bottom:0,left:0,right:0,background:C.white,borderTop:"1px solid rgba(0,0,0,0.08)",display:"flex",paddingBottom:16}}>
   {tabs.map(tab=>(<button key={tab.id} onClick={()=>onTab(tab.id)} style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",gap:2,background:"none",color:active===tab.id?C.coral:"#C4937A",fontSize:9,fontWeight:active===tab.id?800:500,padding:"9px 2px",border:"none",cursor:"pointer",fontFamily:"inherit"}}>{tab.icon}<span>{tab.label}</span></button>))}
@@ -3027,7 +3030,7 @@ INSTRUÇÕES:
    {!msgs&&<div style={{display:"flex",justifyContent:"center",padding:"20px"}}><div style={{width:28,height:28,border:`3px solid ${C.beige}`,borderTop:`3px solid ${C.coral}`,borderRadius:"50%",animation:"spin 0.8s linear infinite"}}/></div>}
    {(msgs||[]).map((m,i)=>(<div key={i} style={{display:"flex",justifyContent:m.from==="user"?"flex-end":"flex-start",gap:7,alignItems:"flex-end"}}>
     {m.from==="bot"&&<div style={{width:26,height:26,borderRadius:"50%",background:`${C.coral}15`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,flexShrink:0}}>🤖</div>}
-    <div style={{display:"flex",flexDirection:"column",gap:7,alignItems:m.from==="user"?"flex-end":"flex-start",maxWidth:"85%"}}>
+    <div style={{display:"flex",flexDirection:"column",gap:6,alignItems:m.from==="user"?"flex-end":"flex-start",maxWidth:"85%"}}>{m.img&&<img src={m.img} style={{width:110,height:110,borderRadius:12,objectFit:"cover",border:`2px solid ${C.coral}`,alignSelf:"flex-end",marginBottom:2}}/>}
      <div style={{padding:"11px 13px",borderRadius:m.from==="user"?"17px 17px 4px 17px":"17px 17px 17px 4px",background:m.from==="user"?C.coral:C.white,color:m.from==="user"?C.white:C.dark,fontSize:13,fontWeight:500,lineHeight:1.6,boxShadow:"0 2px 8px rgba(0,0,0,0.06)",whiteSpace:"pre-wrap"}}>{m.text}</div>
      {m.id&&productCards[m.id]&&productCards[m.id].map((p,pi)=>(
       <div key={pi} style={{background:C.white,borderRadius:12,padding:"10px 12px",boxShadow:"0 2px 8px rgba(0,0,0,0.08)",width:"100%"}}>
@@ -3046,11 +3049,26 @@ INSTRUÇÕES:
    {typing&&<div style={{display:"flex",alignItems:"center",gap:7}}><div style={{width:26,height:26,borderRadius:"50%",background:`${C.coral}15`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:13}}>🤖</div><div style={{background:C.white,borderRadius:"17px 17px 17px 4px",padding:"14px",boxShadow:"0 2px 8px rgba(0,0,0,0.06)",display:"flex",gap:5,alignItems:"center"}}><div style={{width:7,height:7,borderRadius:"50%",background:C.coral,animation:"pulse 1s infinite"}}/>  <div style={{width:7,height:7,borderRadius:"50%",background:C.coral,opacity:0.6}}/><div style={{width:7,height:7,borderRadius:"50%",background:C.coral,opacity:0.3}}/></div></div>}
    <div style={{display:"flex",flexWrap:"wrap",gap:7,marginTop:4}}>{[`${pet.name||"Meu pet"} pode comer manga?`,`Qual ração indicada para ${pet.name||"meu pet"}?`,`Antipulgas e vermífugo para ${pet.name||"meu pet"}`,`Sintomas de Leishmaniose?`].map((s,i)=>(<button key={i} onClick={()=>send(s)} style={{padding:"7px 12px",background:C.white,color:C.coral,borderRadius:18,fontSize:11,fontWeight:600,border:`1.5px solid ${C.coral}30`,cursor:"pointer",fontFamily:"inherit"}}>{s}</button>))}</div>
   </div>
-  <div style={{background:C.white,padding:"11px 14px 22px",borderTop:`1px solid ${C.beige}`,display:"flex",gap:9,alignItems:"center"}}>
-   <div style={{flex:1,background:C.beige,borderRadius:18,padding:"11px 15px",display:"flex",alignItems:"center"}}><input value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==="Enter"&&send()} placeholder={`Pergunte sobre a saúde de ${pet.name||"seu pet"}...`} style={{flex:1,fontSize:14,color:C.dark,background:"transparent",border:"none",outline:"none",fontFamily:"inherit"}}/></div>
-   <button onClick={()=>send()} style={{width:42,height:42,borderRadius:"50%",background:C.coral,display:"flex",alignItems:"center",justifyContent:"center",border:"none",cursor:"pointer"}}>
-    <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13" stroke="white" strokeWidth="2.5" strokeLinecap="round"/><path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-   </button>
+  <div style={{background:C.white,borderTop:`1px solid ${C.beige}`,padding:"10px 14px 24px"}}>
+   <input id="botImgInput" type="file" accept="image/*" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(!f)return;const r=new FileReader();r.onload=ev=>{setImgPreview(ev.target.result);setImgData({base64:ev.target.result.split(",")[1],type:f.type});};r.readAsDataURL(f);}}/>
+   {imgPreview&&<div style={{display:"flex",alignItems:"center",gap:8,marginBottom:6,paddingBottom:6,borderBottom:`1px solid ${C.beige}`}}>
+    <div style={{position:"relative"}}>
+     <img src={imgPreview} style={{width:44,height:44,borderRadius:9,objectFit:"cover",border:`2px solid ${C.coral}`}}/>
+     <button onClick={()=>{setImgPreview(null);setImgData(null);}} style={{position:"absolute",top:-5,right:-5,width:16,height:16,borderRadius:"50%",background:C.coral,color:"white",border:"none",cursor:"pointer",fontSize:11,fontWeight:800,display:"flex",alignItems:"center",justifyContent:"center",padding:0}}>×</button>
+    </div>
+    <div style={{fontSize:11,color:C.light,fontWeight:500}}>Imagem pronta para envio</div>
+   </div>}
+   <div style={{display:"flex",gap:8,alignItems:"center"}}>
+    <button onClick={()=>document.getElementById("botImgInput")?.click()} style={{width:36,height:36,borderRadius:"50%",background:imgPreview?`${C.coral}15`:C.beigeLight,border:`1.5px solid ${imgPreview?C.coral:"transparent"}`,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={imgPreview?C.coral:C.light} strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+    </button>
+    <div style={{flex:1,background:C.beige,borderRadius:18,padding:"10px 14px",display:"flex",alignItems:"center"}}>
+     <input value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==="Enter"&&send()} placeholder={imgPreview?"Pergunte sobre a imagem...":`Pergunte sobre ${pet.name||"seu pet"}...`} style={{flex:1,fontSize:13,color:C.dark,background:"transparent",border:"none",outline:"none",fontFamily:"inherit"}}/>
+    </div>
+    <button onClick={()=>send()} disabled={typing&&!imgPreview&&!input.trim()} style={{width:42,height:42,borderRadius:"50%",background:(input.trim()||imgPreview)&&!typing?C.coral:C.beige,display:"flex",alignItems:"center",justifyContent:"center",border:"none",cursor:"pointer",flexShrink:0}}>
+     <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13" stroke={(input.trim()||imgPreview)&&!typing?"white":C.light} strokeWidth="2.5" strokeLinecap="round"/><path d="M22 2L15 22L11 13L2 9L22 2Z" stroke={(input.trim()||imgPreview)&&!typing?"white":C.light} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+    </button>
+   </div>
   </div>
  </div>);}
 
@@ -3189,7 +3207,7 @@ function PetHubApp(){
 
  function nav(id,data={}){
   setScreen(id);
-  if(["home","health","services","shopping","ong","profile"].includes(id))setActiveNav(id);
+  if(["home","health","services","petbot","shopping","ong","profile"].includes(id))setActiveNav(id);
   if(data?.provider)setProvider(data.provider);
  }
  function setLang(l){setLanguage(l);}
